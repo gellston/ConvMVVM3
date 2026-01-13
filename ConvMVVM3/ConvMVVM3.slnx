@@ -1,1 +1,3 @@
-<Solution />
+<Solution>
+  <Project Path="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
+</Solution>
