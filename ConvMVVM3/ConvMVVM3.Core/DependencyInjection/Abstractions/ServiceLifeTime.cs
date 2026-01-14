@@ -1,5 +1,4 @@
-﻿
-namespace ConvMVVM3.Core.Abstractions
+﻿namespace ConvMVVM3.Core.DependencyInjection.Abstractions
 {
     public enum ServiceLifetime
     {

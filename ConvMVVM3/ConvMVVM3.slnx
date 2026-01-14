@@ -1,3 +1,6 @@
 <Solution>
   <Project Path="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
+  <Project Path="ConvMVVM3.Host/ConvMVVM3.Host.csproj">
+    <BuildDependency Project="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
+  </Project>
 </Solution>

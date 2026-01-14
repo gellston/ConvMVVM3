@@ -1,10 +1,12 @@
 ﻿using System;
 
-namespace ConvMVVM3.Core.Abstractions
+namespace ConvMVVM3.Core.DependencyInjection.Abstractions
 {
 
     public interface IServiceRegistry
     {
+
+        #region Public Functions
         void Add(Type serviceType, Type implementationType, ServiceLifetime lifetime);
         void AddFactory(Type serviceType, Func<IServiceResolver, object> factory, ServiceLifetime lifetime);
 
@@ -16,9 +18,10 @@ namespace ConvMVVM3.Core.Abstractions
         void AddSingleton<TService>(Func<IServiceResolver, TService> factory);
         void AddScoped<TService>(Func<IServiceResolver, TService> factory);
         void AddTransient<TService>(Func<IServiceResolver, TService> factory);
+        #endregion
     }
 
-   
+
 
 
 
