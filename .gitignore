@@ -5,3 +5,7 @@
 /ConvMVVM3/.vs/ConvMVVM3.slnx/v18
 /ConvMVVM3/.vs/ConvMVVM3.slnx/FileContentIndex
 /ConvMVVM3/ConvMVVM3.Core/obj
+/ConvMVVM3/.vs/ConvMVVM3.slnx/DesignTimeBuild
+/ConvMVVM3/ConvMVVM3.Core/bin/Debug/netstandard2.0
+/ConvMVVM3/ConvMVVM3.Host/bin/Debug/netstandard2.0
+/ConvMVVM3/ConvMVVM3.Host/obj
