@@ -1,7 +1,7 @@
 # ConvMVVM3
 
 <p align="center">
-  <img src="logo.png" alt="ConvMVVM3 Logo" width="200"/>
+  <img src="logo.png" alt="ConvMVVM3 Logo" width="400"/>
 </p>
 
 **ConvMVVM3 (Convergence MVVM3)** is a free MVVM library for WPF inspired by Community Toolkit and Prism frameworks.
@@ -16,11 +16,11 @@
 
 ## 🚀 Upcoming Features
 
-- Enhanced source generation with validation
-- Advanced DI features (decorators, interceptors)
+- Enhanced source generation
+- Advanced DI features
 - WPF markup extensions
-- Performance optimizations
-- Design-time support
+- 
+
 
 ## 📁 Project Structure
 
