@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
@@ -23,12 +23,10 @@ namespace ConvMVVM3.Core.DependencyInjection.Abstractions
 
             try
             {
-                // JsonElement -> T
-                if (value is JsonElement)
-                {
-                    var je = (JsonElement)value;
-                    return je.Deserialize<T>();
-                }
+// JsonElement 처리 제거 - 호환성 문제 해결
+                // JsonElement는 System.Text.Json에 의존하므로
+                // .NET Standard 2.0 환경에서 호환성 문제 발생 가능
+                // 기본 형 변환만으로 단순화
 
                 // 기본 형 변환
                 if (value is IConvertible && typeof(IConvertible).IsAssignableFrom(targetType))
