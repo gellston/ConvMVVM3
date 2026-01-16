@@ -17,12 +17,7 @@ public class WeakReferenceMessengerTests
         public TestMessage ReceivedMessage { get; set; }
         public int ReceiveCount { get; set; }
 
-        public TestRecipient()
-        {
-            // Register message handler
-            Messenger.Register<TestMessage>(this, Receive);
-        }
-
+        // IRecipient 인터페이스 구현
         public void Receive(TestMessage message)
         {
             ReceivedMessage = message;
@@ -31,12 +26,15 @@ public class WeakReferenceMessengerTests
     }
 
     [Fact]
-    public void Send_Delivers_Message_To_Registered_Recipient()
+    public void Send_Delivers_Message_To_IRecipient()
     {
         // Arrange
         var recipient = new TestRecipient();
         var messenger = WeakReferenceMessenger.Default;
         var message = new TestMessage { Content = "Test" };
+
+        // Register using IRecipient interface
+        messenger.Register<TestMessage>(recipient);
 
         // Act
         messenger.Send(message);
@@ -47,13 +45,39 @@ public class WeakReferenceMessengerTests
     }
 
     [Fact]
-    public void Send_Delivers_Message_To_Multiple_Recipients()
+    public void Send_Delivers_Message_To_Closure_Handler()
+    {
+        // Arrange
+        var recipient = new TestRecipient();
+        var messenger = WeakReferenceMessenger.Default;
+        var message = new TestMessage { Content = "Test" };
+        TestMessage receivedMessage = null;
+
+        // Register using closure
+        messenger.Register<TestRecipient, TestMessage>(
+            recipient,
+            (r, m) => receivedMessage = m
+        );
+
+        // Act
+        messenger.Send(message);
+
+        // Assert
+        Assert.Equal(message, receivedMessage);
+    }
+
+    [Fact]
+    public void Send_Delivers_Message_To_Multiple_IRecipients()
     {
         // Arrange
         var recipient1 = new TestRecipient();
         var recipient2 = new TestRecipient();
         var messenger = WeakReferenceMessenger.Default;
         var message = new TestMessage { Content = "Test" };
+
+        // Register both recipients
+        messenger.Register<TestMessage>(recipient1);
+        messenger.Register<TestMessage>(recipient2);
 
         // Act
         messenger.Send(message);
@@ -66,12 +90,15 @@ public class WeakReferenceMessengerTests
     }
 
     [Fact]
-    public void Unregister_Prevents_Message_Delivery()
+    public void Unregister_IRecipient_Prevents_Message_Delivery()
     {
         // Arrange
         var recipient = new TestRecipient();
         var messenger = WeakReferenceMessenger.Default;
         var message = new TestMessage { Content = "Test" };
+
+        // Register first
+        messenger.Register<TestMessage>(recipient);
 
         // Act - Unregister
         messenger.Unregister<TestMessage>(recipient);
@@ -115,19 +142,15 @@ public class WeakReferenceMessengerTests
     }
 
     [Fact]
-    public void Register_With_Token_Allows_Scoped_Unregistration()
+    public void Register_IRecipient_With_Token_Allows_Scoped_Unregistration()
     {
         // Arrange
         var recipient = new TestRecipient();
         var messenger = WeakReferenceMessenger.Default;
         var token = new object();
 
-        // Register with token
-        messenger.Register<TestMessage, object>(recipient, token, (r, m) =>
-        {
-            ((TestRecipient)r).ReceivedMessage = m;
-            ((TestRecipient)r).ReceiveCount++;
-        });
+        // Register IRecipient with token
+        messenger.Register<TestMessage>(recipient, token);
 
         var message = new TestMessage { Content = "Test" };
 
@@ -143,7 +166,7 @@ public class WeakReferenceMessengerTests
         recipient.ReceiveCount = 0;
 
         // Unregister with token
-        messenger.Unregister<TestMessage, object>(recipient, token);
+        messenger.Unregister<TestMessage>(recipient, token);
 
         // Send again
         messenger.Send(new TestMessage { Content = "After Unregister" });
@@ -154,7 +177,7 @@ public class WeakReferenceMessengerTests
     }
 
     [Fact]
-    public void Send_With_Token_Delivers_Only_To_Matching_Recipients()
+    public void Send_With_Token_Delivers_Only_To_Matching_IRecipients()
     {
         // Arrange
         var recipient1 = new TestRecipient();
@@ -165,18 +188,10 @@ public class WeakReferenceMessengerTests
         var token2 = new object();
 
         // Register recipient1 with token1
-        messenger.Register<TestMessage, object>(recipient1, token1, (r, m) =>
-        {
-            ((TestRecipient)r).ReceivedMessage = m;
-            ((TestRecipient)r).ReceiveCount++;
-        });
+        messenger.Register<TestMessage>(recipient1, token1);
 
         // Register recipient2 with token2
-        messenger.Register<TestMessage, object>(recipient2, token2, (r, m) =>
-        {
-            ((TestRecipient)r).ReceivedMessage = m;
-            ((TestRecipient)r).ReceiveCount++;
-        });
+        messenger.Register<TestMessage>(recipient2, token2);
 
         var message = new TestMessage { Content = "Test" };
 
