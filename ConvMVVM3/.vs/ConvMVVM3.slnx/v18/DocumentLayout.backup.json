@@ -134,12 +134,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -154,7 +150,8 @@
               "RelativeToolTip": "ConvMVVM3.Core\\Mvvm\\ObservableObject.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAFEAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-14T17:05:42.153Z"
+              "WhenOpened": "2026-01-14T17:05:42.153Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -226,8 +223,7 @@
               "RelativeToolTip": "ConvMVVM3.Core\\ConvMVVM3.Core.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvwcAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-01-13T22:51:40.214Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-13T22:51:40.214Z"
             },
             {
               "$type": "Document",
@@ -239,8 +235,7 @@
               "RelativeToolTip": "ConvMVVM3.Host\\ConvMVVM3.Host.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvwQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-01-13T22:51:34.001Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-13T22:51:34.001Z"
             },
             {
               "$type": "Document",
@@ -517,6 +512,10 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-01-13T22:08:30.254Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }
