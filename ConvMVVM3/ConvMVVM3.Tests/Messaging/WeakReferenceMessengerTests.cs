@@ -1,4 +1,5 @@
 using ConvMVVM3.Core.Mvvm.Messaging;
+using ConvMVVM3.Core.Mvvm.Messaging.Abstractions;
 using System;
 using Xunit;
 
@@ -11,19 +12,21 @@ public class WeakReferenceMessengerTests
         public string Content { get; set; }
     }
 
-    private class TestRecipient : ObservableRecipient
+    private class TestRecipient : ObservableRecipient, IRecipient<TestMessage>
     {
-        public TestMessage ReceivedMessage { get; private set; }
-        public int ReceiveCount { get; private set; }
+        public TestMessage ReceivedMessage { get; set; }
+        public int ReceiveCount { get; set; }
 
         public TestRecipient()
         {
             // Register message handler
-            Messenger.Register<TestMessage>(this, (recipient, message) =>
-            {
-                ((TestRecipient)recipient).ReceivedMessage = message;
-                ((TestRecipient)recipient).ReceiveCount++;
-            });
+            Messenger.Register<TestMessage>(this, Receive);
+        }
+
+        public void Receive(TestMessage message)
+        {
+            ReceivedMessage = message;
+            ReceiveCount++;
         }
     }
 

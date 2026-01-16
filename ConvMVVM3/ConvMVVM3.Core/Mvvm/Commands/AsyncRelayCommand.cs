@@ -1,4 +1,4 @@
-﻿using ConvMVVM3.Core.Mvvm.Commands.Abstractions;
+using ConvMVVM3.Core.Mvvm.Commands.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,6 +23,11 @@ namespace ConvMVVM3.Core.Mvvm.Commands
         public bool IsRunning
         {
             get { return _running == 1; }
+        }
+
+        public bool IsExecuting
+        {
+            get { return IsRunning; }
         }
 
         public AsyncRelayCommand(

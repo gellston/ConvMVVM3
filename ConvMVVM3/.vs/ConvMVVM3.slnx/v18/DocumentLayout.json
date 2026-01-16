@@ -3,6 +3,34 @@
   "WorkspaceRootPath": "C:\\github\\ConvMVVM3\\ConvMVVM3\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{92461E9F-A005-B457-2D8E-84882AD9D0D2}|ConvMVVM3.WPF\\ConvMVVM3.WPF.csproj|c:\\github\\convmvvm3\\convmvvm3\\convmvvm3.wpf\\behaviors\\actions\\callmethodaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{92461E9F-A005-B457-2D8E-84882AD9D0D2}|ConvMVVM3.WPF\\ConvMVVM3.WPF.csproj|solutionrelative:convmvvm3.wpf\\behaviors\\actions\\callmethodaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{92461E9F-A005-B457-2D8E-84882AD9D0D2}|ConvMVVM3.WPF\\ConvMVVM3.WPF.csproj|c:\\github\\convmvvm3\\convmvvm3\\convmvvm3.wpf\\behaviors\\actions\\changepropertyaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{92461E9F-A005-B457-2D8E-84882AD9D0D2}|ConvMVVM3.WPF\\ConvMVVM3.WPF.csproj|solutionrelative:convmvvm3.wpf\\behaviors\\actions\\changepropertyaction.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{92461E9F-A005-B457-2D8E-84882AD9D0D2}|ConvMVVM3.WPF\\ConvMVVM3.WPF.csproj|c:\\github\\convmvvm3\\convmvvm3\\convmvvm3.wpf\\weakeventmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{92461E9F-A005-B457-2D8E-84882AD9D0D2}|ConvMVVM3.WPF\\ConvMVVM3.WPF.csproj|solutionrelative:convmvvm3.wpf\\weakeventmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E26E01C-D401-68A2-8755-E65B1E1EAE33}|ConvMVVM3.Tests\\ConvMVVM3.Tests.csproj|c:\\github\\convmvvm3\\convmvvm3\\convmvvm3.tests\\commands\\asyncrelaycommandtests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E26E01C-D401-68A2-8755-E65B1E1EAE33}|ConvMVVM3.Tests\\ConvMVVM3.Tests.csproj|solutionrelative:convmvvm3.tests\\commands\\asyncrelaycommandtests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E26E01C-D401-68A2-8755-E65B1E1EAE33}|ConvMVVM3.Tests\\ConvMVVM3.Tests.csproj|c:\\github\\convmvvm3\\convmvvm3\\convmvvm3.tests\\messaging\\weakreferencemessengertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E26E01C-D401-68A2-8755-E65B1E1EAE33}|ConvMVVM3.Tests\\ConvMVVM3.Tests.csproj|solutionrelative:convmvvm3.tests\\messaging\\weakreferencemessengertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E26E01C-D401-68A2-8755-E65B1E1EAE33}|ConvMVVM3.Tests\\ConvMVVM3.Tests.csproj|c:\\github\\convmvvm3\\convmvvm3\\convmvvm3.tests\\observableobject\\observableobjecttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E26E01C-D401-68A2-8755-E65B1E1EAE33}|ConvMVVM3.Tests\\ConvMVVM3.Tests.csproj|solutionrelative:convmvvm3.tests\\observableobject\\observableobjecttests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7E26E01C-D401-68A2-8755-E65B1E1EAE33}|ConvMVVM3.Tests\\ConvMVVM3.Tests.csproj|c:\\github\\convmvvm3\\convmvvm3\\convmvvm3.tests\\dependencyinjection\\servicecontainertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7E26E01C-D401-68A2-8755-E65B1E1EAE33}|ConvMVVM3.Tests\\ConvMVVM3.Tests.csproj|solutionrelative:convmvvm3.tests\\dependencyinjection\\servicecontainertests.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{CC181F8B-7397-1AD3-8A60-8AC2E1FEF8C1}|ConvMVVM3.Host\\ConvMVVM3.Host.csproj|c:\\github\\convmvvm3\\convmvvm3\\convmvvm3.host\\dependencyinjection\\activatorutilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{CC181F8B-7397-1AD3-8A60-8AC2E1FEF8C1}|ConvMVVM3.Host\\ConvMVVM3.Host.csproj|solutionrelative:convmvvm3.host\\dependencyinjection\\activatorutilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -134,7 +162,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -142,7 +170,97 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "CallMethodAction.cs",
+              "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.WPF\\Behaviors\\Actions\\CallMethodAction.cs",
+              "RelativeDocumentMoniker": "ConvMVVM3.WPF\\Behaviors\\Actions\\CallMethodAction.cs",
+              "ToolTip": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.WPF\\Behaviors\\Actions\\CallMethodAction.cs",
+              "RelativeToolTip": "ConvMVVM3.WPF\\Behaviors\\Actions\\CallMethodAction.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T13:13:20.888Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "ChangePropertyAction.cs",
+              "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.WPF\\Behaviors\\Actions\\ChangePropertyAction.cs",
+              "RelativeDocumentMoniker": "ConvMVVM3.WPF\\Behaviors\\Actions\\ChangePropertyAction.cs",
+              "ToolTip": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.WPF\\Behaviors\\Actions\\ChangePropertyAction.cs",
+              "RelativeToolTip": "ConvMVVM3.WPF\\Behaviors\\Actions\\ChangePropertyAction.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T13:13:19.722Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "WeakEventManager.cs",
+              "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.WPF\\WeakEventManager.cs",
+              "RelativeDocumentMoniker": "ConvMVVM3.WPF\\WeakEventManager.cs",
+              "ToolTip": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.WPF\\WeakEventManager.cs",
+              "RelativeToolTip": "ConvMVVM3.WPF\\WeakEventManager.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T13:13:12.809Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 5,
+              "Title": "ObservableObjectTests.cs",
+              "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Tests\\ObservableObject\\ObservableObjectTests.cs",
+              "RelativeDocumentMoniker": "ConvMVVM3.Tests\\ObservableObject\\ObservableObjectTests.cs",
+              "ToolTip": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Tests\\ObservableObject\\ObservableObjectTests.cs",
+              "RelativeToolTip": "ConvMVVM3.Tests\\ObservableObject\\ObservableObjectTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T13:12:14.855Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AsyncRelayCommandTests.cs",
+              "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Tests\\Commands\\AsyncRelayCommandTests.cs",
+              "RelativeDocumentMoniker": "ConvMVVM3.Tests\\Commands\\AsyncRelayCommandTests.cs",
+              "ToolTip": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Tests\\Commands\\AsyncRelayCommandTests.cs",
+              "RelativeToolTip": "ConvMVVM3.Tests\\Commands\\AsyncRelayCommandTests.cs",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAuwBcAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T13:00:44.87Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "WeakReferenceMessengerTests.cs",
+              "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Tests\\Messaging\\WeakReferenceMessengerTests.cs",
+              "RelativeDocumentMoniker": "ConvMVVM3.Tests\\Messaging\\WeakReferenceMessengerTests.cs",
+              "ToolTip": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Tests\\Messaging\\WeakReferenceMessengerTests.cs",
+              "RelativeToolTip": "ConvMVVM3.Tests\\Messaging\\WeakReferenceMessengerTests.cs",
+              "ViewState": "AgIAAHwAAAAAAAAAAAAuwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T13:00:19.332Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "ServiceContainerTests.cs",
+              "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Tests\\DependencyInjection\\ServiceContainerTests.cs",
+              "RelativeDocumentMoniker": "ConvMVVM3.Tests\\DependencyInjection\\ServiceContainerTests.cs",
+              "ToolTip": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Tests\\DependencyInjection\\ServiceContainerTests.cs",
+              "RelativeToolTip": "ConvMVVM3.Tests\\DependencyInjection\\ServiceContainerTests.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-16T13:00:16.893Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
               "Title": "ObservableObject.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\ObservableObject.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\ObservableObject.cs",
@@ -150,12 +268,11 @@
               "RelativeToolTip": "ConvMVVM3.Core\\Mvvm\\ObservableObject.cs",
               "ViewState": "AgIAAFAAAAAAAAAAAAAcwBYAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-14T17:05:42.153Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-14T17:05:42.153Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 7,
               "Title": "ActivatorUtilities.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Host\\DependencyInjection\\ActivatorUtilities.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Host\\DependencyInjection\\ActivatorUtilities.cs",
@@ -163,12 +280,11 @@
               "RelativeToolTip": "ConvMVVM3.Host\\DependencyInjection\\ActivatorUtilities.cs",
               "ViewState": "AgIAACgAAAAAAAAAAAAAwDcAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-14T08:35:36.865Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-14T08:35:36.865Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 9,
               "Title": "ServiceCollection.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Host\\DependencyInjection\\ServiceCollection.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Host\\DependencyInjection\\ServiceCollection.cs",
@@ -176,12 +292,11 @@
               "RelativeToolTip": "ConvMVVM3.Host\\DependencyInjection\\ServiceCollection.cs",
               "ViewState": "AgIAAD0AAAAAAAAAAAAgwBEAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-13T22:44:17.557Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-13T22:44:17.557Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 11,
               "Title": "ServiceDescriptor.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Host\\DependencyInjection\\ServiceDescriptor.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Host\\DependencyInjection\\ServiceDescriptor.cs",
@@ -189,12 +304,11 @@
               "RelativeToolTip": "ConvMVVM3.Host\\DependencyInjection\\ServiceDescriptor.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-13T22:42:17.761Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-13T22:42:17.761Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 10,
               "Title": "ServiceContainer.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Host\\DependencyInjection\\ServiceContainer.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Host\\DependencyInjection\\ServiceContainer.cs",
@@ -202,12 +316,11 @@
               "RelativeToolTip": "ConvMVVM3.Host\\DependencyInjection\\ServiceContainer.cs",
               "ViewState": "AgIAAFEAAAAAAAAAAAAiwLMBAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-13T23:24:02.247Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-13T23:24:02.247Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 8,
               "Title": "AddonServiceProviderExtensions.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Host\\DependencyInjection\\AddonServiceProviderExtensions.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Host\\DependencyInjection\\AddonServiceProviderExtensions.cs",
@@ -215,12 +328,11 @@
               "RelativeToolTip": "ConvMVVM3.Host\\DependencyInjection\\AddonServiceProviderExtensions.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-01-14T15:07:22.781Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-14T15:07:22.781Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 15,
               "Title": "ObservableRecipient.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Messaging\\ObservableRecipient.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Messaging\\ObservableRecipient.cs",
@@ -232,7 +344,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 14,
               "Title": "ObservablePropertyAttribute.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Attributes\\ObservablePropertyAttribute.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Attributes\\ObservablePropertyAttribute.cs",
@@ -244,7 +356,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 13,
               "Title": "ReturnValue.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\DependencyInjection\\Abstractions\\ReturnValue.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\DependencyInjection\\Abstractions\\ReturnValue.cs",
@@ -256,7 +368,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 16,
               "Title": "ConvMVVM3.Core.csproj",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\ConvMVVM3.Core.csproj",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\ConvMVVM3.Core.csproj",
@@ -268,7 +380,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 17,
               "Title": "ConvMVVM3.Host.csproj",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Host\\ConvMVVM3.Host.csproj",
               "RelativeDocumentMoniker": "ConvMVVM3.Host\\ConvMVVM3.Host.csproj",
@@ -280,7 +392,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 18,
               "Title": "AsyncRelayCommand.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Commands\\AsyncRelayCommand.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Commands\\AsyncRelayCommand.cs",
@@ -292,7 +404,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 19,
               "Title": "RelayCommand.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Commands\\RelayCommand.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Commands\\RelayCommand.cs",
@@ -304,7 +416,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 20,
               "Title": "IAsyncCommand.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Commands\\Abstractions\\IAsyncCommand.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Commands\\Abstractions\\IAsyncCommand.cs",
@@ -316,7 +428,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 21,
               "Title": "IMessenger.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Messaging\\Abstractions\\IMessenger.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Messaging\\Abstractions\\IMessenger.cs",
@@ -328,7 +440,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 22,
               "Title": "RelayCommandAttribute.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Attributes\\RelayCommandAttribute.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Attributes\\RelayCommandAttribute.cs",
@@ -340,7 +452,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 23,
               "Title": "IRelayCommand.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Commands\\Abstractions\\IRelayCommand.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Commands\\Abstractions\\IRelayCommand.cs",
@@ -352,7 +464,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 24,
               "Title": "NotifyPropertyChangingForAttribute.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Attributes\\NotifyPropertyChangingForAttribute.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Attributes\\NotifyPropertyChangingForAttribute.cs",
@@ -364,7 +476,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 25,
               "Title": "NotifyPropertyChangedForAttribute.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Attributes\\NotifyPropertyChangedForAttribute.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Attributes\\NotifyPropertyChangedForAttribute.cs",
@@ -376,7 +488,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 26,
               "Title": "NotifyCanExecuteChangedForAttribute.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Attributes\\NotifyCanExecuteChangedForAttribute.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Attributes\\NotifyCanExecuteChangedForAttribute.cs",
@@ -388,7 +500,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 27,
               "Title": "AsyncRelayCommandAttribute.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Attributes\\AsyncRelayCommandAttribute.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Attributes\\AsyncRelayCommandAttribute.cs",
@@ -400,7 +512,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 28,
               "Title": "AddonBase.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\DependencyInjection\\Abstractions\\AddonBase.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\DependencyInjection\\Abstractions\\AddonBase.cs",
@@ -412,7 +524,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 29,
               "Title": "IRecipient.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Messaging\\Abstractions\\IRecipient.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Messaging\\Abstractions\\IRecipient.cs",
@@ -424,7 +536,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 30,
               "Title": "WeakReferenceMessenger.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\Mvvm\\Messaging\\WeakReferenceMessenger.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\Mvvm\\Messaging\\WeakReferenceMessenger.cs",
@@ -436,7 +548,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 31,
               "Title": "AddonIdAttribute.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\DependencyInjection\\Abstractions\\AddonIdAttribute.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\DependencyInjection\\Abstractions\\AddonIdAttribute.cs",
@@ -448,7 +560,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 32,
               "Title": "IAddon.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IAddon.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IAddon.cs",
@@ -460,7 +572,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 33,
               "Title": "IServiceContainer.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IServiceContainer.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IServiceContainer.cs",
@@ -472,7 +584,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 34,
               "Title": "IServiceResolver.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IServiceResolver.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IServiceResolver.cs",
@@ -484,7 +596,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 35,
               "Title": "IServiceScope.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IServiceScope.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IServiceScope.cs",
@@ -496,7 +608,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 36,
               "Title": "ServiceLifeTime.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\DependencyInjection\\Abstractions\\ServiceLifeTime.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\DependencyInjection\\Abstractions\\ServiceLifeTime.cs",
@@ -508,7 +620,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 37,
               "Title": "IServiceRegistry.cs",
               "DocumentMoniker": "C:\\github\\ConvMVVM3\\ConvMVVM3\\ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IServiceRegistry.cs",
               "RelativeDocumentMoniker": "ConvMVVM3.Core\\DependencyInjection\\Abstractions\\IServiceRegistry.cs",

@@ -61,7 +61,7 @@ public class RelayCommandTests
     }
 
     [Fact]
-    public void CanExecuteChanged_Raised_When_RaiseCanExecuteChanged_Called()
+    public void CanExecuteChanged_Raised_When_NotifyCanExecuteChanged_Called()
     {
         // Arrange
         var command = new RelayCommand(() => { });
@@ -70,7 +70,7 @@ public class RelayCommandTests
         command.CanExecuteChanged += (sender, e) => eventRaised = true;
 
         // Act
-        command.RaiseCanExecuteChanged();
+        command.NotifyCanExecuteChanged();
 
         // Assert
         Assert.True(eventRaised);

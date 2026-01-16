@@ -12,9 +12,9 @@ public class AsyncRelayCommandTests
     {
         // Arrange
         var executed = false;
-        var command = new AsyncRelayCommand(async () =>
+        var command = new AsyncRelayCommand(async (ct) =>
         {
-            await Task.Delay(1);
+            await Task.Delay(1, ct);
             executed = true;
         });
 
@@ -30,9 +30,9 @@ public class AsyncRelayCommandTests
     {
         // Arrange
         object receivedParameter = null;
-        var command = new AsyncRelayCommand<object>(async param =>
+        var command = new AsyncRelayCommand<object>(async (param, ct) =>
         {
-            await Task.Delay(1);
+            await Task.Delay(1, ct);
             receivedParameter = param;
         });
 
@@ -49,7 +49,7 @@ public class AsyncRelayCommandTests
     public void CanExecute_Returns_True_By_Default()
     {
         // Arrange
-        var command = new AsyncRelayCommand(async () => await Task.Delay(1));
+        var command = new AsyncRelayCommand(async (ct) => await Task.Delay(1, ct));
 
         // Act & Assert
         Assert.True(command.CanExecute(null));
@@ -60,10 +60,10 @@ public class AsyncRelayCommandTests
     {
         // Arrange
         var executionCount = 0;
-        var command = new AsyncRelayCommand(async () =>
+        var command = new AsyncRelayCommand(async (ct) =>
         {
             executionCount++;
-            await Task.Delay(10);
+            await Task.Delay(10, ct);
         });
 
         // Act - Start multiple executions
