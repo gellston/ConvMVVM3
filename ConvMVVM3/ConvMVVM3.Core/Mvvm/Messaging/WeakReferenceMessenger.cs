@@ -1,4 +1,4 @@
-﻿using ConvMVVM3.Core.Mvvm.Messaging.Abstractions;
+using ConvMVVM3.Core.Mvvm.Messaging.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -139,6 +139,14 @@ namespace ConvMVVM3.Core.Mvvm.Messaging
                     if (tokenDict.Count == 0)
                         _map.Remove(mt);
                 }
+            }
+        }
+
+        public void Reset()
+        {
+            lock (_gate)
+            {
+                _map.Clear();
             }
         }
 

@@ -1,4 +1,4 @@
-﻿using ConvMVVM3.Core.DependencyInjection.Abstractions;
+using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,13 +20,22 @@ namespace ConvMVVM3.Host.DependencyInjection
         #endregion
 
         #region Public Functions
-        public ServiceContainer(ServiceCollection services)
+        public ServiceContainer(IServiceRegistry registry)
         {
-            if (services == null) throw new ArgumentNullException(nameof(services));
+            if (registry == null) throw new ArgumentNullException(nameof(registry));
 
-            _map = services.Descriptors
-                .GroupBy(d => d.ServiceType)
-                .ToDictionary(g => g.Key, g => g.ToList());
+            // IServiceRegistry에는 Descriptors 프로퍼티가 없으므로
+            // ServiceCollection을 IServiceRegistry로 캐스팅하여 사용
+            if (registry is ServiceCollection serviceCollection)
+            {
+                _map = serviceCollection.Descriptors
+                    .GroupBy(d => d.ServiceType)
+                    .ToDictionary(g => g.Key, g => g.ToList());
+            }
+            else
+            {
+                throw new ArgumentException("Registry must be ServiceCollection", nameof(registry));
+            }
         }
 
         public IServiceScope CreateScope()

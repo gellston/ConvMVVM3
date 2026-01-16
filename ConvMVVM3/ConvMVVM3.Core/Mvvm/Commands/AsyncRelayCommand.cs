@@ -1,4 +1,4 @@
-﻿using ConvMVVM3.Core.Mvvm.Commands.Abstractions;
+using ConvMVVM3.Core.Mvvm.Commands.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,6 +25,11 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             get { return _running == 1; }
         }
 
+        public bool IsExecuting
+        {
+            get { return IsRunning; }
+        }
+
         public AsyncRelayCommand(
             Func<CancellationToken, Task> execute,
             Func<bool> canExecute = null,
@@ -34,6 +39,21 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             if (execute == null) throw new ArgumentNullException(nameof(execute));
 
             _execute = execute;
+            _canExecute = canExecute;
+            _allowConcurrent = allowConcurrentExecutions;
+            _disableWhileRunning = disableWhileRunning;
+        }
+
+        public AsyncRelayCommand(
+            Func<Task> execute,
+            Func<bool> canExecute = null,
+            bool allowConcurrentExecutions = false,
+            bool disableWhileRunning = true)
+        {
+            if (execute == null) throw new ArgumentNullException(nameof(execute));
+
+            // Convert Func<Task> to Func<CancellationToken, Task> that ignores the token
+            _execute = (ct) => execute();
             _canExecute = canExecute;
             _allowConcurrent = allowConcurrentExecutions;
             _disableWhileRunning = disableWhileRunning;
@@ -77,6 +97,14 @@ namespace ConvMVVM3.Core.Mvvm.Commands
         {
             if (!_allowConcurrent)
             {
+                // 이전 작업이 실행 중이면 취소
+                var previousCts = _cts;
+                if (previousCts != null)
+                {
+                    try { previousCts.Cancel(); } catch { }
+                }
+
+                // 새로운 작업 시작
                 if (Interlocked.CompareExchange(ref _running, 1, 0) != 0)
                     return;
             }

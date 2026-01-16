@@ -1,4 +1,4 @@
-﻿using ConvMVVM3.Core.Mvvm.Commands.Abstractions;
+using ConvMVVM3.Core.Mvvm.Commands.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,7 +26,10 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 
         public void Execute(object parameter)
         {
-            _execute();
+            if (CanExecute(parameter))
+            {
+                _execute();
+            }
         }
 
         public void NotifyCanExecuteChanged()
@@ -69,6 +72,9 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 
         public void Execute(object parameter)
         {
+            if (!CanExecute(parameter))
+                return;
+
             T value = default(T);
             if (parameter != null) value = (T)parameter;
 
