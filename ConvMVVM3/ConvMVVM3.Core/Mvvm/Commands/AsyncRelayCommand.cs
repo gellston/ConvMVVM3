@@ -44,6 +44,21 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             _disableWhileRunning = disableWhileRunning;
         }
 
+        public AsyncRelayCommand(
+            Func<Task> execute,
+            Func<bool> canExecute = null,
+            bool allowConcurrentExecutions = false,
+            bool disableWhileRunning = true)
+        {
+            if (execute == null) throw new ArgumentNullException(nameof(execute));
+
+            // Convert Func<Task> to Func<CancellationToken, Task> that ignores the token
+            _execute = (ct) => execute();
+            _canExecute = canExecute;
+            _allowConcurrent = allowConcurrentExecutions;
+            _disableWhileRunning = disableWhileRunning;
+        }
+
         public bool CanExecute(object parameter)
         {
             if (_disableWhileRunning && IsRunning)

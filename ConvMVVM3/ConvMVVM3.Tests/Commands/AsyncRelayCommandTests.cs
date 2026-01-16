@@ -170,16 +170,30 @@ public class AsyncRelayCommandTests
     }
 
     [Fact]
-    public void Constructor_Throws_When_Execute_Is_Null()
+    public async Task ExecuteAsync_With_FuncTask_Overload_Works()
     {
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new AsyncRelayCommand(null));
+        // Arrange
+        var executed = false;
+        var command = new AsyncRelayCommand(async () =>
+        {
+            await Task.Delay(1);
+            executed = true;
+        });
+
+        // Act
+        await command.ExecuteAsync(null);
+
+        // Assert
+        Assert.True(executed);
     }
 
     [Fact]
-    public void Constructor_With_CanExecute_Throws_When_Execute_Is_Null()
+    public void Constructor_FuncTask_Overload_Throws_When_Execute_Is_Null()
     {
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new AsyncRelayCommand(null, () => true));
+        Assert.Throws<ArgumentNullException>(() => new AsyncRelayCommand((Func<Task>)null));
     }
+
+
+
 }
