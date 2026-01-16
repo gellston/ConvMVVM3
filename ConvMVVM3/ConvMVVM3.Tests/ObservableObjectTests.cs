@@ -2,7 +2,7 @@ using ConvMVVM3.Core.Mvvm;
 using System.ComponentModel;
 using Xunit;
 
-namespace ConvMVVM3.Tests.ObservableObject;
+namespace ConvMVVM3.Tests;
 
 public class ObservableObjectTests
 {
@@ -90,6 +90,57 @@ public class ObservableObjectTests
 
         // Assert
         Assert.IsAssignableFrom<INotifyPropertyChanged>(obj);
+    }
+
+    [Fact]
+    public void Implements_INotifyPropertyChanging()
+    {
+        // Arrange
+        var obj = new TestObservableObject();
+
+        // Assert
+        Assert.IsAssignableFrom<INotifyPropertyChanging>(obj);
+    }
+
+    [Fact]
+    public void PropertyChanging_Raised_When_Property_Value_Changes()
+    {
+        // Arrange
+        var obj = new TestObservableObject();
+        var propertyChangingRaised = false;
+        var changingPropertyName = string.Empty;
+
+        obj.PropertyChanging += (sender, e) =>
+        {
+            propertyChangingRaised = true;
+            changingPropertyName = e.PropertyName;
+        };
+
+        // Act
+        obj.TestProperty = "New Value";
+
+        // Assert
+        Assert.True(propertyChangingRaised);
+        Assert.Equal(nameof(TestObservableObject.TestProperty), changingPropertyName);
+    }
+
+    [Fact]
+    public void PropertyChanging_Not_Raised_When_Property_Value_Same()
+    {
+        // Arrange
+        var obj = new TestObservableObject
+        {
+            TestProperty = "Initial Value"
+        };
+
+        var propertyChangingRaised = false;
+        obj.PropertyChanging += (sender, e) => propertyChangingRaised = true;
+
+        // Act
+        obj.TestProperty = "Initial Value"; // Same value
+
+        // Assert
+        Assert.False(propertyChangingRaised);
     }
 
     [Fact]

@@ -383,3 +383,17 @@ appsettings.*.json
 !appsettings.json
 !appsettings.Development.json
 .vs/
+<<<<<<< Updated upstream
+=======
+
+# Source Generator temporary files
+*.TestFile.g.cs
+*.Simple.g.cs
+*.ReceiverStatus.g.cs
+*.Info.g.cs
+*.GeneratorDebug.g.cs
+*.GeneratorError.g.cs
+*TestFile*.g.cs
+*ReceiverStatus*.g.cs
+*GeneratedTest*
+>>>>>>> Stashed changes

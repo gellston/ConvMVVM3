@@ -1,10 +1,9 @@
 using ConvMVVM3.Host.DependencyInjection;
-using ConvMVVM3.Host.DependencyInjection;
 using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using System;
 using Xunit;
 
-namespace ConvMVVM3.Tests.DependencyInjection;
+namespace ConvMVVM3.Tests;
 
 public class ServiceContainerTests
 {
