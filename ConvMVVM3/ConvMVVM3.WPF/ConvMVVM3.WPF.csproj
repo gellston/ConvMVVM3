@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ConvMVVM3.Core\ConvMVVM3.Core.csproj" />
+    <ProjectReference Include="..\ConvMVVM3.Host\ConvMVVM3.Host.csproj" />
   </ItemGroup>
 
 </Project>
