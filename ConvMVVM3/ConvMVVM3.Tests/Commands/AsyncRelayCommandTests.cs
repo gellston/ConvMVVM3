@@ -70,7 +70,14 @@ public class AsyncRelayCommandTests
         var task1 = command.ExecuteAsync(null);
         var task2 = command.ExecuteAsync(null);
 
-        await Task.WhenAll(task1, task2);
+        try
+        {
+            await Task.WhenAll(task1, task2);
+        }
+        catch (TaskCanceledException)
+        {
+            // Expected when first task is canceled
+        }
 
         // Assert - Only one execution should occur
         Assert.Equal(1, executionCount);
@@ -101,23 +108,24 @@ public class AsyncRelayCommandTests
         // Arrange
         var firstExecutionCompleted = false;
         var secondExecutionStarted = false;
-        var command = new AsyncRelayCommand(async () =>
+        var command = new AsyncRelayCommand(async (ct) =>
         {
-            if (!firstExecutionCompleted)
+            firstExecutionCompleted = true;
+            if (!secondExecutionStarted)
             {
-                firstExecutionCompleted = true;
-                await Task.Delay(100); // Long delay
+                await Task.Delay(100, ct); // Long delay
             }
             else
             {
-                secondExecutionStarted = true;
-                await Task.Delay(1);
+                await Task.Delay(1, ct);
             }
         });
 
         // Act - Start first execution
         var firstTask = command.ExecuteAsync(null);
-        await Task.Delay(10); // Let first execution start
+        await Task.Delay(50); // Let first execution start
+
+        secondExecutionStarted = true;
 
         // Start second execution (should cancel first)
         var secondTask = command.ExecuteAsync(null);
@@ -126,7 +134,15 @@ public class AsyncRelayCommandTests
         // Assert
         Assert.True(secondExecutionStarted);
         // First task should be cancelled
-        Assert.True(firstTask.IsCanceled || !firstTask.IsCompleted);
+        try
+        {
+            await firstTask;
+            Assert.False(true, "First task should be canceled");
+        }
+        catch (TaskCanceledException)
+        {
+            // Expected
+        }
     }
 
     [Fact]

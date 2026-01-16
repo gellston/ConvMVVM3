@@ -155,7 +155,7 @@ public class WeakReferenceMessengerTests
         var message = new TestMessage { Content = "Test" };
 
         // Act - Send message (should be received)
-        messenger.Send(message);
+        messenger.Send(message, token);
 
         // Assert - Message received
         Assert.Equal(message, recipient.ReceivedMessage);
@@ -165,11 +165,11 @@ public class WeakReferenceMessengerTests
         recipient.ReceivedMessage = null;
         recipient.ReceiveCount = 0;
 
-        // Unregister with token
+        // Unregister with token (using IRecipient unregister)
         messenger.Unregister<TestMessage>(recipient, token);
 
         // Send again
-        messenger.Send(new TestMessage { Content = "After Unregister" });
+        messenger.Send(new TestMessage { Content = "After Unregister" }, token);
 
         // Assert - No message received
         Assert.Null(recipient.ReceivedMessage);
@@ -210,8 +210,11 @@ public class WeakReferenceMessengerTests
     {
         // Arrange
         var recipient = new TestRecipient();
-        var messenger = WeakReferenceMessenger.Default;
+        var messenger = new WeakReferenceMessenger();
         var message = new TestMessage { Content = "Test" };
+
+        // Register recipient
+        messenger.Register<TestMessage>(recipient);
 
         // Send message to ensure registration works
         messenger.Send(message);

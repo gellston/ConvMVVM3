@@ -97,6 +97,14 @@ namespace ConvMVVM3.Core.Mvvm.Commands
         {
             if (!_allowConcurrent)
             {
+                // 이전 작업이 실행 중이면 취소
+                var previousCts = _cts;
+                if (previousCts != null)
+                {
+                    try { previousCts.Cancel(); } catch { }
+                }
+
+                // 새로운 작업 시작
                 if (Interlocked.CompareExchange(ref _running, 1, 0) != 0)
                     return;
             }
