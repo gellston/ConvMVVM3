@@ -8,7 +8,7 @@
     <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
-  <ItemGroup>
+   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
@@ -19,13 +19,19 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" PrivateAssets="all" />
   </ItemGroup>
 
-   <ItemGroup>
-     <ProjectReference Include="..\ConvMVVM3.Core\ConvMVVM3.Core.csproj" />
-     <ProjectReference Include="..\ConvMVVM3.Host\ConvMVVM3.Host.csproj" />
-     <ProjectReference Include="..\ConvMVVM3.SourceGenerator\ConvMVVM3.SourceGenerator.csproj" />
-   </ItemGroup>
+    <ItemGroup>
+       <ProjectReference Include="..\ConvMVVM3.Core\ConvMVVM3.Core.csproj" />
+       <ProjectReference Include="..\ConvMVVM3.Host\ConvMVVM3.Host.csproj" />
+          <ProjectReference Include="..\ConvMVVM3.SourceGenerator\ConvMVVM3.SourceGenerator.csproj" />
+          <ProjectReference Include="..\ConvMVVM3.SourceGenerator\ConvMVVM3.SourceGenerator.csproj" 
+                            OutputItemType="Analyzer" 
+                            ReferenceOutputAssembly="false" />
+     </ItemGroup>
+
+
 
    <ItemGroup>
      <Compile Remove="Messaging\ObservableRecipientTests.cs" />

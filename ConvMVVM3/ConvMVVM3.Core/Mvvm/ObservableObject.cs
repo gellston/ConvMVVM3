@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -98,5 +98,7 @@ namespace ConvMVVM3.Core.Mvvm
                     OnPropertyChanged(name);
             }
         }
+
+
     }
 }

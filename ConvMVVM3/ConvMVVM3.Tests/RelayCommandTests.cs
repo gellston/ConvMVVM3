@@ -2,7 +2,7 @@ using ConvMVVM3.Core.Mvvm.Commands;
 using System;
 using Xunit;
 
-namespace ConvMVVM3.Tests.Commands;
+namespace ConvMVVM3.Tests;
 
 public class RelayCommandTests
 {

@@ -3,7 +3,7 @@ using ConvMVVM3.Core.Mvvm.Messaging.Abstractions;
 using System;
 using Xunit;
 
-namespace ConvMVVM3.Tests.Messaging;
+namespace ConvMVVM3.Tests;
 
 public class WeakReferenceMessengerTests
 {

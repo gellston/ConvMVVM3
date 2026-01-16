@@ -3,7 +3,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ConvMVVM3.Tests.Commands;
+namespace ConvMVVM3.Tests;
 
 public class AsyncRelayCommandTests
 {
