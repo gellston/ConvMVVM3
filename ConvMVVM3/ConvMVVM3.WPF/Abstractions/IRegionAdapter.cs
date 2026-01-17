@@ -7,7 +7,6 @@ namespace ConvMVVM3.WPF.Abstractions
     public interface IRegionAdapter
     {
         Type TargetType { get; }
-
-        IRegionAttachment Attach(DependencyObject target, IRegion region);
+        void Attach(DependencyObject target, IRegion region);
     }
 }

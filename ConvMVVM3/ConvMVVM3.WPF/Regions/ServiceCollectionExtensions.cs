@@ -1,6 +1,7 @@
 using System;
 using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using ConvMVVM3.WPF.Abstractions;
+using ConvMVVM3.WPF.Regions.Adapter;
 
 
 namespace ConvMVVM3.WPF.Regions
