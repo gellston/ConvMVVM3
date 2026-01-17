@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Threading;
 using ConvMVVM3.Core.Mvvm.Regions;
+using ConvMVVM3.Host.DependencyInjection;
 using ConvMVVM3.WPF.Abstractions;
 
 namespace ConvMVVM3.WPF.Regions
@@ -145,7 +146,7 @@ namespace ConvMVVM3.WPF.Regions
 
         private static RegionAdapterManager ResolveAdapterManagerFromIoc()
         {
-            var sp = RegionServices.Services;
+            var sp = ServiceLocator.Container;
             if (sp == null) return null;
 
             var obj = sp.GetService(typeof(RegionAdapterManager));
