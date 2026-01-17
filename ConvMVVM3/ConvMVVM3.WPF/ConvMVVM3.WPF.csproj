@@ -1,32 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-       <TargetFrameworks>net48;net6.0-windows;net7.0-windows;net8.0-windows;net9.0-windows;net10.0-windows</TargetFrameworks>
-      <UseWPF>true</UseWPF>
+        <TargetFrameworks>net48;net6.0-windows;net7.0-windows;net8.0-windows;net9.0-windows;net10.0-windows</TargetFrameworks>
+        <UseWPF>true</UseWPF>
     </PropertyGroup>
-
-   <PropertyGroup Condition="'$(TargetFramework)' != 'net48'">
-     <Nullable>enable</Nullable>
-   </PropertyGroup>
 
     <PropertyGroup Condition="'$(TargetFramework)' != 'net48'">
-      <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
-
+    <PropertyGroup Condition="'$(TargetFramework)' != 'net48'">
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ConvMVVM3.Core\ConvMVVM3.Core.csproj" />
-      <ProjectReference Include="..\ConvMVVM3.Host\ConvMVVM3.Host.csproj" />
-      <ProjectReference Include="..\ConvMVVM3.SourceGenerator\ConvMVVM3.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\ConvMVVM3.Core\ConvMVVM3.Core.csproj" />
+        <ProjectReference Include="..\ConvMVVM3.Host\ConvMVVM3.Host.csproj" />
+        <ProjectReference Include="..\ConvMVVM3.SourceGenerator\ConvMVVM3.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
+	
     <!-- 명시적 버전 지정으로 충돌 해결 -->
     <ItemGroup Condition="'$(TargetFramework)' != 'net48'">
-      <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
+        <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
     </ItemGroup>
-
-      <ItemGroup>
-
-     </ItemGroup>
 
 </Project>
