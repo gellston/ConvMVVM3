@@ -6,6 +6,7 @@
   <Project Path="ConvMVVM3.Host/ConvMVVM3.Host.csproj">
     <BuildDependency Project="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
   </Project>
+  <Project Path="ConvMVVM3.WPF.Tests/ConvMVVM3.WPF.Tests.csproj" />
   <Project Path="ConvMVVM3.WPF/ConvMVVM3.WPF.csproj">
     <BuildDependency Project="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
     <BuildDependency Project="ConvMVVM3.Host/ConvMVVM3.Host.csproj" />
