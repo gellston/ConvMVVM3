@@ -397,3 +397,5 @@ appsettings.*.json
 *ReceiverStatus*.g.cs
 *GeneratedTest*
 >>>>>>> Stashed changes
+*.zip
+/.gitignore
