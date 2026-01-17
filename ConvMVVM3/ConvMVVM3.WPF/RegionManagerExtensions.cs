@@ -12,7 +12,7 @@ namespace ConvMVVM3.WPF
     /// Provides attached properties for region management in WPF applications.
     /// Handles automatic region creation and binding with memory leak prevention.
     /// </summary>
-    public static class RegionManager
+    public static class RegionManagerExtensions
     {
         /// <summary>
         /// Identifies the RegionName attached property.
@@ -204,11 +204,5 @@ namespace ConvMVVM3.WPF
         }
     }
 
-    /// <summary>
-    /// Interface for region adapters.
-    /// </summary>
-    internal interface IRegionAdapter
-    {
-        void Initialize(IRegion region, DependencyObject target);
-    }
+
 }

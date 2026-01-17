@@ -56,8 +56,8 @@ namespace ConvMVVM3.WPF.Tests
             {
                 element = new Button();
                 // Act
-                RegionManager.SetRegionName(element, regionName);
-                var retrievedName = RegionManager.GetRegionName(element);
+                RegionManagerExtensions.SetRegionName(element, regionName);
+                var retrievedName = RegionManagerExtensions.GetRegionName(element);
                 
                 // Assert
                 Assert.Equal(regionName, retrievedName);
@@ -75,7 +75,7 @@ namespace ConvMVVM3.WPF.Tests
             {
                 element = new TextBlock();
                 // Act
-                retrievedName = RegionManager.GetRegionName(element);
+                retrievedName = RegionManagerExtensions.GetRegionName(element);
             });
 
             // Assert
