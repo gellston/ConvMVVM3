@@ -1,4 +1,5 @@
 <Solution>
+  <Folder Name="/Samples/" />
   <Project Path="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
   <Project Path="ConvMVVM3.SourceGenerator/ConvMVVM3.SourceGenerator.csproj">
     <BuildDependency Project="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
