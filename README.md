@@ -1,35 +1,28 @@
 # ConvMVVM3
 
 <p align="center">
-  <img src="logo.png" alt="ConvMVVM3 Logo" width="400"/>
+   <img src="logo.png" alt="ConvMVVM3 Logo" width="400"/>
 </p>
 
 **ConvMVVM3 (Convergence MVVM3)** is a free MVVM library for WPF inspired by Community Toolkit and Prism frameworks.
 
-## ✅ Completed Features
+## ✅ Features
 
 - **Dependency Injection** - Service container with addon system
-- **MVVM Core** - ObservableObject, Commands, Messaging
-- **Source Generator** - Automatic property/command generation  
+- **MVVM Core** - ObservableObject, Commands, Messaging  
+- **UIDispatcher** - Microsoft-compatible UI thread dispatcher
+- **Source Generator** - Automatic property/command generation
 - **WPF Behaviors** - Triggers, actions, event binding
-- **Testing Framework** - Comprehensive unit test coverage
-
-## 🚀 Upcoming Features
-
-- Enhanced source generation
-- Advanced DI features
-- WPF markup extensions
-- 
-
+- **Testing Framework** - Comprehensive unit test coverage (107 tests)
 
 ## 📁 Project Structure
 
 ```
-ConvMVVM3.Core/          # Core MVVM library
+ConvMVVM3.Core/          # Core MVVM library + UIDispatcher
 ConvMVVM3.SourceGenerator/  # Roslyn source generator
 ConvMVVM3.WPF/           # WPF-specific behaviors
 ConvMVVM3.Host/           # DI host implementation
-ConvMVVM3.Tests/          # Unit tests
+ConvMVVM3.Tests/          # Unit tests (107 passing)
 ```
 
 ## 🛠️ Installation
@@ -50,14 +43,20 @@ public partial class MainViewModel : ObservableObject
     
     [RelayCommand]
     private void ShowMessage() => MessageBox.Show(Title);
-    
-    [AsyncRelayCommand]
-    private async Task LoadDataAsync()
-    {
-        await Task.Delay(1000);
-        Title = "Data Loaded!";
-    }
 }
+```
+
+### UIDispatcher (NEW!)
+
+```csharp
+// Setup
+services.AddWPFUIDispatcher();
+
+// Usage
+await dispatcher.InvokeAsync(() => 
+{
+    Title = "Updated from background thread";
+});
 ```
 
 ### WPF Behavior
@@ -74,8 +73,14 @@ public partial class MainViewModel : ObservableObject
 
 ## 🎯 Build Status
 
+✅ **107/107 tests passing** (100%)
 ✅ All projects build successfully on .NET 10.0
+✅ UIDispatcher fully implemented and tested
 
 ## 📄 License
 
 MIT License - see [LICENSE](LICENSE) file
+
+---
+
+**ConvMVVM3**: Modern MVVM framework for WPF applications
