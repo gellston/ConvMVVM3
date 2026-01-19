@@ -14,6 +14,7 @@ namespace ConvMVVM3.Core.Mvvm.Attributes
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
     public sealed class ModuleAttribute : Attribute
     {
+        #region Public Proprty
         public string Name { get; private set; }
 
         public string Version { get; private set; } = "1.0.0";
@@ -25,10 +26,15 @@ namespace ConvMVVM3.Core.Mvvm.Attributes
         // 배열도 가능 (상수 string 배열)
         public string[] DependsOn { get; set; } = new string[0];
 
+        #endregion
+
+        #region Constructor
+
         public ModuleAttribute(string name)
         {
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("name");
             Name = name;
         }
+        #endregion
     }
 }

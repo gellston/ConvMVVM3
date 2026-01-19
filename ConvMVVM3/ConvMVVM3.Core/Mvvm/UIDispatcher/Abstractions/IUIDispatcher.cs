@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace ConvMVVM3.Core.Mvvm.Abstractions
+namespace ConvMVVM3.Core.Mvvm.UIDispatcher.Abstractions
 {
     /// <summary>
     /// Provides UI thread dispatching services for cross-platform applications.
@@ -9,6 +9,8 @@ namespace ConvMVVM3.Core.Mvvm.Abstractions
     /// </summary>
     public interface IUIDispatcher
     {
+
+        #region Public Functions
         /// <summary>
         /// Determines whether the calling thread has access to this object.
         /// </summary>
@@ -70,5 +72,7 @@ namespace ConvMVVM3.Core.Mvvm.Abstractions
         /// <returns>A task that contains the result of the delegate execution.</returns>
         /// <exception cref="ArgumentNullException">callback is null.</exception>
         Task<T> InvokeAsync<T>(Func<Task<T>> callback);
+
+        #endregion
     }
 }

@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using ConvMVVM3.Core.Mvvm.Abstractions;
+using ConvMVVM3.Core.Mvvm.UIDispatcher.Abstractions;
 
-namespace ConvMVVM3.Core.Mvvm
+namespace ConvMVVM3.Core.Mvvm.UIDispatcher
 {
     /// <summary>
     /// Platform-independent implementation of IUIDispatcher using SynchronizationContext.
@@ -11,7 +11,13 @@ namespace ConvMVVM3.Core.Mvvm
     /// </summary>
     public class UIDispatcher : IUIDispatcher
     {
+        #region Private Property
         private readonly SynchronizationContext _context;
+        #endregion
+
+
+
+        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the UIDispatcher class.
@@ -22,10 +28,19 @@ namespace ConvMVVM3.Core.Mvvm
             _context = context ?? SynchronizationContext.Current;
         }
 
+        #endregion
+
+
+        #region Static Property
+
         /// <summary>
         /// Gets the default UIDispatcher instance.
         /// </summary>
         public static UIDispatcher Default { get; } = new UIDispatcher();
+        #endregion
+
+
+        #region Public Functions
 
         /// <summary>
         /// Determines whether the calling thread has access to this object.
@@ -248,5 +263,7 @@ namespace ConvMVVM3.Core.Mvvm
                 });
             }
         }
+
+        #endregion
     }
 }

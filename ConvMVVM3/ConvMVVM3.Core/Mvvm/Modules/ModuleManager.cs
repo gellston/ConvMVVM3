@@ -6,11 +6,13 @@ using System.Linq;
 using System.Reflection;
 using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using ConvMVVM3.Core.Mvvm.Attributes;
+using ConvMVVM3.Core.Mvvm.Modules.Abstractions;
 
 namespace ConvMVVM3.Core.Mvvm.Modules
 {
     public sealed class ModuleManager : IModuleManager
     {
+        #region Private Property
         private readonly IServiceRegistry _registry;
         private readonly IServiceContainer _container;
 
@@ -27,6 +29,9 @@ namespace ConvMVVM3.Core.Mvvm.Modules
             new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         private readonly object _gate = new object();
+        #endregion
+
+        #region Constructor
 
         public ModuleManager(IServiceRegistry registry, IServiceContainer container)
         {
@@ -35,6 +40,10 @@ namespace ConvMVVM3.Core.Mvvm.Modules
             _registry = registry;
             _container = container;
         }
+        #endregion
+
+
+        #region Collections
 
         public IReadOnlyCollection<ModuleDescriptor> Modules
         {
@@ -46,6 +55,11 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                 }
             }
         }
+
+        #endregion
+
+
+        #region Public Functions
 
         public void AddBlockName(string blockName)
         {
@@ -196,6 +210,10 @@ namespace ConvMVVM3.Core.Mvvm.Modules
 
             LoadPlan(new[] { name });
         }
+        #endregion
+
+
+        #region Private Functions
 
         // -----------------------------
         // Core loading pipeline
@@ -400,5 +418,7 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                 return new Version(0, 0, 0, 0);
             }
         }
+
+        #endregion
     }
 }

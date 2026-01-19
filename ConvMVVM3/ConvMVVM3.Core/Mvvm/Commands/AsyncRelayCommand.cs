@@ -9,6 +9,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 {
     public sealed class AsyncRelayCommand : IAsyncRelayCommand
     {
+        #region Private Property
         private readonly Func<CancellationToken, Task> _execute;
         private readonly Func<bool> _canExecute;
 
@@ -18,7 +19,15 @@ namespace ConvMVVM3.Core.Mvvm.Commands
         private CancellationTokenSource _cts;
         private int _running; // 0/1
 
+        #endregion
+
+        #region Event
+
         public event EventHandler CanExecuteChanged;
+        #endregion
+
+
+        #region Public Property
 
         public bool IsRunning
         {
@@ -29,6 +38,10 @@ namespace ConvMVVM3.Core.Mvvm.Commands
         {
             get { return IsRunning; }
         }
+        #endregion
+
+
+        #region Constructor
 
         public AsyncRelayCommand(
             Func<CancellationToken, Task> execute,
@@ -59,6 +72,10 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             _disableWhileRunning = disableWhileRunning;
         }
 
+        #endregion
+
+
+        #region Public Functions
         public bool CanExecute(object parameter)
         {
             if (_disableWhileRunning && IsRunning)
@@ -133,10 +150,12 @@ namespace ConvMVVM3.Core.Mvvm.Commands
                     NotifyCanExecuteChanged();
             }
         }
+        #endregion
     }
 
     public sealed class AsyncRelayCommand<T> : IAsyncRelayCommand<T>
     {
+        #region Private Property
         private readonly Func<T, CancellationToken, Task> _execute;
         private readonly Func<T, bool> _canExecute;
 
@@ -145,13 +164,26 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 
         private CancellationTokenSource _cts;
         private int _running;
+        #endregion
+
+
+        #region Event 
 
         public event EventHandler CanExecuteChanged;
+        #endregion
+
+
+        #region Public Property
 
         public bool IsRunning
         {
             get { return _running == 1; }
         }
+
+        #endregion
+
+
+        #region Constructor
 
         public AsyncRelayCommand(
             Func<T, CancellationToken, Task> execute,
@@ -167,6 +199,10 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             _disableWhileRunning = disableWhileRunning;
         }
 
+        #endregion
+
+
+        #region Public Functions
         public bool CanExecute(object parameter)
         {
             if (_disableWhileRunning && IsRunning)
@@ -214,6 +250,10 @@ namespace ConvMVVM3.Core.Mvvm.Commands
                 handler(this, EventArgs.Empty);
         }
 
+        #endregion
+
+
+        #region Private Functions
         private async Task ExecuteInternalAsync(T parameter)
         {
             if (!_allowConcurrent)
@@ -246,5 +286,6 @@ namespace ConvMVVM3.Core.Mvvm.Commands
                     NotifyCanExecuteChanged();
             }
         }
+        #endregion
     }
 }

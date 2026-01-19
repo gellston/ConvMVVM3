@@ -10,6 +10,9 @@ namespace ConvMVVM3.Core.Mvvm.Messaging.Abstractions
 
     public interface IRecipient<TMessage> : IRecipient
     {
+
+        #region Public Functions
         void Receive(TMessage message);
+        #endregion
     }
 }

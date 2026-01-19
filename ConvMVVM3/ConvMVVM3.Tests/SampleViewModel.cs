@@ -12,6 +12,8 @@ namespace ConvMVVM3.Tests.SampleViewModels
         [ObservableProperty]
         private int _age = 25;
 
+
+       
         [ObservableProperty]
         private bool _isLoading = false;
 
@@ -21,6 +23,7 @@ namespace ConvMVVM3.Tests.SampleViewModels
         {
             // Save logic
             Name = "Saved at " + System.DateTime.Now.ToString("HH:mm:ss");
+
         }
 
         // AsyncRelayCommand examples

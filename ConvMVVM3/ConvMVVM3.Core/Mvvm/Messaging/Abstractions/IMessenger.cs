@@ -6,7 +6,8 @@ namespace ConvMVVM3.Core.Mvvm.Messaging.Abstractions
 {
     public interface IMessenger
     {
-    
+
+        #region Public Functions
         void Register<TRecipient, TMessage>(TRecipient recipient,Action<TRecipient, TMessage> handler,object token = null)
             where TRecipient : class;
 
@@ -22,5 +23,6 @@ namespace ConvMVVM3.Core.Mvvm.Messaging.Abstractions
         void Send<TMessage>(TMessage message, object token = null);
 
         void Cleanup();
+        #endregion
     }
 }

@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using ConvMVVM3.Core.Mvvm.Abstractions;
 using ConvMVVM3.Core.DependencyInjection.Abstractions;
+using ConvMVVM3.Core.Mvvm.UIDispatcher.Abstractions;
 
 namespace ConvMVVM3.WPF
 {

@@ -7,6 +7,7 @@ namespace ConvMVVM3.Core.Mvvm.Attributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class RelayCommandAttribute : Attribute
     {
+        #region Public Property
         /// <summary>
         /// (선택) 생성될 Command 프로퍼티 이름을 강제로 지정.
         /// null이면 제너레이터 규칙(보통 메서드명 + "Command")을 따른다.
@@ -24,5 +25,6 @@ namespace ConvMVVM3.Core.Mvvm.Attributes
         /// 지금은 제너레이터가 무시해도 되고, 나중에 쓰기 위한 자리.
         /// </summary>
         public bool CatchExceptions { get; set; }
+        #endregion
     }
 }

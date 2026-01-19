@@ -8,8 +8,14 @@ namespace ConvMVVM3.Core.Mvvm
 {
     public abstract class ObservableObject : INotifyPropertyChanged, INotifyPropertyChanging
     {
+        #region Event
         public event PropertyChangedEventHandler PropertyChanged;
         public event PropertyChangingEventHandler PropertyChanging;
+
+        #endregion
+
+
+        #region Protected Functions
 
         protected virtual void OnPropertyChanging([CallerMemberName] string propertyName = null)
         {
@@ -98,6 +104,8 @@ namespace ConvMVVM3.Core.Mvvm
                     OnPropertyChanged(name);
             }
         }
+
+        #endregion
 
 
     }
