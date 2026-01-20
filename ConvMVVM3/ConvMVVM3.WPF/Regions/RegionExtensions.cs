@@ -34,7 +34,7 @@ namespace ConvMVVM3.WPF.Regions
             var behaivorCollection = Interaction.GetBehaviors(d);
 
 
-            if 
+     
             
         }
         #endregion
