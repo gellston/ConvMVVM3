@@ -13,8 +13,10 @@ namespace ConvMVVM3.Tests.SampleViewModels
         private int _age = 25;
 
 
-       
+
+        
         [ObservableProperty]
+        [NotifyCanExecuteChangedFor("LoadDataAsync")]
         private bool _isLoading = false;
 
         // Basic RelayCommand
@@ -23,12 +25,12 @@ namespace ConvMVVM3.Tests.SampleViewModels
         {
             // Save logic
             Name = "Saved at " + System.DateTime.Now.ToString("HH:mm:ss");
-
         }
 
         // AsyncRelayCommand examples
+        
         [AsyncRelayCommand]
-        private async Task LoadDataAsync()
+        private async Task LoadDataAsync(CancellationToken token)
         {
             IsLoading = true;
             try

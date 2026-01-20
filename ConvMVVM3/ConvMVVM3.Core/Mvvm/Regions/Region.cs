@@ -13,14 +13,17 @@ namespace ConvMVVM3.Core.Mvvm.Regions
         #region Private Property
         private string _Name = "";
         private bool _IsAttached = false;
-        private RegionKind _RegionKind = RegionKind.Unknown;
-        private ObservableCollection<object> _Items = new ObservableCollection<object>();
+        private ObservableCollection<object> _Views = new ObservableCollection<object>();
+        private object _SelectedItem = null;
+        private object _Content = null;
+        private NavigationContext _NavigationContext = null;
+        private RegionType _RegionType = RegionType.SingleView;
         #endregion
 
         #region Collection
-        public ObservableCollection<object> Items
+        public ObservableCollection<object> Views
         {
-            get => _Items;
+            get => _Views;
         }
         #endregion
 
@@ -32,14 +35,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions
             set
             {
                 _Name = value;
-                this.OnPropertyChaned();
             }
-        }
-
-        public RegionKind RegionKind
-        {
-            get => _RegionKind;
-            set => _RegionKind = value;
         }
 
         public bool IsAttaced
@@ -47,12 +43,49 @@ namespace ConvMVVM3.Core.Mvvm.Regions
             get => _IsAttached;
             set => _IsAttached = value;
         }
+
+        public object SelectedItem
+        {
+            get => _SelectedItem;
+            set
+            {
+                _SelectedItem = value;
+                this.OnPropertyChaned();
+            }
+        }
+
+
+        public NavigationContext NavigationContext
+        {
+            get => _NavigationContext;
+            set
+            {
+                _NavigationContext = value;
+            }
+        }
+
+        public object Content
+        {
+            get => _Content;
+            set
+            {
+                _Content = value;
+                this.OnPropertyChaned();
+            }
+        }
+
+        public RegionType RegionType
+        {
+            get => _RegionType;
+            set
+            {
+                _RegionType = value;
+            }
+        }
         #endregion
 
         #region Event
-
         public event PropertyChangedEventHandler PropertyChanged;
-
         #endregion
 
         #region Protected Functions

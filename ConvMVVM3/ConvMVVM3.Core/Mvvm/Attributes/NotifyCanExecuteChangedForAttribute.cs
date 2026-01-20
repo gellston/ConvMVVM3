@@ -4,18 +4,18 @@ using System.Text;
 
 namespace ConvMVVM3.Core.Mvvm.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = true)]
     public sealed class NotifyCanExecuteChangedForAttribute : Attribute
     {
         #region Public Property
-        public string[] CommandNames { get; }
+        public string[] PropertyNames { get; }
         #endregion
 
         #region Constructor
 
-        public NotifyCanExecuteChangedForAttribute(params string[] commandNames)
+        public NotifyCanExecuteChangedForAttribute(params string[] propertyNames)
         {
-            CommandNames = commandNames;
+            PropertyNames = propertyNames;
         }
         #endregion
     }

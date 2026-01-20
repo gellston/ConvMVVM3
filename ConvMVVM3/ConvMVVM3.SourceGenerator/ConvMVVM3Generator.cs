@@ -177,14 +177,17 @@ namespace GeneratedTest
                     var notifyChangingAttrs = GetNotifyAttributes(field, "NotifyPropertyChangingFor");
                     var notifyCanExecuteAttrs = GetNotifyAttributes(field, "NotifyCanExecuteChangedFor");
 
+                    sb.AppendLine($"        partial void On{propertyName}Changed({fieldType} oldValue, {fieldType} newValue);");
+                    sb.AppendLine($"        partial void On{propertyName}Changing({fieldType} oldValue, {fieldType} newValue);");
                     sb.AppendLine($"        public {fieldType} {propertyName}");
                     sb.AppendLine("        {");
                     sb.AppendLine($"            get {{ return {fieldName}; }}");
                     sb.AppendLine("            set");
                     sb.AppendLine("            {");
+                    sb.AppendLine($"                On{propertyName}Changing({fieldName}, value);");
                     sb.AppendLine($"                if (SetProperty(ref {fieldName}, value))");
                     sb.AppendLine("                {");
-
+                    sb.AppendLine($"                    On{propertyName}Changed({fieldName}, value);");
                     // NotifyPropertyChangingFor 속성 처리
                     foreach (var propName in notifyChangingAttrs)
                     {
@@ -200,7 +203,7 @@ namespace GeneratedTest
                     // NotifyCanExecuteChangedFor 속성 처리
                     foreach (var commandName in notifyCanExecuteAttrs)
                     {
-                        sb.AppendLine($"                    {commandName}?.NotifyCanExecuteChanged();");
+                        sb.AppendLine($"                    {commandName}Command?.NotifyCanExecuteChanged();");
                     }
 
                     sb.AppendLine("                }");

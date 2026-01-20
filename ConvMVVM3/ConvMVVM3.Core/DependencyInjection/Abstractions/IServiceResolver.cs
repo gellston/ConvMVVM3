@@ -7,11 +7,20 @@ namespace ConvMVVM3.Core.DependencyInjection.Abstractions
     {
         #region Public Functions
         object GetRequiredService(Type serviceType);
+
+        object GetRequiredService(string serviceName);
+        
         T GetRequiredService<T>();
+
+        T GetRequiredService<T>(string key);
 
         // 관례: 없으면 null 반환 (reference type 기준)
         object GetService(Type serviceType);
+
+        object GetService(string key);
+
         T GetService<T>();
+        T GetService<T>(string key);
 
         // 관례: 등록이 0개면 빈 IEnumerable 반환
         IEnumerable<T> GetServices<T>();

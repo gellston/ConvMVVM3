@@ -12,6 +12,7 @@ namespace ConvMVVM3.Host.DependencyInjection
     {
         #region Private Property
         private readonly Dictionary<Type, List<ServiceDescriptor>> _map;
+        private readonly Dictionary<string, Type> _typenameMapping = new Dictionary<string, Type>();
 
         private readonly Dictionary<ServiceDescriptor, object> _singletons = new Dictionary<ServiceDescriptor, object>();
         private readonly List<IDisposable> _rootDisposables = new List<IDisposable>();
@@ -31,11 +32,18 @@ namespace ConvMVVM3.Host.DependencyInjection
                 _map = serviceCollection.Descriptors
                     .GroupBy(d => d.ServiceType)
                     .ToDictionary(g => g.Key, g => g.ToList());
+
+                foreach(var keypair in serviceCollection.TypeNameMapper)
+                {
+                    _typenameMapping.Add(keypair.Key, keypair.Value);
+                }
             }
             else
             {
                 throw new ArgumentException("Registry must be ServiceCollection", nameof(registry));
             }
+
+           
         }
 
         public IServiceScope CreateScope()
@@ -55,7 +63,27 @@ namespace ConvMVVM3.Host.DependencyInjection
             return v;
         }
 
+
+        public object GetRequiredService(string key)
+        {
+            ThrowIfDisposed();
+
+            if (!this._typenameMapping.ContainsKey(key))
+            {
+                throw new InvalidOperationException("Invalid service key");
+            }
+
+            var type = this._typenameMapping[key];  
+
+            return this.GetRequiredService(type);
+        }
+
         public T GetRequiredService<T>()
+        {
+            return (T)GetRequiredService(typeof(T));
+        }
+
+        public T GetRequiredService<T>(string key)
         {
             return (T)GetRequiredService(typeof(T));
         }
@@ -67,9 +95,27 @@ namespace ConvMVVM3.Host.DependencyInjection
             return Resolve(serviceType, scope: null, chain: new Stack<Type>(), required: false);
         }
 
+        public object GetService(string key)
+        {
+            ThrowIfDisposed();
+            // 관례: 없으면 null
+            if (!this._typenameMapping.ContainsKey(key))
+            {
+                return null;
+            }
+
+            var type = this._typenameMapping[key];
+            return Resolve(type, scope: null, chain: new Stack<Type>(), required: false);
+        }
+
         public T GetService<T>()
         {
             return (T)GetService(typeof(T));
+        }
+
+        public T GetService<T>(string key)
+        {
+            return (T)GetService(key);
         }
 
         public IEnumerable<T> GetServices<T>()
@@ -375,6 +421,8 @@ namespace ConvMVVM3.Host.DependencyInjection
             {
                 if (root == null) throw new ArgumentNullException(nameof(root));
                 _root = root;
+
+
             }
 
             public object GetRequiredService(Type serviceType)
@@ -386,20 +434,50 @@ namespace ConvMVVM3.Host.DependencyInjection
                 return v;
             }
 
+            public object GetRequiredService(string key)
+            {
+                if (_disposed) throw new ObjectDisposedException(nameof(ServiceScope));
+                if (!_root._typenameMapping.ContainsKey(key)) throw new InvalidOperationException($"Invalid key : {key}");
+
+                var type = _root._typenameMapping[key];
+                var v = _root.Resolve(type, this, new Stack<Type>(), required: true);
+                if (v == null) throw new InvalidOperationException("Service not registered: " + type.FullName);
+                return v;
+            }
+
             public T GetRequiredService<T>()
             {
                 return (T)GetRequiredService(typeof(T));
             }
 
+            public T GetRequiredService<T>(string key)
+            {
+                return (T)GetRequiredService(key);
+            }
+
             public object GetService(Type serviceType)
             {
                 if (_disposed) throw new ObjectDisposedException(nameof(ServiceScope));
+
                 return _root.Resolve(serviceType, this, new Stack<Type>(), required: false);
+            }
+
+            public object GetService(string key)
+            {
+                if (!_root._typenameMapping.ContainsKey(key)) throw new InvalidOperationException($"Invalid key : {key}");
+                var type = _root._typenameMapping[key];
+
+                return _root.Resolve(type, this, new Stack<Type>(), required: false);
             }
 
             public T GetService<T>()
             {
                 return (T)GetService(typeof(T));
+            }
+
+            public T GetService<T>(string key)
+            {
+                return (T)GetService(key);
             }
 
             public IEnumerable<T> GetServices<T>()
