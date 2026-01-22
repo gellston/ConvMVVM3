@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Threading;
 using ConvMVVM3.Core.Mvvm.UIDispatcher.Abstractions;
 
-namespace ConvMVVM3.WPF
+namespace ConvMVVM3.WPF.UIDispatcher
 {
     /// <summary>
     /// WPF-specific implementation of IUIDispatcher using System.Windows.Threading.Dispatcher.

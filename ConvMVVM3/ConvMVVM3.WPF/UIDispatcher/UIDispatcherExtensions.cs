@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using ConvMVVM3.Core.Mvvm.UIDispatcher.Abstractions;
 
-namespace ConvMVVM3.WPF
+namespace ConvMVVM3.WPF.UIDispatcher
 {
     /// <summary>
     /// Extension methods for registering WPF UI dispatcher services.

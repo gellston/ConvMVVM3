@@ -9,11 +9,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 
 namespace ConvMVVM3.WPF.Regions
 {
-    public class ContentControlBehavior : Behavior<ContentControl>
+    public class SelectorBehaivor : Behavior<Selector>
     {
         #region Protected Functions
         protected override void OnAttached()
@@ -53,14 +54,22 @@ namespace ConvMVVM3.WPF.Regions
             this.AssociatedObject.Loaded -= AssociatedObject_Loaded;
             if (this.CurrentRegion == null) return;
 
-            var b = new Binding("Content")
+            var viewsBinding = new Binding("Views")
             {
                 Mode = BindingMode.TwoWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Source = this.CurrentRegion
             };
 
-            BindingOperations.SetBinding(this.AssociatedObject, ContentControl.ContentProperty, b);
+            var selectorBinding = new Binding("Selector")
+            {
+                Mode = BindingMode.TwoWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                Source = this.CurrentRegion
+            };
+
+            BindingOperations.SetBinding(this.AssociatedObject, Selector.ItemsSourceProperty, viewsBinding);
+            BindingOperations.SetBinding(this.AssociatedObject, Selector.SelectedItemProperty, selectorBinding);
 
         }
 
@@ -70,8 +79,8 @@ namespace ConvMVVM3.WPF.Regions
             if (this.CurrentRegion == null) return;
 
 
-            BindingOperations.ClearBinding(this.AssociatedObject, ContentControl.ContentProperty);
-
+            BindingOperations.ClearBinding(this.AssociatedObject, Selector.ItemsSourceProperty);
+            BindingOperations.ClearBinding(this.AssociatedObject, Selector.SelectedItemProperty);
 
             this.CurrentRegion = null;
         }

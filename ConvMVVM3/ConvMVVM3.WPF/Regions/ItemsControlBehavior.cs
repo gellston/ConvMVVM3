@@ -13,7 +13,7 @@ using System.Windows.Data;
 
 namespace ConvMVVM3.WPF.Regions
 {
-    public class ContentControlBehavior : Behavior<ContentControl>
+    public class ItemsControlBehavior : Behavior<ItemsControl>
     {
         #region Protected Functions
         protected override void OnAttached()
@@ -53,14 +53,14 @@ namespace ConvMVVM3.WPF.Regions
             this.AssociatedObject.Loaded -= AssociatedObject_Loaded;
             if (this.CurrentRegion == null) return;
 
-            var b = new Binding("Content")
+            var viewsBinding = new Binding("Views")
             {
                 Mode = BindingMode.TwoWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Source = this.CurrentRegion
             };
 
-            BindingOperations.SetBinding(this.AssociatedObject, ContentControl.ContentProperty, b);
+            BindingOperations.SetBinding(this.AssociatedObject, ItemsControl.ItemsSourceProperty, viewsBinding);
 
         }
 
@@ -70,7 +70,7 @@ namespace ConvMVVM3.WPF.Regions
             if (this.CurrentRegion == null) return;
 
 
-            BindingOperations.ClearBinding(this.AssociatedObject, ContentControl.ContentProperty);
+            BindingOperations.ClearBinding(this.AssociatedObject, ItemsControl.ItemsSourceProperty);
 
 
             this.CurrentRegion = null;

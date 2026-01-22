@@ -54,7 +54,6 @@ namespace ConvMVVM3.Core.Mvvm.Regions
             }
         }
 
-
         public NavigationContext NavigationContext
         {
             get => _NavigationContext;
