@@ -26,6 +26,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions.Abstractions
         ObservableCollection<object> Views
         {
             get;
+            set;
         }
         #endregion
     }

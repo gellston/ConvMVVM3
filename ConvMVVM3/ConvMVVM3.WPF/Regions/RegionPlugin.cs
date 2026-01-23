@@ -50,27 +50,29 @@ namespace ConvMVVM3.WPF.Regions
                 return;
             }
 
-            if (d is ItemsControlBehavior itemsControl)
-            {
-                regionManager.RegisterViewWithRegion(name, RegionType.MultiView);
-                var region = regionManager.Regions[name];
-                var contentControlBehaivor = new ItemsControlBehavior();
-                contentControlBehaivor.CurrentRegion = (Region)region;
-                contentControlBehaivor.CurrentRegion.IsAttaced = true;
-                behaivorCollection.Add(contentControlBehaivor);
-                return;
-            }
 
             if (d is Selector selector)
             {
                 regionManager.RegisterViewWithRegion(name, RegionType.MultiView);
                 var region = regionManager.Regions[name];
-                var contentControlBehaivor = new SelectorBehaivor();
-                contentControlBehaivor.CurrentRegion = (Region)region;
-                contentControlBehaivor.CurrentRegion.IsAttaced = true;
-                behaivorCollection.Add(contentControlBehaivor);
+                var selectorBehavior = new SelectorBehaivor();
+                selectorBehavior.CurrentRegion = (Region)region;
+                selectorBehavior.CurrentRegion.IsAttaced = true;
+                behaivorCollection.Add(selectorBehavior);
                 return;
             }
+
+            if (d is ItemsControl itemsControl)
+            {
+                regionManager.RegisterViewWithRegion(name, RegionType.MultiView);
+                var region = regionManager.Regions[name];
+                var itemsControlBehavior = new ItemsControlBehavior();
+                itemsControlBehavior.CurrentRegion = (Region)region;
+                itemsControlBehavior.CurrentRegion.IsAttaced = true;
+                behaivorCollection.Add(itemsControlBehavior);
+                return;
+            }
+
         }
         #endregion
     }

@@ -5,7 +5,7 @@ using System.Windows.Markup;
 
 [assembly: ComVisible(false)]
 [assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Behaviors.Base")]
-[assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Behaviors.Behaviors")]
+[assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Behaviors")]
 [assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Behaviors.Triggers")]
 [assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Behaviors.Actions")]
 [assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Locator")]

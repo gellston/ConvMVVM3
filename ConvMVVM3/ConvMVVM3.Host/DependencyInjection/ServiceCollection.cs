@@ -100,6 +100,31 @@ namespace ConvMVVM3.Host.DependencyInjection
         public void AddTransient<TService, TImpl>() where TImpl : TService
             => Add(typeof(TService), typeof(TImpl), ServiceLifetime.Transient);
 
+
+
+
+
+        public void AddSingleton<TService>()
+            => Add(typeof(TService), typeof(TService), ServiceLifetime.Singleton);
+
+        public void AddScoped<TService>()
+            => Add(typeof(TService), typeof(TService), ServiceLifetime.Scoped);
+
+        public void AddTransient<TService>()
+            => Add(typeof(TService), typeof(TService), ServiceLifetime.Transient);
+
+
+        public void AddSingleton<TService>(string key)
+            => Add(typeof(TService), typeof(TService), key, ServiceLifetime.Singleton);
+
+        public void AddScoped<TService>(string key)
+            => Add(typeof(TService), typeof(TService), key, ServiceLifetime.Scoped);
+
+        public void AddTransient<TService>(string key)
+            => Add(typeof(TService), typeof(TService), key, ServiceLifetime.Transient);
+
+
+
         public void AddSingleton<TService>(Func<IServiceResolver, TService> factory)
             => AddFactory(typeof(TService), sp => (object)factory(sp), ServiceLifetime.Singleton);
 
@@ -114,7 +139,7 @@ namespace ConvMVVM3.Host.DependencyInjection
 
 
         public void AddSingleton<TService, TImpl>(string key) where TImpl : TService
-          => Add(typeof(TService), typeof(TImpl), key, ServiceLifetime.Singleton);
+            => Add(typeof(TService), typeof(TImpl), key, ServiceLifetime.Singleton);
 
         public void AddScoped<TService, TImpl>(string key) where TImpl : TService
             => Add(typeof(TService), typeof(TImpl), key, ServiceLifetime.Scoped);

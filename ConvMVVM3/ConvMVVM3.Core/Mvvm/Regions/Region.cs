@@ -24,6 +24,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions
         public ObservableCollection<object> Views
         {
             get => _Views;
+            set => _Views = value;
         }
         #endregion
 

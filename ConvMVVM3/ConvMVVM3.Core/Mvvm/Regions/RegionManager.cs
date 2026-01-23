@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
+using System.Globalization;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading;
@@ -230,6 +231,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions
 
 
             var view = this.serviceContainer.GetRequiredService(viewType);
+            region.Content = view;
             if (view is INavigationAware navigationAware)
             {
                 navigation.Parameters = parameters;
@@ -268,6 +270,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions
 
 
                 var view = this.serviceContainer.GetRequiredService(typeof(T));
+                region.Content = view;
                 if (view is INavigationAware navigationAware)
                 {
                     navigation.Parameters = parameters;
@@ -314,7 +317,8 @@ namespace ConvMVVM3.Core.Mvvm.Regions
 
 
                 var view = this.serviceContainer.GetRequiredService(typeName);
-                if(view is INavigationAware navigationAware)
+                region.Content = view;
+                if (view is INavigationAware navigationAware)
                 {
                     navigation.Parameters = parameters;
                     if(navigationAware.IsNavigationTarget(navigation))
@@ -379,7 +383,8 @@ namespace ConvMVVM3.Core.Mvvm.Regions
 
                 for (int count = 0; count < repeat; count++)
                 {
-                    this.RequestNavigate(name, typeName);
+                    var view = this.serviceContainer.GetRequiredService(typeName);
+                    region.Views.Add(view);
                 }
             }
             catch
@@ -441,6 +446,27 @@ namespace ConvMVVM3.Core.Mvvm.Regions
                 var view = this.serviceContainer.GetRequiredService(viewName);
                 var region = this.regions[name];
                 region.SelectedItem = view;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void Active(string name, int index)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    throw new InvalidOperationException($"Invalid region name : {name}");
+                }
+
+                
+                var region = this.regions[name];
+               
+                if (index >= 0 && region.Views.Count > index)
+                    region.SelectedItem = region.Views[index];
             }
             catch
             {

@@ -31,7 +31,11 @@ namespace ConvMVVM3.WPF
 
             // 여기서 Build (RegisterTypes 끝난 뒤)
             this.serviceContainer = new Host.DependencyInjection.ServiceContainer(this.serviceRegistry);
-        
+            ServiceLocator.Initialize(this.serviceContainer);
+            var region = this.serviceContainer.GetService<IRegionManager>();
+
+
+            ConfigureRegion(region);
             
 
             var shell = CreateShell(this.serviceContainer);
@@ -48,7 +52,7 @@ namespace ConvMVVM3.WPF
         }
 
 
-        protected virtual void ConfigureRegion(IRegionManager registry)
+        protected virtual void ConfigureRegion(IRegionManager regionManager)
         {
             // WPF RegionAdapterMappings / Behaviors 같은 거 등록 위치
         }

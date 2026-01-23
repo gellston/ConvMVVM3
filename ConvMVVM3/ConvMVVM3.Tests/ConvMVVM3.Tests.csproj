@@ -25,9 +25,9 @@
     <ItemGroup>
        <ProjectReference Include="..\ConvMVVM3.Core\ConvMVVM3.Core.csproj" />
        <ProjectReference Include="..\ConvMVVM3.Host\ConvMVVM3.Host.csproj" />
-		  <ProjectReference Include="..\ConvMVVM3.SourceGenerator\ConvMVVM3.SourceGenerator.csproj"></ProjectReference>
-          <ProjectReference Include="..\ConvMVVM3.SourceGenerator\ConvMVVM3.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-     </ItemGroup>
+	   <ProjectReference Include="..\ConvMVVM3.SourceGenerator\ConvMVVM3.SourceGenerator.csproj"></ProjectReference>
+       <ProjectReference Include="..\ConvMVVM3.SourceGenerator\ConvMVVM3.SourceGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    </ItemGroup>
 
 
 

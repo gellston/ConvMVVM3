@@ -51,17 +51,16 @@ namespace ConvMVVM3.WPF.Regions
         #region Event Handler
         private void AssociatedObject_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.AssociatedObject.Loaded -= AssociatedObject_Loaded;
             if (this.CurrentRegion == null) return;
 
             var viewsBinding = new Binding("Views")
             {
-                Mode = BindingMode.TwoWay,
+                Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Source = this.CurrentRegion
             };
 
-            var selectorBinding = new Binding("Selector")
+            var selectorBinding = new Binding("SelectedItem")
             {
                 Mode = BindingMode.TwoWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
@@ -75,12 +74,19 @@ namespace ConvMVVM3.WPF.Regions
 
         private void AssociatedObject_Unloaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
             if (this.CurrentRegion == null) return;
 
 
             BindingOperations.ClearBinding(this.AssociatedObject, Selector.ItemsSourceProperty);
             BindingOperations.ClearBinding(this.AssociatedObject, Selector.SelectedItemProperty);
+
+            if (this.CurrentRegion != null)
+            {
+                this.CurrentRegion.IsAttaced = false;
+                this.CurrentRegion.Content = null;
+                this.CurrentRegion.Views.Clear();
+            }
+
 
             this.CurrentRegion = null;
         }

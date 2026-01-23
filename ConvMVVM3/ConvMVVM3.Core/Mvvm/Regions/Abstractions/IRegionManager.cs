@@ -37,6 +37,8 @@ namespace ConvMVVM3.Core.Mvvm.Regions.Abstractions
         void Active(string name, object view);
 
         void Active(string name, string viewName);
+
+        void Active(string name, int index);
         #endregion
     }
 }

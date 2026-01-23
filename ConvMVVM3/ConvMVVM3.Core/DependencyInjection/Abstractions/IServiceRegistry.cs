@@ -15,6 +15,16 @@ namespace ConvMVVM3.Core.DependencyInjection.Abstractions
         void AddScoped<TService, TImpl>() where TImpl : TService;
         void AddTransient<TService, TImpl>() where TImpl : TService;
 
+        void AddSingleton<TService>();
+        void AddScoped<TService>();
+        void AddTransient<TService>();
+
+
+        void AddSingleton<TService>(string key);
+        void AddScoped<TService>(string key);
+        void AddTransient<TService>(string key);
+
+
         void AddSingleton<TService>(Func<IServiceResolver, TService> factory);
         void AddScoped<TService>(Func<IServiceResolver, TService> factory);
         void AddTransient<TService>(Func<IServiceResolver, TService> factory);

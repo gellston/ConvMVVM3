@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -9,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ExampleRegionManager
+namespace ExampleRegionManager.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// SubView1.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SubView1 : UserControl
     {
-        public MainWindow()
+        public SubView1()
         {
             InitializeComponent();
         }

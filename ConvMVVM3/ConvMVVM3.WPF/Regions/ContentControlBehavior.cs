@@ -50,12 +50,11 @@ namespace ConvMVVM3.WPF.Regions
         #region Event Handler
         private void AssociatedObject_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.AssociatedObject.Loaded -= AssociatedObject_Loaded;
             if (this.CurrentRegion == null) return;
 
             var b = new Binding("Content")
             {
-                Mode = BindingMode.TwoWay,
+                Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Source = this.CurrentRegion
             };
@@ -66,11 +65,17 @@ namespace ConvMVVM3.WPF.Regions
 
         private void AssociatedObject_Unloaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
             if (this.CurrentRegion == null) return;
 
 
             BindingOperations.ClearBinding(this.AssociatedObject, ContentControl.ContentProperty);
+
+            if (this.CurrentRegion != null)
+            {
+                this.CurrentRegion.IsAttaced = false;
+                this.CurrentRegion.Content = null;
+                this.CurrentRegion.Views.Clear();
+            }
 
 
             this.CurrentRegion = null;
