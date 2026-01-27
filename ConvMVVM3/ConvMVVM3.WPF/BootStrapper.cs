@@ -3,7 +3,6 @@ using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using ConvMVVM3.Core.Mvvm.Modules;
 using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
 using ConvMVVM3.Host.DependencyInjection;
-using ConvMVVM3.WPF.UIDispatcher;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -27,6 +26,7 @@ namespace ConvMVVM3.WPF
             this.RegisterServices(this.serviceRegistry);
             this.serviceRegistry.AddWPFUIDispatcher();
             this.serviceRegistry.AddRegionManager();
+            this.serviceRegistry.AddModuleManager();
 
 
             // 여기서 Build (RegisterTypes 끝난 뒤)
