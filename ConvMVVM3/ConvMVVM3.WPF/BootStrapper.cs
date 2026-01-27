@@ -46,16 +46,10 @@ namespace ConvMVVM3.WPF
         }
 
 
-        protected virtual void RegisterServices(Core.DependencyInjection.Abstractions.IServiceRegistry container)
-        {
-            // Service등록 위치
-        }
+        protected abstract void RegisterServices(Core.DependencyInjection.Abstractions.IServiceRegistry container);
 
 
-        protected virtual void ConfigureRegion(IRegionManager regionManager)
-        {
-            // WPF RegionAdapterMappings / Behaviors 같은 거 등록 위치
-        }
+        protected abstract void ConfigureRegion(IRegionManager regionManager);
 
         protected abstract Window CreateShell(Core.DependencyInjection.Abstractions.IServiceContainer provider);
 
@@ -65,6 +59,6 @@ namespace ConvMVVM3.WPF
             shell.Show();
         }
 
-        protected virtual void OnInitialized(Core.DependencyInjection.Abstractions.IServiceContainer provider) { }
+        protected abstract void OnInitialized(Core.DependencyInjection.Abstractions.IServiceContainer provider);
     }
 }

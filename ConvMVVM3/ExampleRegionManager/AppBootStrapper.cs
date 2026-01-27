@@ -61,6 +61,11 @@ namespace ExampleRegionManager
             regionManager.RegisterViewWithRegion("SubView2", "ExampleApp/SubView/2", RegionType.MultiView);
 
         }
+
+        protected override void OnInitialized(IServiceContainer provider)
+        {
+
+        }
         #endregion
     }
 }

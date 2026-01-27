@@ -1,0 +1,40 @@
+﻿<Window x:Class="ExampleActivatorUtilities.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExampleActivatorUtilities"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        xmlns:models="clr-namespace:ExampleActivatorUtilities.Models"
+        xmlns:convMVVM3="https://github.com/gellston/ConvMVVM3"
+        convMVVM3:ViewModelLocator.AutoWireViewModel="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <ListView Grid.Row="0"
+                  ItemsSource="{Binding TestModelCollection}"
+                  HorizontalContentAlignment="Stretch"
+                  VerticalContentAlignment="Stretch">
+
+            <ListView.Resources>
+                <DataTemplate DataType="{x:Type models:TestModel}">
+                    <UniformGrid HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch"
+                                 Rows="1">
+                        <TextBlock Text="Name : "></TextBlock>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                        <TextBlock Text="Age : "></TextBlock>
+                        <TextBlock Text="{Binding Age}"></TextBlock>
+                    </UniformGrid>
+                </DataTemplate>
+            </ListView.Resources>
+            
+        </ListView>
+
+        <Button Grid.Row="1" Command="{Binding GenerateModelCommand}"></Button>
+    </Grid>
+</Window>

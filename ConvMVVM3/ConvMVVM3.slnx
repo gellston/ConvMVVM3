@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/Samples/">
+    <Project Path="ExampleActivatorUtilities/ExampleActivatorUtilities.csproj" Id="f84e540e-8bd8-4650-aaca-52589c50a3b9" />
     <Project Path="ExampleRegionManager/ExampleRegionManager.csproj" Id="3d079cc5-eecb-4ab3-9584-9791417e8121">
       <BuildDependency Project="ConvMVVM3.WPF/ConvMVVM3.WPF.csproj" />
     </Project>
