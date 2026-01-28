@@ -26,7 +26,6 @@ namespace ExampleActivatorUtilities
 
             container.AddSingleton<MainWindowViewModel>();
 
-
             container.AddTransient<TestModel>();
 
         }
