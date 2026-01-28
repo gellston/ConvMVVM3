@@ -12,12 +12,15 @@ namespace ConvMVVM3.Core
 {
     public static class ModuleManagerExtensions
     {
-        public static IServiceRegistry AddModuleManager(this IServiceRegistry services)
+        public static IServiceRegistry AddModuleManager(this IServiceRegistry services, List<IModule> modules, List<ModuleCategory> categories)
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
 
-            services.AddSingleton<IModuleManager, ModuleManager>();
+            services.AddSingleton<IModuleManager>((serviceResolver) =>
+            {
+                return new ModuleManager(serviceResolver, modules, categories);
+            });
             return services;
         }
     }

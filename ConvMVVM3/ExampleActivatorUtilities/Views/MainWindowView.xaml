@@ -35,6 +35,8 @@
             
         </ListView>
 
-        <Button Grid.Row="1" Command="{Binding GenerateModelCommand}"></Button>
+        <Button Grid.Row="1" 
+                Command="{Binding GenerateModelCommand}"
+                Content="Generate"></Button>
     </Grid>
 </Window>

@@ -66,6 +66,11 @@ namespace ExampleRegionManager
         {
 
         }
+
+        protected override void RegisterModules()
+        {
+          
+        }
         #endregion
     }
 }

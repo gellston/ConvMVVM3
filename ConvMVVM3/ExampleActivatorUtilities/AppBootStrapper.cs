@@ -40,6 +40,11 @@ namespace ExampleActivatorUtilities
 
         }
 
+        protected override void RegisterModules()
+        {
+
+        }
+
 
         #endregion
 
