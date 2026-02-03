@@ -2,6 +2,8 @@
 using ConvMVVM3.Core.Mvvm.Attributes;
 using ConvMVVM3.Core.Mvvm.Modules.Abstractions;
 using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
+using ExampleModuleManager.ViewModels;
+using ExampleModuleManager.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -23,6 +25,12 @@ namespace ExampleModuleManager.Modules
 
         public void RegisterServices(IServiceRegistry registry)
         {
+
+            //Views
+            registry.AddSingleton<AModuleView>("/SubContent/AModuleView");
+
+            //ViewModels
+            registry.AddSingleton<AModuleViewModel>();
 
         }
     }

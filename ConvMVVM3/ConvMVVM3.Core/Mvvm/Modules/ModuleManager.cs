@@ -54,10 +54,11 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                         var type = module.GetType();
                         var moduleAttribute = type.GetCustomAttribute<ModuleAttribute>(inherit: true);
                         if (moduleAttribute == null) continue;
-                        if (moduleCategory.Name != name) continue;
+                        if (moduleAttribute.Name != name) continue;
              
                         module.OnInitialized(this.serviceResolver);
                         moduleCategory.IsInitialized = true;
+                        break;
                        
                     }
                 }
@@ -86,9 +87,10 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                         var type = module.GetType();
                         var moduleAttribute = type.GetCustomAttribute<ModuleAttribute>(inherit: true);
                         if (moduleAttribute == null) continue;
-                        if (moduleCategory.Name != moduleAttribute.Name) continue;
+                        if (moduleAttribute.Name != moduleCategory.Name) continue;
                         module.OnInitialized(this.serviceResolver);
                         moduleCategory.IsInitialized = true;
+                        break;
                     }
                 }
 
@@ -115,9 +117,10 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                         var type = module.GetType();
                         var moduleAttribute = type.GetCustomAttribute<ModuleAttribute>(inherit: true);
                         if (moduleAttribute == null) continue;
-                        if (moduleCategory.Name != moduleAttribute.Name) continue;
+                        if (moduleAttribute.Name != moduleCategory.Name) continue;
                         module.ConfigureRegions(regionManager);
                         moduleCategory.IsRegionConfigured = true;
+                        break;
                     }
                 }
             }

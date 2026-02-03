@@ -11,7 +11,7 @@ namespace ConvMVVM3.Core.Mvvm.Modules.Abstractions
         #region Pulibc Functions
         void RegisterServices(IServiceRegistry registry);
         void ConfigureRegions(IRegionManager regionManager);
-        void OnInitialized(IServiceResolver serviecResolver);
+        void OnInitialized(IServiceResolver serviceResolver);
         #endregion
     }
 }

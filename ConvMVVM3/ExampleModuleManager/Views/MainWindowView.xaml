@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExampleModuleManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800"
+        xmlns:convMVVM3="https://github.com/gellston/ConvMVVM3">
     <Grid>
-
+        <ContentControl convMVVM3:RegionPlugin.RegionName="MainContent"></ContentControl>
     </Grid>
 </Window>

@@ -10,26 +10,27 @@ using System.Text;
 
 namespace ExampleModuleManager.Modules
 {
-    [Module("BModule", "1.0.0")]
-    public class BModule : IModule
+    [Module("CModule", "1.0.0", InitializationMode.OnDemand)]
+    public class CModule : IModule
     {
         public void ConfigureRegions(IRegionManager regionManager)
         {
 
         }
 
-        public void OnInitialized(IServiceResolver serviecResolver)
+        public void OnInitialized(IServiceResolver serviceResolver)
         {
-
+            var regionManager = serviceResolver.GetService<IRegionManager>();
+            regionManager.RequestNavigate("SubContent", "/SubContent/CModuleView");
         }
 
         public void RegisterServices(IServiceRegistry registry)
         {
             //Views
-            registry.AddSingleton<BModuleView>("/SubContent/BModuleView");
+            registry.AddSingleton<CModuleView>("/SubContent/CModuleView");
 
             //ViewModels
-            registry.AddSingleton<BModuleViewModel>();
+            registry.AddSingleton<CModuleViewModel>();
         }
     }
 }

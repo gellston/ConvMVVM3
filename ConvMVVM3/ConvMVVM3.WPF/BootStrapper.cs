@@ -38,34 +38,6 @@ namespace ConvMVVM3.WPF
 
 
         #region Private Functions
-        private void LoadModules()
-        {
-            try
-            {
-                // 수동으로 등록한 모듈 추가 
-                foreach (var module in this.modules)
-                {
-
-                    var moduleAttribute = module.GetType().GetCustomAttribute<ModuleAttribute>(inherit: true);
-                    if (moduleAttribute == null) continue;
-
-
-                    if (this.categories.Count(_category => _category.Name == moduleAttribute.Name) > 0) continue;
-                    if (this.moduleRejectNames.Contains(moduleAttribute.Name) == true) continue;
-
-                    var category = new ModuleCategory(moduleAttribute.Name,
-                                                      moduleAttribute.Version,
-                                                      moduleAttribute.Mode,
-                                                      moduleAttribute.DependsOn);
-                    category.IsRegistered = true;
-                    this.categories.Add(category);
-                }
-            }
-            catch
-            {
-
-            }
-        }
         private void LoadAssemblyStart()
         {
             try
@@ -90,24 +62,21 @@ namespace ConvMVVM3.WPF
                             var pluginTypes = assembly.GetTypes().Where(t => typeof(IModule).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
                             foreach (var pluginType in pluginTypes)
                             {
-                                var moduleAttribute = pluginType.GetCustomAttribute<ModuleAttribute>(inherit: true);
-                                if (moduleAttribute == null) continue;
-
-                                if (this.categories.Count(_category => _category.Name == moduleAttribute.Name) > 0) continue;
-                                if (this.moduleRejectNames.Contains(moduleAttribute.Name) == true) continue;
+                                //var moduleAttribute = pluginType.GetCustomAttribute<ModuleAttribute>(inherit: true);
+                                //if (moduleAttribute == null) continue;
 
                                 var plugin = (IModule)Activator.CreateInstance(pluginType);
-                                plugin.RegisterServices(this.serviceRegistry);
-                                this.modules.Add(plugin);
 
 
-                                var category = new ModuleCategory(moduleAttribute.Name,
-                                                                  moduleAttribute.Version,
-                                                                  moduleAttribute.Mode,
-                                                                  moduleAttribute.DependsOn);
-                                category.IsRegistered = true;
-                                this.categories.Add(category);
-                                //this.OnModuleAddEvent?.Invoke(plugin.ModuleVersion, plugin.ModuleName);
+                                try
+                                {
+                                    this.RegisterModule<IModule>(plugin);
+                                }
+                                catch(Exception ex)
+                                {
+                                    System.Diagnostics.Debug.WriteLine(ex);
+                                }
+                                break;
                             }
 
                             loadedAssemblyNames.Add(assemblyName);
@@ -136,14 +105,18 @@ namespace ConvMVVM3.WPF
             var moduleAttribute = type.GetCustomAttribute<ModuleAttribute>(inherit: true);
             if (moduleAttribute == null) throw new InvalidOperationException("No module attribute information");
 
-            if (this.categories.Count(category => category.Name == moduleAttribute.Name) == 0)
+            if (this.categories.Count(category => category.Name == moduleAttribute.Name) > 0)
                 throw new InvalidOperationException("Duplicate module category information");
 
+            if (this.moduleRejectNames.Contains(moduleAttribute.Name) == true)
+                throw new InvalidOperationException("Module rejected");
+
+            module.RegisterServices(this.serviceRegistry);
             var moduleCategory = new ModuleCategory(moduleAttribute.Name,
                                                     moduleAttribute.Version,
                                                     moduleAttribute.Mode,
                                                     moduleAttribute.DependsOn);
-
+            moduleCategory.IsRegistered = true;
             this.categories.Add(moduleCategory);
             this.modules.Add(module);
         }
@@ -239,7 +212,6 @@ namespace ConvMVVM3.WPF
 
             // Module Registeration
             RegisterModules();
-            LoadModules();
             if (this.enableAutoModuleSearch)
             {
                 LoadAssemblyStart();
