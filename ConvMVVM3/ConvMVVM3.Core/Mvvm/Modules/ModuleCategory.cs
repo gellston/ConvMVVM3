@@ -23,7 +23,9 @@ namespace ConvMVVM3.Core.Mvvm.Modules
         public InitializationMode Mode { get; private set; } = InitializationMode.WhenAvailable;
         public string[] DependsOn { get; private set; } = new string[0];
 
-        public bool Loaded { get; set; } = false;
+        public bool IsInitialized { get; internal set; } = false;
+        public bool IsRegistered { get; set; } = false;
+        public bool IsRegionConfigured { get; internal set; } = false;
         #endregion
     }
 }

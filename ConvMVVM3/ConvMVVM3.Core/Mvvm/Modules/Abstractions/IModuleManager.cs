@@ -9,8 +9,10 @@ namespace ConvMVVM3.Core.Mvvm.Modules.Abstractions
 
         #region Public Functions
         void InitializeModules();
-        void LoadModule(string name);
+        void InitializeModule(string name);
         void ConfigureRegions();
+
+
         #endregion
 
         #region Public Property

@@ -38,10 +38,40 @@ namespace ConvMVVM3.WPF
 
 
         #region Private Functions
+        private void LoadModules()
+        {
+            try
+            {
+                // 수동으로 등록한 모듈 추가 
+                foreach (var module in this.modules)
+                {
+
+                    var moduleAttribute = module.GetType().GetCustomAttribute<ModuleAttribute>(inherit: true);
+                    if (moduleAttribute == null) continue;
+
+
+                    if (this.categories.Count(_category => _category.Name == moduleAttribute.Name) > 0) continue;
+                    if (this.moduleRejectNames.Contains(moduleAttribute.Name) == true) continue;
+
+                    var category = new ModuleCategory(moduleAttribute.Name,
+                                                      moduleAttribute.Version,
+                                                      moduleAttribute.Mode,
+                                                      moduleAttribute.DependsOn);
+                    category.IsRegistered = true;
+                    this.categories.Add(category);
+                }
+            }
+            catch
+            {
+
+            }
+        }
         private void LoadAssemblyStart()
         {
             try
             {
+
+                // DLL로 부터 모듈 추출
                 foreach (var modulePath in this.moduleLoadPaths)
                 {
                     var moduleFiles = Directory.GetFiles(modulePath, "*.dll");
@@ -67,6 +97,7 @@ namespace ConvMVVM3.WPF
                                 if (this.moduleRejectNames.Contains(moduleAttribute.Name) == true) continue;
 
                                 var plugin = (IModule)Activator.CreateInstance(pluginType);
+                                plugin.RegisterServices(this.serviceRegistry);
                                 this.modules.Add(plugin);
 
 
@@ -74,7 +105,7 @@ namespace ConvMVVM3.WPF
                                                                   moduleAttribute.Version,
                                                                   moduleAttribute.Mode,
                                                                   moduleAttribute.DependsOn);
-
+                                category.IsRegistered = true;
                                 this.categories.Add(category);
                                 //this.OnModuleAddEvent?.Invoke(plugin.ModuleVersion, plugin.ModuleName);
                             }
@@ -208,6 +239,7 @@ namespace ConvMVVM3.WPF
 
             // Module Registeration
             RegisterModules();
+            LoadModules();
             if (this.enableAutoModuleSearch)
             {
                 LoadAssemblyStart();

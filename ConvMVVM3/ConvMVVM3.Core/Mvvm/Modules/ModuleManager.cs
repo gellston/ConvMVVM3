@@ -36,7 +36,7 @@ namespace ConvMVVM3.Core.Mvvm.Modules
 
 
         #region Public Functions
-        public void LoadModule(string name)
+        public void InitializeModule(string name)
         {
             try
             {
@@ -45,7 +45,8 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                 {
                     if (moduleCategory.Name != name) continue;
                     if (moduleCategory.Mode != Attributes.InitializationMode.OnDemand) continue;
-                    if (moduleCategory.Loaded == true) continue;
+                    if (moduleCategory.IsRegistered == false) continue;
+                    if (moduleCategory.IsInitialized == true) continue;
 
                     foreach (var module in this.modules)
                     {
@@ -54,9 +55,9 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                         var moduleAttribute = type.GetCustomAttribute<ModuleAttribute>(inherit: true);
                         if (moduleAttribute == null) continue;
                         if (moduleCategory.Name != name) continue;
-                        module.ConfigureRegions(regionManager);
+             
                         module.OnInitialized(this.serviceResolver);
-                        moduleCategory.Loaded = true;
+                        moduleCategory.IsInitialized = true;
                        
                     }
                 }
@@ -77,7 +78,8 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                 foreach(var moduleCategory in this.categories)
                 {
                     if (moduleCategory.Mode != Attributes.InitializationMode.WhenAvailable) continue;
-                    if (moduleCategory.Loaded == true) continue;
+                    if (moduleCategory.IsRegistered == false) continue;
+                    if (moduleCategory.IsInitialized == true) continue;
 
                     foreach (var module in this.modules)
                     {
@@ -86,7 +88,7 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                         if (moduleAttribute == null) continue;
                         if (moduleCategory.Name != moduleAttribute.Name) continue;
                         module.OnInitialized(this.serviceResolver);
-                        moduleCategory.Loaded = true;
+                        moduleCategory.IsInitialized = true;
                     }
                 }
 
@@ -97,7 +99,7 @@ namespace ConvMVVM3.Core.Mvvm.Modules
             }
         }
 
-
+        
         public void ConfigureRegions()
         {
             try
@@ -105,8 +107,8 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                 var regionManager = this.serviceResolver.GetService<IRegionManager>();
                 foreach (var moduleCategory in this.categories)
                 {
-                    if (moduleCategory.Mode != Attributes.InitializationMode.WhenAvailable) continue;
-                    if (moduleCategory.Loaded == true) continue;
+                    //if (moduleCategory.Mode != Attributes.InitializationMode.WhenAvailable) continue;
+                    if (moduleCategory.IsRegionConfigured == true) continue;
 
                     foreach (var module in this.modules)
                     {
@@ -115,6 +117,7 @@ namespace ConvMVVM3.Core.Mvvm.Modules
                         if (moduleAttribute == null) continue;
                         if (moduleCategory.Name != moduleAttribute.Name) continue;
                         module.ConfigureRegions(regionManager);
+                        moduleCategory.IsRegionConfigured = true;
                     }
                 }
             }

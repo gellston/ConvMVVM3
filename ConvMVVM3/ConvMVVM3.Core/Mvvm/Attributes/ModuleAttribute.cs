@@ -30,10 +30,13 @@ namespace ConvMVVM3.Core.Mvvm.Attributes
 
         #region Constructor
 
-        public ModuleAttribute(string name)
+        public ModuleAttribute(string name, string version = "1.0.0", InitializationMode mode = InitializationMode.WhenAvailable)
         {
-            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("name");
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException($"Name {name}");
+            if (string.IsNullOrWhiteSpace(version)) throw new ArgumentException($"Version {version}");
             Name = name;
+            Version = version;
+            Mode = mode;
         }
         #endregion
     }

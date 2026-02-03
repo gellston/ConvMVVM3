@@ -6,10 +6,12 @@ using System.Text;
 
 namespace ExampleModuleManager.ViewModels
 {
-
-
     public partial class MainWindowViewModel : ObservableObject
     {
+        #region Private Property
+
+        #endregion
+
         #region Constructor
         public MainWindowViewModel()
         {
