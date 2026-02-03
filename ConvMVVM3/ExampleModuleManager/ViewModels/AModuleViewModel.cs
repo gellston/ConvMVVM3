@@ -1,4 +1,5 @@
 ﻿using ConvMVVM3.Core.Mvvm;
+using ConvMVVM3.Core.Mvvm.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,5 +18,6 @@ namespace ExampleModuleManager.ViewModels
 
         }
         #endregion
+
     }
 }
