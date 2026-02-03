@@ -8,8 +8,9 @@ using System.Text;
 
 namespace ExampleModuleManager.Modules
 {
-    [Module("AModule", "1.0.0")]
-    public class AModule : IModule
+
+    [Module("MainModule", "1.0.0")]
+    public class MainModule : IModule
     {
         public void ConfigureRegions(IRegionManager regionManager)
         {
@@ -25,5 +26,6 @@ namespace ExampleModuleManager.Modules
         {
 
         }
+
     }
 }
