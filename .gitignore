@@ -397,3 +397,4 @@ appsettings.*.json
 *ReceiverStatus*.g.cs
 *GeneratedTest*
 >>>>>>> Stashed changes
+*.bak
