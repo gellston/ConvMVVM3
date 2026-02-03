@@ -1,4 +1,3 @@
-# ConvMVVM3
 
 <p align="center">
    <img src="logo.png" alt="ConvMVVM3 Logo" width="400"/>
@@ -6,14 +5,35 @@
 
 **ConvMVVM3 (Convergence MVVM3)** is a modern, cross-platform MVVM framework that combines the best features from Prism and Community Toolkit while adding unique innovations.
 
+---
+
+## 📌 XAML Namespace Mapping (NEW)
+
+ConvMVVM3 exposes a **single** XAML XML namespace for a clean, consistent XAML experience:
+
+```xml
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:convMVVM3="https://github.com/gellston/ConvMVVM3"
+    convMVVM3:ViewModelLocator.AutoWireViewModel="True">
+</Window>
+```
+
+- `xmlns:convMVVM3="https://github.com/gellston/ConvMVVM3"` → ConvMVVM3 XAML features (Regions, ViewModelLocator, Behaviors/Interactivity, etc.)
+- `convMVVM3:ViewModelLocator.AutoWireViewModel="True"` → ViewModel auto-wiring (Prism-like)
+
+---
+
 ## ✨ Key Differentiators from Prism & Community Toolkit
 
 ### 🚀 **UIDispatcher** (UNIQUE - Cross-Platform)
 Microsoft-compatible UI thread dispatcher for multiple platforms:
+
 ```csharp
 // Setup - Available for WPF, MAUI, Avalonia, WinUI
-services.AddWPFUIDispatcher();    // WPF
-services.AddMAUIUIDispatcher();    // MAUI (coming soon)
+services.AddWPFUIDispatcher();      // WPF
+services.AddMAUIUIDispatcher();     // MAUI (coming soon)
 services.AddAvaloniaUIDispatcher(); // Avalonia (coming soon)
 
 // Usage - Cross-platform compatible
@@ -22,14 +42,15 @@ await dispatcher.InvokeAsync(() => Title = "Updated");
 
 ### 🔌 **Smart Dependency Injection** (UNIQUE - Built-in)
 Lightweight service container with addon system - **No external DI required**:
+
 ```csharp
 // Built-in container - Zero external dependencies
 services.AddSingleton<IMyService, MyService>();
-services.AddAddon<MyAddon>();
 ```
 
 ### 📡 **WeakReference Messenger** (Memory-Safe, Cross-Platform)
 Thread-safe messaging with automatic cleanup:
+
 ```csharp
 // Automatic weak references - Platform-agnostic
 WeakReferenceMessenger.Default.Send<Message>(this, newData);
@@ -37,18 +58,22 @@ WeakReferenceMessenger.Default.Send<Message>(this, newData);
 
 ### 🎯 **Region System** (Prism-inspired, Cross-Platform)
 Built-in region management for multiple frameworks:
-```csharp
-// Available for WPF, MAUI, Avalonia, WinUI
-<ContentControl regions:RegionManager.RegionName="MainRegion" />
+
+```xml
+<!-- Works on WPF, MAUI, Avalonia, WinUI -->
+<ContentControl convMVVM3:RegionPlugin.RegionName="MainContent" />
 ```
 
 ### ⚡ **Source Generator** (Community Toolkit-inspired)
 Automatic property and command generation with enhanced features:
+
 ```csharp
 [ObservableProperty] private string title;       // Generates Title property
-[RelayCommand] private void Save();              // Generates SaveCommand  
-[AsyncRelayCommand] private async Task Load();  // Generates LoadCommand
+[RelayCommand] private void Save();              // Generates SaveCommand
+[AsyncRelayCommand] private async Task Load();   // Generates LoadCommand
 ```
+
+---
 
 ## 🏗️ Architecture Overview
 
@@ -56,55 +81,47 @@ Automatic property and command generation with enhanced features:
 ```
 ConvMVVM3.Core/
 ├── ObservableObject              # Base class with INotifyPropertyChanged
-├── ObservableRecipient          # Message recipient base class
-├── UIDispatcher               # NEW: Cross-platform dispatcher interface
-├── WeakReferenceMessenger       # Memory-safe messaging system
+├── ObservableRecipient           # Message recipient base class
+├── UIDispatcher                  # NEW: Cross-platform dispatcher interface
+├── WeakReferenceMessenger        # Memory-safe messaging system
 ├── Commands/
-│   ├── RelayCommand          # Synchronous command implementation
-│   └── AsyncRelayCommand     # Async command with cancellation
-└── DependencyInjection/       # Built-in DI container
+│   ├── RelayCommand              # Synchronous command implementation
+│   └── AsyncRelayCommand         # Async command with cancellation
+└── DependencyInjection/          # Built-in DI container
 ```
 
 ### **WPF Implementation** (One of Many Platforms)
 ```
-ConvMVVM3.WPF/           # WPF-specific implementation
-├── RegionManager              # Region management (Prism-inspired)
-├── WPFUIDispatcher          # WPF-specific dispatcher
-├── Behaviors/               # Interactive behaviors
-│   ├── Triggers/           # Event triggers
-│   └── Actions/            # Action behaviors
-└── WeakEventManager          # Memory-efficient event handling
-```
-
-### **Cross-Platform Strategy**
-```
-Platforms Status:
-✅ WPF              - Full implementation (current)
-🔄 MAUI              - Planned (UIDispatcher + Behaviors)
-🔄 Avalonia          - Planned (UIDispatcher + Behaviors)
-🔄 WinUI              - Planned (UIDispatcher + Behaviors)
-🔄 UNO Platform      - Planned (UIDispatcher + Behaviors)
+ConvMVVM3.WPF/                    # WPF-specific implementation
+├── Regions/                      # Region system (Prism-inspired)
+├── WPFUIDispatcher               # WPF-specific dispatcher
+├── Interactivity/                # Behaviors / triggers / actions
+└── WeakEventManager              # Memory-efficient event handling
 ```
 
 ### **Source Generation** (Cross-Platform)
 ```
 ConvMVVM3.SourceGenerator/
-├── ObservableProperty generation    # Auto property implementation
-├── RelayCommand generation        # Auto command creation
-├── Dependency tracking          # Smart property notification
+├── ObservableProperty generation # Auto property implementation
+├── RelayCommand generation       # Auto command creation
+├── Dependency tracking           # Smart property notification
 └── Compile-time validation       # Early error detection
 ```
+
+---
 
 ## 📁 Project Structure
 
 ```
-ConvMVVM3.Core/              # Platform-agnostic MVVM library
-ConvMVVM3.SourceGenerator/    # Cross-platform source generator
-ConvMVVM3.WPF/              # WPF-specific behaviors + regions
-ConvMVVM3.Host/              # DI host implementation
-ConvMVVM3.WPF.Tests/         # WPF unit tests (30 passing)
-ConvMVVM3.Tests/             # Core unit tests (77 passing)
+ConvMVVM3.Core/                   # Platform-agnostic MVVM library
+ConvMVVM3.SourceGenerator/        # Cross-platform source generator
+ConvMVVM3.WPF/                    # WPF-specific interactivity + regions
+ConvMVVM3.Host/                   # DI host implementation
+ConvMVVM3.WPF.Tests/              # WPF unit tests (30 passing)
+ConvMVVM3.Tests/                  # Core unit tests (77 passing)
 ```
+
+---
 
 ## 🛠️ Installation
 
@@ -112,9 +129,11 @@ ConvMVVM3.Tests/             # Core unit tests (77 passing)
 dotnet add package ConvMVVM3
 ```
 
+---
+
 ## 🚀 Quick Start
 
-### Basic ViewModel with Cross-Platform Generation
+### 1) Basic ViewModel with Cross-Platform Generation
 
 ```csharp
 // Works on ALL supported platforms
@@ -122,10 +141,10 @@ public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
     private string title = "Hello ConvMVVM3!";
-    
+
     [RelayCommand]
     private void ShowMessage() => MessageBox.Show(Title);
-    
+
     [AsyncRelayCommand]
     private async Task LoadDataAsync()
     {
@@ -136,48 +155,62 @@ public partial class MainViewModel : ObservableObject
 }
 ```
 
-### Cross-Platform UIDispatcher Integration
+### 2) ViewModelLocator (AutoWireViewModel) (NEW)
+
+```xml
+<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:convMVVM3="https://github.com/gellston/ConvMVVM3"
+    convMVVM3:ViewModelLocator.AutoWireViewModel="True">
+    <!-- View content -->
+</Window>
+```
+
+### 3) Cross-Platform UIDispatcher Integration
 
 ```csharp
 // Setup varies by platform
-services.AddWPFUIDispatcher();      // WPF
-// services.AddMAUIUIDispatcher();    // MAUI (coming)
+services.AddWPFUIDispatcher();       // WPF
+// services.AddMAUIUIDispatcher();   // MAUI (coming)
 // services.AddAvaloniaUIDispatcher(); // Avalonia (coming)
 
 // Usage is identical across platforms
 public partial class MyViewModel : ObservableObject
 {
     private readonly IUIDispatcher _dispatcher;
-    
+
     public MyViewModel(IUIDispatcher dispatcher)
     {
         _dispatcher = dispatcher;
     }
-    
+
     [AsyncRelayCommand]
     private async Task UpdateFromBackgroundAsync()
     {
         var data = await Task.Run(() => GetHeavyData());
-        
+
         // Thread-safe UI update (cross-platform)
         await _dispatcher.InvokeAsync(() => Title = data);
     }
 }
 ```
 
-### Cross-Platform Region Management
+### 4) Cross-Platform Region Management (UPDATED)
 
 ```xml
 <!-- Works on WPF, MAUI, Avalonia, WinUI -->
 <Grid>
-    <ContentControl regions:RegionManager.RegionName="MainRegion" />
+    <ContentControl convMVVM3:RegionPlugin.RegionName="MainContent" />
 </Grid>
-
-<!-- Platform-agnostic navigation -->
-_regionManager.RequestNavigate("MainRegion", typeof(HomeViewModel));
 ```
 
-### Memory-Safe Cross-Platform Messaging
+```csharp
+// Platform-agnostic navigation
+_regionManager.RequestNavigate("MainContent", typeof(HomeViewModel));
+```
+
+### 5) Memory-Safe Cross-Platform Messaging
 
 ```csharp
 // Sender (all platforms)
@@ -193,18 +226,55 @@ public partial class MyViewModel : ObservableObject, IRecipient<DataUpdatedMessa
 }
 ```
 
-### WPF-Specific Behaviors
+### 6) WPF Interactivity / Behaviors (UPDATED prefix)
 
 ```xml
-<!-- WPF-specific - MAUI/Avalonia equivalents planned -->
 <Button Content="Click Me">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Click">
-            <i:InvokeCommandAction Command="{Binding SaveCommand}" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
+    <convMVVM3:Interaction.Triggers>
+        <convMVVM3:EventTrigger EventName="Click">
+            <convMVVM3:InvokeCommandAction Command="{Binding SaveCommand}" />
+        </convMVVM3:EventTrigger>
+    </convMVVM3:Interaction.Triggers>
 </Button>
 ```
+
+---
+
+## 🧩 Bootstrapper (NEW)
+
+ConvMVVM3 supports a Prism-style **Bootstrapper** flow for registering modules, building the shell, and initializing regions/services.
+
+```csharp
+public class AppBootStrapper : Bootstrapper
+{
+    protected override void ConfigureRegion(IRegionManager regionManager)
+    {
+    }
+
+    protected override Window CreateShell(IServiceContainer provider)
+    {
+        return (Window)provider.GetService("MainWindowView");
+    }
+
+    protected override void OnInitialized(IServiceContainer provider)
+    {
+    }
+
+    protected override void RegisterModules()
+    {
+        this.RegisterModule<AModule>();
+        this.RegisterModule<BModule>();
+        this.RegisterModule<CModule>();
+        this.RegisterModule<MainModule>();
+    }
+
+    protected override void RegisterServices(IServiceRegistry container)
+    {
+    }
+}
+```
+
+---
 
 ## 🎯 Platform Support Matrix
 
@@ -216,23 +286,27 @@ public partial class MyViewModel : ObservableObject, IRecipient<DataUpdatedMessa
 | **Region System** | ✅ | 🔄 | 🔄 | 🔄 | 🔄 |
 | **Built-in DI** | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Weak Messenger** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **WPF Behaviors** | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Platform Behaviors** | ❌ | 🔄 | 🔄 | 🔄 | 🔄 |
+| **WPF Interactivity** | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **Platform Interactivity** | ❌ | 🔄 | 🔄 | 🔄 | 🔄 |
 
 *✅ Available | 🔄 Planned | ❌ Not applicable*
+
+---
 
 ## 🎯 Comparison Matrix
 
 | Feature | ConvMVVM3 | Community Toolkit | Prism |
-|---------|-------------|-------------------|-------|
+|---------|-----------|-------------------|------|
 | **Cross-Platform** | ✅ WPF + planned others | ✅ Many platforms | ❌ WPF only |
 | **Built-in DI** | ✅ Lightweight | ❌ External only | ❌ External only |
 | **UIDispatcher** | ✅ Cross-platform | ❌ Manual only | ❌ Manual only |
 | **Region System** | ✅ Cross-platform | ❌ Not included | ❌ WPF only |
-| **Weak Messenger** | ✅ Auto-cleanup | ✅ Basic | ❌ Manual cleanup |
+| **Weak Messenger** | ✅ Auto-cleanup | ✅ Basic | ⚠️ Manual cleanup |
 | **Source Generator** | ✅ Full feature | ✅ Advanced | ❌ Not included |
 | **Memory Safety** | ✅ Designed for safety | ⚠️ Partial | ⚠️ Manual |
 | **Zero Dependencies** | ✅ Self-contained | ❌ Many packages | ❌ Many packages |
+
+---
 
 ## 🎯 Testing Status
 
@@ -240,7 +314,7 @@ public partial class MyViewModel : ObservableObject, IRecipient<DataUpdatedMessa
 - ✅ UIDispatcher functionality
 - ✅ Dependency injection integration
 - ✅ Region management
-- ✅ Behavior system
+- ✅ Interactivity system
 - ✅ Messaging system
 
 ### **Core Unit Tests** ✅ (77/77 passing)
@@ -251,6 +325,8 @@ public partial class MyViewModel : ObservableObject, IRecipient<DataUpdatedMessa
 - ✅ Dependency injection
 
 **Total: 107/107 tests passing (100%)**
+
+---
 
 ## 📄 License
 
