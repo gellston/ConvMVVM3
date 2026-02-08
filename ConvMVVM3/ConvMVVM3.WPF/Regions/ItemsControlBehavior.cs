@@ -1,4 +1,5 @@
 ﻿
+using ConvMVVM3.Core.Mvvm.Abstractions;
 using ConvMVVM3.Core.Mvvm.Regions;
 using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
 using ConvMVVM3.Host.DependencyInjection;
@@ -74,6 +75,16 @@ namespace ConvMVVM3.WPF.Regions
             {
                 this.CurrentRegion.IsAttaced = false;
                 this.CurrentRegion.SelectedItem = null;
+
+                foreach(var view in this.CurrentRegion.Views)
+                {
+                    if(view is IDestructible destructor)
+                    {
+                        destructor.Destroy();
+                    }
+
+                }
+
                 this.CurrentRegion.Views.Clear();
 
             }

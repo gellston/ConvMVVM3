@@ -1,4 +1,5 @@
 ﻿using ConvMVVM3.Core.DependencyInjection.Abstractions;
+using ConvMVVM3.Core.Mvvm.Abstractions;
 using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
 using System;
 using System.Collections.Generic;
@@ -71,9 +72,22 @@ namespace ConvMVVM3.Core.Mvvm.Regions
 
                 var view  = this.serviceContainer.GetRequiredService(viewType);
                 var region = this.regions[name];
-                region.Content = view;
-                region.Views.Add(view);
-                
+
+
+                switch (regionType)
+                {
+                    case RegionType.SingleView:
+                        {
+                            region.Content = view;
+                            break;
+                        }
+
+                    case RegionType.MultiView:
+                        {
+                            region.Views.Add(view);
+                            break;
+                        }
+                }
 
             }
             catch
@@ -95,12 +109,23 @@ namespace ConvMVVM3.Core.Mvvm.Regions
                     });
                 }
 
-
                 var view = this.serviceContainer.GetRequiredService<T>();
                 var region = this.regions[name];
-                region.Content = view;
-                region.Views.Add(view);
 
+                switch (regionType)
+                {
+                    case RegionType.SingleView:
+                        {
+                            region.Content = view;
+                            break;
+                        }
+
+                    case RegionType.MultiView:
+                        {
+                            region.Views.Add(view);
+                            break;
+                        }
+                }
 
             }
             catch
@@ -132,7 +157,6 @@ namespace ConvMVVM3.Core.Mvvm.Regions
                 {
                     var view = this.serviceContainer.GetRequiredService(type);
                     var region = this.regions[name];
-                    region.Content = view;
                     region.Views.Add(view);
                 }
 
@@ -160,8 +184,20 @@ namespace ConvMVVM3.Core.Mvvm.Regions
 
                 var view = this.serviceContainer.GetRequiredService(typeName);
                 var region = this.regions[name];
-                region.Content = view;
-                region.Views.Add(view);
+                switch (regionType)
+                {
+                    case RegionType.SingleView:
+                        {
+                            region.Content = view;
+                            break;
+                        }
+
+                    case RegionType.MultiView:
+                        {
+                            region.Views.Add(view);
+                            break;
+                        }
+                }
 
 
             }
@@ -194,7 +230,6 @@ namespace ConvMVVM3.Core.Mvvm.Regions
                 {
                     var view = this.serviceContainer.GetRequiredService(typeName);
                     var region = this.regions[name];
-                    region.Content = view;
                     region.Views.Add(view);
                 }
             }
@@ -203,6 +238,23 @@ namespace ConvMVVM3.Core.Mvvm.Regions
                 throw;
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -353,7 +405,6 @@ namespace ConvMVVM3.Core.Mvvm.Regions
                 foreach (var typeName in typeNames)
                 {
                     var view = this.serviceContainer.GetRequiredService(typeName);
-                    region.Content = view;
                     region.Views.Add(view);
                 }
 
@@ -405,7 +456,24 @@ namespace ConvMVVM3.Core.Mvvm.Regions
 
                 var region = this.regions[name];
                 region.SelectedItem = null;
+
+
+                if(region.Content is IDestructible destructor)
+                {
+                    destructor.Destroy();
+                }
+
                 region.Content = null;
+
+
+                foreach(var view in region.Views)
+                {
+                    if(view is IDestructible viewDestructor)
+                    {
+                        viewDestructor.Destroy();
+                    }
+                }
+
                 region.Views.Clear();
                 region.NavigationContext = null;
             }
@@ -464,7 +532,6 @@ namespace ConvMVVM3.Core.Mvvm.Regions
 
                 
                 var region = this.regions[name];
-               
                 if (index >= 0 && region.Views.Count > index)
                     region.SelectedItem = region.Views[index];
             }

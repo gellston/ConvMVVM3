@@ -234,8 +234,9 @@ namespace ConvMVVM3.WPF
             var shell = CreateShell(this.serviceContainer);
             InitializeShell(app, shell);
 
-            OnInitialized(this.serviceContainer);
             moduleManager.InitializeModules();
+            OnInitialized(this.serviceContainer);
+            
         }
         #endregion
 

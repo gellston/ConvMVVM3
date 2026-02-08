@@ -1,4 +1,5 @@
-﻿using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
+﻿using ConvMVVM3.Core.Mvvm.Abstractions;
+using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -50,7 +51,21 @@ namespace ConvMVVM3.Core.Mvvm.Regions
             get => _SelectedItem;
             set
             {
+
+                if (ReferenceEquals(_SelectedItem, value)) return;
+
+                if(_SelectedItem is IPrimaryAware prevAware)
+                {
+                    prevAware.IsPrimary = false;
+                }
+
                 _SelectedItem = value;
+
+                if (value is IPrimaryAware activeAware)
+                {
+                    activeAware.IsPrimary = true;
+                }
+
                 this.OnPropertyChaned();
             }
         }
@@ -69,7 +84,19 @@ namespace ConvMVVM3.Core.Mvvm.Regions
             get => _Content;
             set
             {
+                if (ReferenceEquals(_Content, value)) return;
+
+                if (_Content is IPrimaryAware prevAware)
+                {
+                    prevAware.IsPrimary = false;
+                }
+
                 _Content = value;
+
+                if (value is IPrimaryAware activeAware)
+                {
+                    activeAware.IsPrimary = true;
+                }
                 this.OnPropertyChaned();
             }
         }
