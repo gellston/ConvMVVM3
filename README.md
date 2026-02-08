@@ -1,5 +1,5 @@
 <p align="center">
-   <img src="logo.png" alt="ConvMVVM3 Logo" width="400"/>
+   <img src="https://github.com/gellston/ConvMVVM3/blob/main/logo.png?raw=true" alt="ConvMVVM3 Logo" width="400"/>
 </p>
 
 **ConvMVVM3 (Convergence MVVM3)** is a modern, cross-platform MVVM framework that combines the best features from Prism and Community Toolkit while adding unique innovations.

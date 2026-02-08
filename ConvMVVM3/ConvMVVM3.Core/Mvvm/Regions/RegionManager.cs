@@ -20,7 +20,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions
         #endregion
 
         #region Constructor
-        internal RegionManager(IServiceContainer serviceContainer)
+        public RegionManager(IServiceContainer serviceContainer)
         {
             this.serviceContainer = serviceContainer;
             
