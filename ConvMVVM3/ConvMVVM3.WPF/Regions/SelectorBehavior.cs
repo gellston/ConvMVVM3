@@ -14,7 +14,7 @@ using System.Windows.Data;
 
 namespace ConvMVVM3.WPF.Regions
 {
-    public class SelectorBehaivor : Behavior<Selector>
+    public sealed class SelectorBehaivor : Behavior<Selector>
     {
         #region Protected Functions
         protected override void OnAttached()

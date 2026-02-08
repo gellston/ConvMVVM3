@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ConvMVVM3.Core.Mvvm.Regions
 {
-    public class NavigationContext
+    public sealed class NavigationContext
     {
         #region Public Property
 

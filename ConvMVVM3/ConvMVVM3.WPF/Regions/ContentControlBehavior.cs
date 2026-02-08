@@ -14,7 +14,7 @@ using System.Windows.Data;
 
 namespace ConvMVVM3.WPF.Regions
 {
-    public class ContentControlBehavior : Behavior<ContentControl>
+    public sealed class ContentControlBehavior : Behavior<ContentControl>
     {
         #region Protected Functions
         protected override void OnAttached()

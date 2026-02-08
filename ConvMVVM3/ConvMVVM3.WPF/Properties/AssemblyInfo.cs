@@ -10,3 +10,4 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Behaviors.Actions")]
 [assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Locator")]
 [assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Regions")]
+[assembly: XmlnsDefinition("https://github.com/gellston/ConvMVVM3", "ConvMVVM3.WPF.Binders")]

@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ConvMVVM3.Core.Mvvm.Regions
 {
-    public class Region : IRegion
+    public sealed class Region : IRegion
     {
         #region Private Property
         private string _Name = "";
@@ -66,7 +66,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions
                     activeAware.IsPrimary = true;
                 }
 
-                this.OnPropertyChaned();
+                this.OnPropertyChanged();
             }
         }
 
@@ -97,7 +97,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions
                 {
                     activeAware.IsPrimary = true;
                 }
-                this.OnPropertyChaned();
+                this.OnPropertyChanged();
             }
         }
 
@@ -116,7 +116,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions
         #endregion
 
         #region Protected Functions
-        protected void OnPropertyChaned([CallerMemberName]string propertyName = "")
+        internal void OnPropertyChanged([CallerMemberName]string propertyName = "")
         {
             var handler = PropertyChanged;
             if (handler != null)

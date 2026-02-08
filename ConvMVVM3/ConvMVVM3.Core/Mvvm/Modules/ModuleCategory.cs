@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ConvMVVM3.Core.Mvvm.Modules
 {
-    public class ModuleCategory
+    public sealed class ModuleCategory
     {
         #region Constructor
         public ModuleCategory(string name, string version, InitializationMode mode, string[] dependsOn)

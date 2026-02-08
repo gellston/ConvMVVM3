@@ -9,7 +9,7 @@ namespace ConvMVVM3.WPF.UIDispatcher
     /// WPF-specific implementation of IUIDispatcher using System.Windows.Threading.Dispatcher.
     /// Provides optimized UI thread dispatching for WPF applications.
     /// </summary>
-    public class WPFUIDispatcher : IUIDispatcher
+    public sealed class WPFUIDispatcher : IUIDispatcher
     {
         private readonly System.Windows.Threading.Dispatcher _dispatcher;
 

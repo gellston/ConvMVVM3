@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace ConvMVVM3.Core.Mvvm.Regions
 {
-    public class RegionManager : IRegionManager
+    public sealed class RegionManager : IRegionManager
     {
         #region Private Property
         private readonly IServiceContainer serviceContainer;
@@ -20,7 +20,7 @@ namespace ConvMVVM3.Core.Mvvm.Regions
         #endregion
 
         #region Constructor
-        public RegionManager(IServiceContainer serviceContainer)
+        internal RegionManager(IServiceContainer serviceContainer)
         {
             this.serviceContainer = serviceContainer;
             

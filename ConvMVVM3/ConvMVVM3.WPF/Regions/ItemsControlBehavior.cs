@@ -14,7 +14,7 @@ using System.Windows.Data;
 
 namespace ConvMVVM3.WPF.Regions
 {
-    public class ItemsControlBehavior : Behavior<ItemsControl>
+    public sealed class ItemsControlBehavior : Behavior<ItemsControl>
     {
         #region Protected Functions
         protected override void OnAttached()

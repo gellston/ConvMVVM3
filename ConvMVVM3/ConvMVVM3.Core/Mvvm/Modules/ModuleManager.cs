@@ -9,7 +9,7 @@ using System.Text;
 
 namespace ConvMVVM3.Core.Mvvm.Modules
 {
-    public class ModuleManager : IModuleManager
+    public sealed class ModuleManager : IModuleManager
     {
         #region Private Property
         private readonly List<IModule> modules = new List<IModule>();
