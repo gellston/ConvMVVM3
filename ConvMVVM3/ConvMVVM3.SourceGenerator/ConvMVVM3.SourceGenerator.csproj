@@ -15,7 +15,7 @@
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<!-- 필요 없으면 false -->
 	<PackageId>ConvMVVM3.SourceGenerator</PackageId>
-	<Version>1.0.1.0</Version>
+	<Version>1.0.2.0</Version>
 	<Authors>gellston</Authors>
 	<Company>gellston</Company>
 	<Description>ConvMVVM3 Core MVVM library (platform-agnostic).</Description>
@@ -40,8 +40,8 @@
 
 	
   <ItemGroup>
-    <PackageReference Include="ConvMVVM3.Core" Version="1.0.1" />
-    <PackageReference Include="ConvMVVM3.Host" Version="1.0.1" />
+    <PackageReference Include="ConvMVVM3.Core" Version="1.0.2" />
+    <PackageReference Include="ConvMVVM3.Host" Version="1.0.2" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" PrivateAssets="all" />
 	<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
   </ItemGroup>
