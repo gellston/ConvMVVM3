@@ -1,4 +1,3 @@
-
 <p align="center">
    <img src="logo.png" alt="ConvMVVM3 Logo" width="400"/>
 </p>
@@ -7,7 +6,7 @@
 
 ---
 
-## 📌 XAML Namespace Mapping (NEW)
+## 📌 XAML Namespace Mapping
 
 ConvMVVM3 exposes a **single** XAML XML namespace for a clean, consistent XAML experience:
 
@@ -33,8 +32,6 @@ Microsoft-compatible UI thread dispatcher for multiple platforms:
 ```csharp
 // Setup - Available for WPF, MAUI, Avalonia, WinUI
 services.AddWPFUIDispatcher();      // WPF
-services.AddMAUIUIDispatcher();     // MAUI (coming soon)
-services.AddAvaloniaUIDispatcher(); // Avalonia (coming soon)
 
 // Usage - Cross-platform compatible
 await dispatcher.InvokeAsync(() => Title = "Updated");
@@ -82,7 +79,7 @@ Automatic property and command generation with enhanced features:
 ConvMVVM3.Core/
 ├── ObservableObject              # Base class with INotifyPropertyChanged
 ├── ObservableRecipient           # Message recipient base class
-├── UIDispatcher                  # NEW: Cross-platform dispatcher interface
+├── UIDispatcher                  # Cross-platform dispatcher interface
 ├── WeakReferenceMessenger        # Memory-safe messaging system
 ├── Commands/
 │   ├── RelayCommand              # Synchronous command implementation
@@ -117,8 +114,8 @@ ConvMVVM3.Core/                   # Platform-agnostic MVVM library
 ConvMVVM3.SourceGenerator/        # Cross-platform source generator
 ConvMVVM3.WPF/                    # WPF-specific interactivity + regions
 ConvMVVM3.Host/                   # DI host implementation
-ConvMVVM3.WPF.Tests/              # WPF unit tests (30 passing)
-ConvMVVM3.Tests/                  # Core unit tests (77 passing)
+ConvMVVM3.WPF.Tests/              # WPF unit tests
+ConvMVVM3.Tests/                  # Core unit tests
 ```
 
 ---
@@ -155,7 +152,7 @@ public partial class MainViewModel : ObservableObject
 }
 ```
 
-### 2) ViewModelLocator (AutoWireViewModel) (NEW)
+### 2) ViewModelLocator (AutoWireViewModel)
 
 ```xml
 <Window
@@ -172,8 +169,6 @@ public partial class MainViewModel : ObservableObject
 ```csharp
 // Setup varies by platform
 services.AddWPFUIDispatcher();       // WPF
-// services.AddMAUIUIDispatcher();   // MAUI (coming)
-// services.AddAvaloniaUIDispatcher(); // Avalonia (coming)
 
 // Usage is identical across platforms
 public partial class MyViewModel : ObservableObject
@@ -196,7 +191,7 @@ public partial class MyViewModel : ObservableObject
 }
 ```
 
-### 4) Cross-Platform Region Management (UPDATED)
+### 4) Cross-Platform Region Management
 
 ```xml
 <!-- Works on WPF, MAUI, Avalonia, WinUI -->
@@ -226,7 +221,7 @@ public partial class MyViewModel : ObservableObject, IRecipient<DataUpdatedMessa
 }
 ```
 
-### 6) WPF Interactivity / Behaviors (UPDATED prefix)
+### 6) WPF Interactivity / Behaviors
 
 ```xml
 <Button Content="Click Me">
@@ -240,7 +235,157 @@ public partial class MyViewModel : ObservableObject, IRecipient<DataUpdatedMessa
 
 ---
 
-## 🧩 Bootstrapper (NEW)
+## 🧰 Helpful Utilities
+
+This section includes a few practical helpers used frequently in Prism-style MVVM apps:
+
+- `ConvMVVM3.Core.Mvvm.Threading`
+- `ConvMVVM3.Core.Mvvm.Collections`
+- `ConvMVVM3.Host.DependencyInjection`
+
+### A) BusyScope — ConvMVVM3.Core.Mvvm.Threading
+
+Use a scope to ensure `IsBusy` is always restored (even if an exception occurs).  
+Recommended for simple “single operation” flows.
+
+```csharp
+using ConvMVVM3.Core.Mvvm.Threading;
+
+// In your ViewModel
+private bool _isBusy;
+public bool IsBusy
+{
+    get => _isBusy;
+    set { _isBusy = value; /* RaisePropertyChanged */ }
+}
+
+public async Task RefreshAsync()
+{
+    using (BusyScope.Enter(v => IsBusy = v))
+    {
+        await LoadAsync();
+    }
+}
+```
+
+### B) BusyCounterScope (Recommended) — ConvMVVM3.Core.Mvvm.Threading
+
+Recommended when operations can overlap (nested calls, multiple async commands).
+
+```csharp
+using ConvMVVM3.Core.Mvvm.Threading;
+
+private int _busyCount;
+private bool _isBusy;
+public bool IsBusy
+{
+    get => _isBusy;
+    set { _isBusy = value; /* RaisePropertyChanged */ }
+}
+
+public async Task RefreshAsync()
+{
+    using (BusyCounterScope.Enter(
+        getCount: () => _busyCount,
+        setCount: v => _busyCount = v,
+        setBusy:  v => IsBusy = v))
+    {
+        await LoadAsync();
+    }
+}
+```
+
+### C) OperationGuard — ConvMVVM3.Core.Mvvm.Threading
+
+Prevents re-entrancy (double-click save, multiple async executions).  
+Combine it with BusyScope/BusyCounterScope for a great UX.
+
+```csharp
+using ConvMVVM3.Core.Mvvm.Threading;
+
+private readonly OperationGuard _saveGuard = new OperationGuard();
+private int _busyCount;
+
+public Task SaveAsync()
+{
+    return _saveGuard.RunAsync(async () =>
+    {
+        using (BusyCounterScope.Enter(
+            () => _busyCount,
+            v => _busyCount = v,
+            v => IsBusy = v))
+        {
+            await SaveAsyncCore();
+        }
+    });
+}
+```
+
+### D) ObservableRangeCollection — ConvMVVM3.Core.Mvvm.Collections
+
+Use `AddRange/ReplaceRange` to avoid thousands of per-item collection change notifications.
+
+```csharp
+using ConvMVVM3.Core.Mvvm.Collections;
+
+public ObservableRangeCollection<ItemViewModel> Items { get; } = new();
+
+public async Task LoadItemsAsync()
+{
+    var items = await LoadFromServerAsync();
+
+    // One reset notification instead of N adds
+    Items.ReplaceRange(items);
+}
+```
+
+### E) ActivatorUtilities — ConvMVVM3.Host.DependencyInjection
+
+`ActivatorUtilities` helps create objects by mixing:
+- **DI-resolved services** from `IServiceResolver`
+- **runtime arguments** you provide (e.g., IDs, parameters, view references)
+
+```csharp
+using ConvMVVM3.Core.DependencyInjection.Abstractions;
+using ConvMVVM3.Host.DependencyInjection;
+
+// Example types
+public sealed class UserDetailsViewModel
+{
+    public UserDetailsViewModel(IUserService service, int userId)
+    {
+        // service comes from DI, userId comes from runtime args
+    }
+}
+
+public static class Example
+{
+    public static void CreateWithRuntimeArgs(IServiceResolver resolver)
+    {
+        // 1) CreateInstance: DI + runtime args
+        var vm = (UserDetailsViewModel)ActivatorUtilities.CreateInstance(
+            resolver,
+            typeof(UserDetailsViewModel),
+            123);
+
+        // 2) GetServiceOrCreateInstance: prefer registered instance, otherwise create
+        var shell = ActivatorUtilities.GetServiceOrCreateInstance<MainShellViewModel>(resolver);
+
+        // 3) CreateFactory: preselect ctor + argument mapping for speed
+        var factory = ActivatorUtilities.CreateFactory(
+            typeof(UserDetailsViewModel),
+            new[] { typeof(int) });
+
+        var vmFast = (UserDetailsViewModel)factory(resolver, new object[] { 456 });
+    }
+}
+```
+
+> Note: The class name is **ActivatorUtilities** (not ActivityUtility).
+
+---
+
+## 🧩 Bootstrapper
 
 ConvMVVM3 supports a Prism-style **Bootstrapper** flow for registering modules, building the shell, and initializing regions/services.
 
@@ -290,41 +435,6 @@ public class AppBootStrapper : Bootstrapper
 | **Platform Interactivity** | ❌ | 🔄 | 🔄 | 🔄 | 🔄 |
 
 *✅ Available | 🔄 Planned | ❌ Not applicable*
-
----
-
-## 🎯 Comparison Matrix
-
-| Feature | ConvMVVM3 | Community Toolkit | Prism |
-|---------|-----------|-------------------|------|
-| **Cross-Platform** | ✅ WPF + planned others | ✅ Many platforms | ❌ WPF only |
-| **Built-in DI** | ✅ Lightweight | ❌ External only | ❌ External only |
-| **UIDispatcher** | ✅ Cross-platform | ❌ Manual only | ❌ Manual only |
-| **Region System** | ✅ Cross-platform | ❌ Not included | ❌ WPF only |
-| **Weak Messenger** | ✅ Auto-cleanup | ✅ Basic | ⚠️ Manual cleanup |
-| **Source Generator** | ✅ Full feature | ✅ Advanced | ❌ Not included |
-| **Memory Safety** | ✅ Designed for safety | ⚠️ Partial | ⚠️ Manual |
-| **Zero Dependencies** | ✅ Self-contained | ❌ Many packages | ❌ Many packages |
-
----
-
-## 🎯 Testing Status
-
-### **WPF Unit Tests** ✅ (30/30 passing)
-- ✅ UIDispatcher functionality
-- ✅ Dependency injection integration
-- ✅ Region management
-- ✅ Interactivity system
-- ✅ Messaging system
-
-### **Core Unit Tests** ✅ (77/77 passing)
-- ✅ ObservableObject behavior
-- ✅ Command implementations
-- ✅ Source generator output
-- ✅ Messaging system
-- ✅ Dependency injection
-
-**Total: 107/107 tests passing (100%)**
 
 ---
 
