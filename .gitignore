@@ -398,3 +398,6 @@ appsettings.*.json
 *GeneratedTest*
 >>>>>>> Stashed changes
 *.bak
+
+
+*.zip
