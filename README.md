@@ -1,6 +1,37 @@
+
+
 <p align="center">
    <img src="https://github.com/gellston/ConvMVVM3/blob/main/logo.png?raw=true" alt="ConvMVVM3 Logo" width="400"/>
 </p>
+
+
+
+<div align="center">
+
+<a href="https://www.nuget.org/packages/ConvMVVM3.Core">
+    <img src="https://img.shields.io/nuget/v/ConvMVVM3.Core.svg?style=for-the-badge&logo=nuget&label=NGET%20ConvMVVM3.Core" />
+
+</a>
+
+<a href="https://www.nuget.org/packages/ConvMVVM3.Host">
+    <img src="https://img.shields.io/nuget/v/ConvMVVM3.Host.svg?style=for-the-badge&logo=nuget&label=NGET%20ConvMVVM3.Host" />
+
+</a>
+
+<a href="https://www.nuget.org/packages/ConvMVVM3.SourceGenerator">
+    <img src="https://img.shields.io/nuget/v/ConvMVVM3.SourceGenerator.svg?style=for-the-badge&logo=nuget&label=NGET%20ConvMVVM3.SourceGenerator" />
+
+</a>
+
+<br/>
+<a href="https://www.nuget.org/packages/ConvMVVM3.WPF">
+    <img src="https://img.shields.io/nuget/v/ConvMVVM3.WPF.svg?style=for-the-badge&logo=nuget&label=NGET%20ConvMVVM3.WPF" />
+
+</a>
+</div>
+
+
+
 
 **ConvMVVM3 (Convergence MVVM3)** is a modern, cross-platform MVVM framework that combines the best features from Prism and Community Toolkit while adding unique innovations.
 
@@ -381,7 +412,6 @@ public static class Example
 }
 ```
 
-> Note: The class name is **ActivatorUtilities** (not ActivityUtility).
 
 ---
 
