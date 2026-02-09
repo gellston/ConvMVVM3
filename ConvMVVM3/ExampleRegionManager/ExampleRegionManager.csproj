@@ -9,10 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConvMVVM3.Core" Version="1.0.2" />
-    <PackageReference Include="ConvMVVM3.Host" Version="1.0.2" />
-    <PackageReference Include="ConvMVVM3.SourceGenerator" Version="1.0.1" />
-    <PackageReference Include="ConvMVVM3.WPF" Version="1.0.1" />
+    <PackageReference Include="ConvMVVM3.WPF" Version="1.0.2" />
   </ItemGroup>
 
 
