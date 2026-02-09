@@ -7,6 +7,43 @@ namespace ConvMVVM3.Tests;
 
 public class ServiceContainerTests
 {
+
+
+    [Fact]
+    public void Resolve_Returns_Required_Service_Width_Key()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        services.AddSingleton<ITestService, TestService>("test");
+        var container = new ServiceContainer(services);
+
+        // Act
+        var service = container.GetRequiredService<ITestService>("test");
+
+        // Assert
+        Assert.NotNull(service);
+        Assert.IsType<TestService>(service);
+    }
+
+
+    [Fact]
+    public void Resolve_Returns_Service_Width_Key()
+    {
+        // Arrange
+        var services = new ServiceCollection();
+        services.AddSingleton<ITestService, TestService>("test");
+        var container = new ServiceContainer(services);
+
+        // Act
+        var service = container.GetService<ITestService>("test");
+
+        // Assert
+        Assert.NotNull(service);
+        Assert.IsType<TestService>(service);
+    }
+
+
+
     [Fact]
     public void Resolve_Returns_Registered_Service()
     {

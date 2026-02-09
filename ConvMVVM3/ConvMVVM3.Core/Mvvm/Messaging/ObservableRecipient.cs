@@ -9,10 +9,14 @@ namespace ConvMVVM3.Core.Mvvm.Messaging
 {
     public abstract class ObservableRecipient : ObservableObject, IDisposable
     {
+        #region Private Property
         private bool _isActive;
         private bool _disposed;
 
         private Type[] _messageTypes;
+        #endregion
+
+        #region Constructor
 
         protected ObservableRecipient()
             : this(WeakReferenceMessenger.Default)
@@ -25,7 +29,15 @@ namespace ConvMVVM3.Core.Mvvm.Messaging
             Messenger = messenger;
         }
 
+        #endregion
+
+
+        #region Protected Property
+
         protected IMessenger Messenger { get; }
+        #endregion
+
+        #region Public Property
 
         /// <summary>
         /// 이 Recipient가 사용할 채널 토큰.
@@ -35,6 +47,7 @@ namespace ConvMVVM3.Core.Mvvm.Messaging
         /// 주의: IsActive=true 상태에서 토큰을 바꾸면, 다시 등록이 필요하므로
         /// 기본 구현은 예외를 던지게 해 두었다.
         /// </summary>
+        private object _token;
         public object Token
         {
             get { return _token; }
@@ -50,7 +63,9 @@ namespace ConvMVVM3.Core.Mvvm.Messaging
                 OnTokenChanged();
             }
         }
-        private object _token;
+
+        #endregion
+
 
         protected virtual void OnTokenChanged() { }
 

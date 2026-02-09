@@ -1,159 +1,127 @@
+﻿using ConvMVVM3.Core.Mvvm.Abstractions;
+using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace ConvMVVM3.Core.Mvvm.Regions
 {
     public sealed class Region : IRegion
     {
-        private readonly List<object> _views = new List<object>();
-        private readonly object _gate = new object();
-        private object _activeView;
-        private readonly bool _singleActive;
+        #region Private Property
+        private string _Name = "";
+        private bool _IsAttached = false;
+        private ObservableCollection<object> _Views = new ObservableCollection<object>();
+        private object _SelectedItem = null;
+        private object _Content = null;
+        private NavigationContext _NavigationContext = null;
+        private RegionType _RegionType = RegionType.SingleView;
+        #endregion
 
-        public Region(string name, bool singleActive)
+        #region Collection
+        public ObservableCollection<object> Views
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("Region name is required.", nameof(name));
-
-            Name = name;
-            _singleActive = singleActive;
+            get => _Views;
+            set => _Views = value;
         }
+        #endregion
 
-        public string Name { get; private set; }
 
-        public IReadOnlyList<object> Views
+        #region Public Property
+        public string Name
         {
-            get
+            get => _Name;
+            set
             {
-                lock (_gate) return _views.ToArray();
+                _Name = value;
             }
         }
 
-        public object ActiveView
+        public bool IsAttaced
         {
-            get
-            {
-                lock (_gate) return _activeView;
-            }
+            get => _IsAttached;
+            set => _IsAttached = value;
         }
 
         public object SelectedItem
         {
-            get { return ActiveView; }
+            get => _SelectedItem;
             set
             {
-                if (value == null) Deactivate(null);
-                else Activate(value, null);
-            }
-        }
 
-        public event EventHandler<RegionViewsChangedEventArgs> ViewsChanged;
-        public event EventHandler<RegionActiveViewChangedEventArgs> ActiveViewChanged;
+                if (ReferenceEquals(_SelectedItem, value)) return;
 
-        public void Add(object view)
-        {
-            if (view == null) throw new ArgumentNullException(nameof(view));
-
-            bool added;
-            lock (_gate)
-            {
-                added = !_views.Contains(view);
-                if (added) _views.Add(view);
-            }
-
-            if (added)
-            {
-                var handler = ViewsChanged;
-                if (handler != null)
-                    handler(this, new RegionViewsChangedEventArgs(new[] { view }, new object[0]));
-            }
-        }
-
-        public bool Remove(object view)
-        {
-            if (view == null) throw new ArgumentNullException(nameof(view));
-
-            bool removed;
-            object oldActive = null;
-
-            lock (_gate)
-            {
-                removed = _views.Remove(view);
-                if (!removed) return false;
-
-                if (object.ReferenceEquals(_activeView, view))
+                if(_SelectedItem is IPrimaryAware prevAware)
                 {
-                    oldActive = _activeView;
-                    _activeView = null;
-                }
-            }
-
-            var vh = ViewsChanged;
-            if (vh != null)
-                vh(this, new RegionViewsChangedEventArgs(new object[0], new[] { view }));
-
-            if (oldActive != null)
-            {
-                var ah = ActiveViewChanged;
-                if (ah != null)
-                    ah(this, new RegionActiveViewChangedEventArgs(oldActive, null, null));
-            }
-
-            return true;
-        }
-
-        public void Activate(object view, INavigationContext context)
-        {
-            if (view == null) throw new ArgumentNullException(nameof(view));
-
-            object old;
-            bool added = false;
-            bool same;
-
-            lock (_gate)
-            {
-                if (!_views.Contains(view))
-                {
-                    _views.Add(view);
-                    added = true;
+                    prevAware.IsPrimary = false;
                 }
 
-                old = _activeView;
-                same = object.ReferenceEquals(old, view);
-                if (!same)
-                    _activeView = view;
+                _SelectedItem = value;
+
+                if (value is IPrimaryAware activeAware)
+                {
+                    activeAware.IsPrimary = true;
+                }
+
+                this.OnPropertyChanged();
             }
-
-            if (same) return;
-
-            if (added)
-            {
-                var vh = ViewsChanged;
-                if (vh != null)
-                    vh(this, new RegionViewsChangedEventArgs(new[] { view }, new object[0]));
-            }
-
-            var ah2 = ActiveViewChanged;
-            if (ah2 != null)
-                ah2(this, new RegionActiveViewChangedEventArgs(old, view, context));
-
-            if (_singleActive && old != null && !object.ReferenceEquals(old, view))
-                Remove(old);
         }
 
-        public void Deactivate(INavigationContext context)
+        public NavigationContext NavigationContext
         {
-            object old;
-            lock (_gate)
+            get => _NavigationContext;
+            set
             {
-                if (_activeView == null) return;
-                old = _activeView;
-                _activeView = null;
+                _NavigationContext = value;
             }
-
-            var ah = ActiveViewChanged;
-            if (ah != null)
-                ah(this, new RegionActiveViewChangedEventArgs(old, null, context));
         }
+
+        public object Content
+        {
+            get => _Content;
+            set
+            {
+                if (ReferenceEquals(_Content, value)) return;
+
+                if (_Content is IPrimaryAware prevAware)
+                {
+                    prevAware.IsPrimary = false;
+                }
+
+                _Content = value;
+
+                if (value is IPrimaryAware activeAware)
+                {
+                    activeAware.IsPrimary = true;
+                }
+                this.OnPropertyChanged();
+            }
+        }
+
+        public RegionType RegionType
+        {
+            get => _RegionType;
+            set
+            {
+                _RegionType = value;
+            }
+        }
+        #endregion
+
+        #region Event
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region Protected Functions
+        internal void OnPropertyChanged([CallerMemberName]string propertyName = "")
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+                handler(this, new PropertyChangedEventArgs(propertyName));
+        } 
+        #endregion
     }
 }
