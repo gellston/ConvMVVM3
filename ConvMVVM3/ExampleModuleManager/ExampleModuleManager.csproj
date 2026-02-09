@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConvMVVM3.WPF" Version="1.0.2" />
+    <PackageReference Include="ConvMVVM3.WPF" Version="1.0.3" />
   </ItemGroup>
+
+
 </Project>
