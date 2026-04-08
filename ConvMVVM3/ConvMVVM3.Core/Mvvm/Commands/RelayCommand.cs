@@ -7,10 +7,20 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 {
     public sealed class RelayCommand : IRelayCommand
     {
+        #region Private Property
         private readonly Action _execute;
         private readonly Func<bool> _canExecute;
+        #endregion
+
+
+
+        #region Event
 
         public event EventHandler CanExecuteChanged;
+        #endregion
+
+
+        #region Constructor
 
         public RelayCommand(Action execute, Func<bool> canExecute = null)
         {
@@ -18,6 +28,10 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             _execute = execute;
             _canExecute = canExecute;
         }
+        #endregion
+
+
+        #region Public Functions
 
         public bool CanExecute(object parameter)
         {
@@ -38,22 +52,31 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
+        #endregion
     }
 
     public sealed class RelayCommand<T> : IRelayCommand<T>
     {
+        #region Private Property
         private readonly Action<T> _execute;
         private readonly Func<T, bool> _canExecute;
+        #endregion
+
+        #region Event
 
         public event EventHandler CanExecuteChanged;
+        #endregion
 
+        #region Constructor
         public RelayCommand(Action<T> execute, Func<T, bool> canExecute = null)
         {
             if (execute == null) throw new ArgumentNullException(nameof(execute));
             _execute = execute;
             _canExecute = canExecute;
         }
+        #endregion
 
+        #region Public Functions
         public bool CanExecute(object parameter)
         {
             // parameter가 null일 수 있음. value type이면 default(T)로 처리.
@@ -87,5 +110,6 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             if (handler != null)
                 handler(this, EventArgs.Empty);
         }
+        #endregion
     }
 }

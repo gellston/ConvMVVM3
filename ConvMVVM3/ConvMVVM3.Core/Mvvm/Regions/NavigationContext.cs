@@ -1,21 +1,14 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace ConvMVVM3.Core.Mvvm.Regions
 {
-    public sealed class NavigationContext : INavigationContext
+    public sealed class NavigationContext
     {
-        public NavigationContext(string regionName, IReadOnlyDictionary<string, object> parameters)
-        {
-            if (string.IsNullOrWhiteSpace(regionName))
-                throw new ArgumentException("Region name is required.", nameof(regionName));
+        #region Public Property
 
-            RegionName = regionName;
-            Parameters = parameters ?? new Dictionary<string, object>();
-        }
-
-        public string RegionName { get; private set; }
-
-        public IReadOnlyDictionary<string, object> Parameters { get; private set; }
+        public NavigationParameters Parameters { get; set; } = new NavigationParameters();
+        #endregion
     }
 }

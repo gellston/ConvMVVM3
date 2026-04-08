@@ -1,0 +1,56 @@
+﻿<Window x:Class="ExampleRegionManager.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExampleRegionManager"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        xmlns:convMVVM3="https://github.com/gellston/ConvMVVM3"
+        convMVVM3:ViewModelLocator.AutoWireViewModel="True">
+    
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ContentControl convMVVM3:RegionPlugin.RegionName="ContentView"
+                        Grid.Column="0"></ContentControl>
+
+        <ItemsControl convMVVM3:RegionPlugin.RegionName="SubView1"
+                      Grid.Column="1"></ItemsControl>
+
+        <ListBox convMVVM3:RegionPlugin.RegionName="SubView2"
+                 Grid.Column="2"></ListBox>
+
+        <Button Grid.Column="0"
+                Grid.Row="1"
+                Content="Switch"
+                Command="{Binding SwitchContentCommand}"></Button>
+
+
+        <UniformGrid Grid.Column="1"
+                     Grid.Row="1">
+            <Button Content="Add Items"
+                    Command="{Binding AddItemsCommand}"></Button>
+        </UniformGrid>
+
+
+        <UniformGrid Grid.Column="2"
+                     Grid.Row="1"
+                     Rows="1">
+            <Button Content="Add List"
+                    Command="{Binding AddListCommand}"></Button>
+            <Button Content="Select second one"
+                    Command="{Binding SelectListCommand}"></Button>
+        </UniformGrid>
+
+    </Grid>
+</Window>

@@ -7,6 +7,8 @@ namespace ConvMVVM3.Core.Mvvm.Attributes
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public sealed class AsyncRelayCommandAttribute : Attribute
     {
+
+        #region Public Property
         /// <summary>
         /// (선택) 생성될 Command 프로퍼티 이름 지정.
         /// </summary>
@@ -33,6 +35,11 @@ namespace ConvMVVM3.Core.Mvvm.Attributes
         /// </summary>
         public bool CatchExceptions { get; set; }
 
+        #endregion
+
+
+        #region Constructor
+
         public AsyncRelayCommandAttribute()
         {
             // 보수적 기본값(장비/IO 앱에 안전한 편)
@@ -40,5 +47,6 @@ namespace ConvMVVM3.Core.Mvvm.Attributes
             DisableWhileRunning = true;
             CatchExceptions = false;
         }
+        #endregion
     }
 }

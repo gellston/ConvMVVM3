@@ -1,79 +1,546 @@
+﻿using ConvMVVM3.Core.DependencyInjection.Abstractions;
+using ConvMVVM3.Core.Mvvm.Abstractions;
+using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics.Contracts;
+using System.Globalization;
+using System.Runtime.InteropServices.ComTypes;
+using System.Text;
+using System.Threading;
 
 namespace ConvMVVM3.Core.Mvvm.Regions
 {
     public sealed class RegionManager : IRegionManager
     {
-        private readonly Dictionary<string, IRegion> _regions = new Dictionary<string, IRegion>(StringComparer.OrdinalIgnoreCase);
-        private readonly object _gate = new object();
-        private readonly IViewFactory _viewFactory;
-        private readonly bool _defaultSingleActive;
+        #region Private Property
+        private readonly IServiceContainer serviceContainer;
+        private readonly Dictionary<string, IRegion> regions = new Dictionary<string, IRegion>();
+        #endregion
 
-        public RegionManager(IViewFactory viewFactory, bool defaultSingleActive = false)
+        #region Constructor
+        public RegionManager(IServiceContainer serviceContainer)
         {
-            if (viewFactory == null) throw new ArgumentNullException(nameof(viewFactory));
+            this.serviceContainer = serviceContainer;
+            
+        }
+        #endregion
 
-            _viewFactory = viewFactory;
-            _defaultSingleActive = defaultSingleActive;
-            ViewRegistry = new RegionViewRegistry();
 
-            ViewRegistry.ViewRegistered += OnViewRegistered;
+        #region Public Property
+        public ReadOnlyDictionary<string, IRegion> Regions => new ReadOnlyDictionary<string, IRegion>(this.regions);
+        #endregion
+
+
+
+        #region Public Functions
+
+        public void RegisterViewWithRegion(string name, RegionType regionType = RegionType.SingleView)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    this.regions.Add(name, new Region()
+                    {
+                        Name = name,
+                        RegionType = regionType,
+                    });
+                }
+
+            }
+            catch
+            {
+                throw;
+            }
         }
 
-        public IRegionViewRegistry ViewRegistry { get; private set; }
-
-        public IRegion GetOrCreateRegion(string regionName)
+        public void RegisterViewWithRegion(string name, Type viewType, RegionType regionType = RegionType.SingleView)
         {
-            if (string.IsNullOrWhiteSpace(regionName)) throw new ArgumentException("Region name is required.", nameof(regionName));
-
-            IRegion region;
-            bool created = false;
-
-            lock (_gate)
+            try
             {
-                if (_regions.TryGetValue(regionName, out region))
-                    return region;
-
-                region = new Region(regionName, _defaultSingleActive);
-                _regions[regionName] = region;
-                created = true;
-            }
-
-            if (created)
-            {
-                foreach (var vt in ViewRegistry.GetViewTypes(regionName))
+                if (!this.regions.ContainsKey(name))
                 {
-                    var view = _viewFactory.Create(vt);
-                    region.Add(view);
+                    this.regions.Add(name, new Region()
+                    {
+                        Name = name,
+                        RegionType = regionType,
+                    });
+                }
+
+
+                var view  = this.serviceContainer.GetRequiredService(viewType);
+                var region = this.regions[name];
+
+
+                switch (regionType)
+                {
+                    case RegionType.SingleView:
+                        {
+                            region.Content = view;
+                            break;
+                        }
+
+                    case RegionType.MultiView:
+                        {
+                            region.Views.Add(view);
+                            break;
+                        }
+                }
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void RegisterViewWithRegion<T>(string name, RegionType regionType = RegionType.SingleView)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    this.regions.Add(name, new Region()
+                    {
+                        Name = name,
+                        RegionType = regionType
+                    });
+                }
+
+                var view = this.serviceContainer.GetRequiredService<T>();
+                var region = this.regions[name];
+
+                switch (regionType)
+                {
+                    case RegionType.SingleView:
+                        {
+                            region.Content = view;
+                            break;
+                        }
+
+                    case RegionType.MultiView:
+                        {
+                            region.Views.Add(view);
+                            break;
+                        }
+                }
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void RegisterViewWithRegion(string name, params Type[] types)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    this.regions.Add(name, new Region()
+                    {
+                        Name = name,
+                        RegionType = RegionType.MultiView
+                    });
+                }
+
+
+                if(types == null || types.Length == 0)
+                {
+                    throw new InvalidOperationException("Invalid types information");
+                }
+
+                foreach (var type in types)
+                {
+                    var view = this.serviceContainer.GetRequiredService(type);
+                    var region = this.regions[name];
+                    region.Views.Add(view);
+                }
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void RegisterViewWithRegion(string name, string typeName, RegionType regionType = RegionType.SingleView)
+        {
+            try
+            {
+
+                if (!this.regions.ContainsKey(name))
+                {
+                    this.regions.Add(name, new Region()
+                    {
+                        Name = name,
+                        RegionType = regionType
+                    });
+                }
+
+
+                var view = this.serviceContainer.GetRequiredService(typeName);
+                var region = this.regions[name];
+                switch (regionType)
+                {
+                    case RegionType.SingleView:
+                        {
+                            region.Content = view;
+                            break;
+                        }
+
+                    case RegionType.MultiView:
+                        {
+                            region.Views.Add(view);
+                            break;
+                        }
+                }
+
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void RegisterViewWithRegion(string name, params string[] typeNames)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    this.regions.Add(name, new Region()
+                    {
+                        Name = name,
+                        RegionType = RegionType.MultiView
+                    });
+                }
+
+
+                if (typeNames == null || typeNames.Length == 0)
+                {
+                    throw new InvalidOperationException("Invalid typeNames information");
+                }
+
+                foreach (var typeName in typeNames)
+                {
+                    var view = this.serviceContainer.GetRequiredService(typeName);
+                    var region = this.regions[name];
+                    region.Views.Add(view);
                 }
             }
-
-            return region;
-        }
-
-        public object Navigate(string regionName, Type viewType, IReadOnlyDictionary<string, object> parameters = null)
-        {
-            var region = GetOrCreateRegion(regionName);
-            var view = _viewFactory.Create(viewType);
-
-            var ctx = new NavigationContext(regionName, parameters);
-            region.Activate(view, ctx);
-
-            return view;
-        }
-
-        private void OnViewRegistered(object sender, RegionViewRegisteredEventArgs e)
-        {
-            IRegion region;
-            lock (_gate)
+            catch
             {
-                if (!_regions.TryGetValue(e.RegionName, out region))
-                    return;
+                throw;
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        public void RequestNavigate(string name, Type viewType, NavigationParameters parameters = null, Action<NavigationContext> result = null)
+        {
+            if (!this.regions.ContainsKey(name))
+            {
+                throw new InvalidOperationException($"Invalid region name : {name}");
             }
 
-            var view = _viewFactory.Create(e.ViewType);
-            region.Add(view);
+            var navigation = new NavigationContext();
+            var region = this.regions[name];
+
+
+            if (region.RegionType != RegionType.SingleView)
+            {
+                throw new InvalidOperationException("Invalid region type");
+            }
+
+            region.NavigationContext = navigation;
+            var prevView = region.Content;
+            if (prevView is INavigationAware prevNavigationAware)
+            {
+                prevNavigationAware.OnNavigatedFrom(navigation);
+            }
+
+
+            var view = this.serviceContainer.GetRequiredService(viewType);
+            region.Content = view;
+            if (view is INavigationAware navigationAware)
+            {
+                navigation.Parameters = parameters;
+                if (navigationAware.IsNavigationTarget(navigation))
+                    navigationAware.OnNavigatedTo(navigation);
+            }
+
+
+            result?.Invoke(navigation);
         }
+
+        public void RequestNavigate<T>(string name, NavigationParameters parameters = null, Action<NavigationContext> result = null)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    throw new InvalidOperationException($"Invalid region name : {name}");
+                }
+
+                var navigation = new NavigationContext();
+                var region = this.regions[name];
+
+
+                if (region.RegionType != RegionType.SingleView)
+                {
+                    throw new InvalidOperationException("Invalid region type");
+                }
+
+                region.NavigationContext = navigation;
+                var prevView = region.Content;
+                if (prevView is INavigationAware prevNavigationAware)
+                {
+                    prevNavigationAware.OnNavigatedFrom(navigation);
+                }
+
+
+                var view = this.serviceContainer.GetRequiredService(typeof(T));
+                region.Content = view;
+                if (view is INavigationAware navigationAware)
+                {
+                    navigation.Parameters = parameters;
+                    if (navigationAware.IsNavigationTarget(navigation))
+                        navigationAware.OnNavigatedTo(navigation);
+                }
+
+                result?.Invoke(navigation);
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
+
+
+        public void RequestNavigate(string name, string typeName, NavigationParameters parameters = null, Action<NavigationContext> result = null)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    throw new InvalidOperationException($"Invalid region name : {name}");
+                }
+
+                var navigation = new NavigationContext();
+                var region = this.regions[name];
+
+
+                if (region.RegionType != RegionType.SingleView)
+                {
+                    throw new InvalidOperationException("Invalid region type");
+                }
+
+                region.NavigationContext = navigation;
+                var prevView = region.Content;
+                if(prevView is INavigationAware prevNavigationAware)
+                {
+                    prevNavigationAware.OnNavigatedFrom(navigation);
+                }
+
+
+                var view = this.serviceContainer.GetRequiredService(typeName);
+                region.Content = view;
+                if (view is INavigationAware navigationAware)
+                {
+                    navigation.Parameters = parameters;
+                    if(navigationAware.IsNavigationTarget(navigation))
+                        navigationAware.OnNavigatedTo(navigation);
+                }
+
+
+
+                result?.Invoke(navigation);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void RequestNavigate(string name, string[] typeNames)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    throw new InvalidOperationException($"Invalid region name : {name}");
+                }
+
+                var region = this.regions[name];
+                if (region.RegionType != RegionType.MultiView)
+                {
+                    throw new InvalidOperationException("Invalid region type");
+                }
+
+                foreach (var typeName in typeNames)
+                {
+                    var view = this.serviceContainer.GetRequiredService(typeName);
+                    region.Views.Add(view);
+                }
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void RequestNavigate(string name, string typeName, int repeat)
+        {
+            try
+            {
+
+                if (!this.regions.ContainsKey(name))
+                {
+                    throw new InvalidOperationException($"Invalid region name : {name}");
+                }
+
+                var region = this.regions[name];
+                if(region.RegionType != RegionType.MultiView)
+                {
+                    throw new InvalidOperationException("Invalid region type");
+                }
+
+
+                for (int count = 0; count < repeat; count++)
+                {
+                    var view = this.serviceContainer.GetRequiredService(typeName);
+                    region.Views.Add(view);
+                }
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+
+        public void ClearRegion(string name)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    throw new InvalidOperationException($"Invalid region name : {name}");
+                }
+
+                var region = this.regions[name];
+                region.SelectedItem = null;
+
+
+                if(region.Content is IDestructible destructor)
+                {
+                    destructor.Destroy();
+                }
+
+                region.Content = null;
+
+
+                foreach(var view in region.Views)
+                {
+                    if(view is IDestructible viewDestructor)
+                    {
+                        viewDestructor.Destroy();
+                    }
+                }
+
+                region.Views.Clear();
+                region.NavigationContext = null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void Active(string name, object view)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    throw new InvalidOperationException($"Invalid region name : {name}");
+                }
+
+                var region = this.regions[name];
+                region.SelectedItem = view;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+
+        public void Active(string name, string viewName)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    throw new InvalidOperationException($"Invalid region name : {name}");
+                }
+
+                var view = this.serviceContainer.GetRequiredService(viewName);
+                var region = this.regions[name];
+                region.SelectedItem = view;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public void Active(string name, int index)
+        {
+            try
+            {
+                if (!this.regions.ContainsKey(name))
+                {
+                    throw new InvalidOperationException($"Invalid region name : {name}");
+                }
+
+                
+                var region = this.regions[name];
+                if (index >= 0 && region.Views.Count > index)
+                    region.SelectedItem = region.Views[index];
+            }
+            catch
+            {
+                throw;
+            }
+        }
+        #endregion
+
     }
 }

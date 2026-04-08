@@ -1,19 +1,25 @@
 <Solution>
-  <Folder Name="/Samples/" />
+  <Folder Name="/Samples/">
+    <Project Path="ExampleActivatorUtilities/ExampleActivatorUtilities.csproj" Id="f84e540e-8bd8-4650-aaca-52589c50a3b9" />
+    <Project Path="ExampleModuleManager/ExampleModuleManager.csproj" Id="1edc723a-1480-4618-bf60-b4f6d3be3760" />
+    <Project Path="ExampleRegionManager/ExampleRegionManager.csproj" Id="3d079cc5-eecb-4ab3-9584-9791417e8121">
+      <BuildDependency Project="ConvMVVM3.WPF/ConvMVVM3.WPF.csproj" />
+    </Project>
+  </Folder>
   <Project Path="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
+  <Project Path="ConvMVVM3.Host/ConvMVVM3.Host.csproj">
+    <BuildDependency Project="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
+  </Project>
   <Project Path="ConvMVVM3.SourceGenerator/ConvMVVM3.SourceGenerator.csproj">
     <BuildDependency Project="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
   </Project>
-  <Project Path="ConvMVVM3.Host/ConvMVVM3.Host.csproj">
+  <Project Path="ConvMVVM3.Tests/ConvMVVM3.Tests.csproj">
     <BuildDependency Project="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
+    <BuildDependency Project="ConvMVVM3.SourceGenerator/ConvMVVM3.SourceGenerator.csproj" />
   </Project>
   <Project Path="ConvMVVM3.WPF.Tests/ConvMVVM3.WPF.Tests.csproj" />
   <Project Path="ConvMVVM3.WPF/ConvMVVM3.WPF.csproj">
     <BuildDependency Project="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
     <BuildDependency Project="ConvMVVM3.Host/ConvMVVM3.Host.csproj" />
-  </Project>
-  <Project Path="ConvMVVM3.Tests/ConvMVVM3.Tests.csproj">
-    <BuildDependency Project="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
-    <BuildDependency Project="ConvMVVM3.SourceGenerator/ConvMVVM3.SourceGenerator.csproj" />
   </Project>
 </Solution>

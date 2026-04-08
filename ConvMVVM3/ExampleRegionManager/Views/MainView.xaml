@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="ExampleRegionManager.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ExampleRegionManager.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:convMVVM3="https://github.com/gellston/ConvMVVM3"
+             convMVVM3:ViewModelLocator.AutoWireViewModel="True"
+             >
+    <Grid Background="Green">
+            
+    </Grid>
+</UserControl>
