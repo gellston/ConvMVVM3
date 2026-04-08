@@ -19,7 +19,7 @@ namespace ConvMVVM3.Core.Mvvm.Threading
 
             try
             {
-                await operation().ConfigureAwait(false);
+                await operation().ConfigureAwait(true);
             }
             finally
             {
@@ -34,7 +34,7 @@ namespace ConvMVVM3.Core.Mvvm.Threading
 
             try
             {
-                return await operation().ConfigureAwait(false);
+                return await operation().ConfigureAwait(true);
             }
             finally
             {

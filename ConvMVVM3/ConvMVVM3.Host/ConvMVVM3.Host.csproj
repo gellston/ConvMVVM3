@@ -10,7 +10,7 @@
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<!-- 필요 없으면 false -->
 	<PackageId>ConvMVVM3.Host</PackageId>
-	<Version>1.0.3.0</Version>
+	<Version>1.1.0.0</Version>
 	<Authors>gellston</Authors>
 	<Company>gellston</Company>
 	<Description>ConvMVVM3 Core MVVM library (platform-agnostic).</Description>
@@ -40,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConvMVVM3.Core" Version="1.0.3" />
+    <PackageReference Include="ConvMVVM3.Core" Version="[1.1.0,1.2.0)" />
   </ItemGroup>
 
 </Project>

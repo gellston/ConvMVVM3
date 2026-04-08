@@ -10,7 +10,7 @@
 	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<!-- 필요 없으면 false -->
 	<PackageId>ConvMVVM3.Core</PackageId>
-	<Version>1.0.3</Version>
+	<Version>1.1.0</Version>
 	<Authors>gellston</Authors>
 	<Company>gellston</Company>
 	<Description>ConvMVVM3 Core MVVM library (platform-agnostic).</Description>

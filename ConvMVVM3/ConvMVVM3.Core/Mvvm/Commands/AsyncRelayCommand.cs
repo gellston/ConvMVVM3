@@ -86,7 +86,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 
         public async void Execute(object parameter)
         {
-            await ExecuteAsync(parameter).ConfigureAwait(false);
+            await ExecuteAsync(parameter).ConfigureAwait(true);
         }
 
         public Task ExecuteAsync(object parameter)
@@ -138,7 +138,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 
             try
             {
-                await _execute(localCts.Token).ConfigureAwait(false);
+                await _execute(localCts.Token).ConfigureAwait(true);
             }
             finally
             {
@@ -226,7 +226,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             T value = default(T);
             if (parameter != null) value = (T)parameter;
 
-            await ExecuteAsync(value).ConfigureAwait(false);
+            await ExecuteAsync(value).ConfigureAwait(true);
         }
 
         public Task ExecuteAsync(T parameter)
@@ -274,7 +274,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 
             try
             {
-                await _execute(parameter, localCts.Token).ConfigureAwait(false);
+                await _execute(parameter, localCts.Token).ConfigureAwait(true);
             }
             finally
             {
