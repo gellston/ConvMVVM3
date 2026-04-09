@@ -133,26 +133,33 @@ namespace ConvMVVM3.WPF.Locator
         {
             var fe = d as FrameworkElement;
             if (fe == null) return;
+            if (!(bool)e.NewValue) return;
 
-            if ((bool)e.NewValue)
+            TryWire(fe);
+
+            if (fe.DataContext == null)
             {
-                if (fe.IsLoaded) Wire(fe);
-                else
+                RoutedEventHandler loaded = null;
+                loaded = delegate (object s, RoutedEventArgs args)
                 {
-                    RoutedEventHandler loaded = null;
-                    loaded = delegate(object s, RoutedEventArgs args)
-                    {
-                        fe.Loaded -= loaded;
-                        Wire(fe);
-                    };
-                    fe.Loaded += loaded;
-                }
+                    fe.Loaded -= loaded;
+                    TryWire(fe);
+                };
+                fe.Loaded += loaded;
             }
+        }
+
+        private static void TryWire(FrameworkElement fe)
+        {
+            if (fe.ReadLocalValue(FrameworkElement.DataContextProperty) != DependencyProperty.UnsetValue)
+                return;
+
+            Wire(fe);
         }
 
         private static void Wire(FrameworkElement fe)
         {
-            if (fe.DataContext != null)
+            if (fe.ReadLocalValue(FrameworkElement.DataContextProperty) != DependencyProperty.UnsetValue)
                 return;
 
             var viewType = fe.GetType();
@@ -200,13 +207,14 @@ namespace ConvMVVM3.WPF.Locator
         private static object Create(Type vmType)
         {
             var sp = ServiceLocator.Container;
-            if (sp != null)
-            {
-                var obj = sp.GetService(vmType);
-                if (obj != null) return obj;
-            }
+            if (sp == null)
+                throw new InvalidOperationException("ServiceLocator.Container is null.");
 
-            return Activator.CreateInstance(vmType);
+            var obj = sp.GetService(vmType);
+            if (obj == null)
+                throw new InvalidOperationException("ViewModel not registered: " + vmType.FullName);
+
+            return obj;
         }
 
         

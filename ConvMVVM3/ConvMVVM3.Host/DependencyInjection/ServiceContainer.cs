@@ -85,7 +85,7 @@ namespace ConvMVVM3.Host.DependencyInjection
 
         public T GetRequiredService<T>(string key)
         {
-            return (T)GetRequiredService(typeof(T));
+            return (T)GetRequiredService(key);
         }
 
         public object GetService(Type serviceType)
@@ -191,15 +191,11 @@ namespace ConvMVVM3.Host.DependencyInjection
             if (!_map.TryGetValue(serviceType, out list))
             {
                 // 관례: interface/abstract는 optional이면 null
-                if (serviceType.IsInterface || serviceType.IsAbstract)
-                {
-                    if (required)
-                        throw new InvalidOperationException("Service not registered: " + serviceType.FullName + ". Path: " + FormatPath(chain));
-                    return null;
-                }
+                if (required)
+                    throw new InvalidOperationException(
+                        "Service not registered: " + serviceType.FullName + ". Path: " + FormatPath(chain));
 
-                // 옵션: concrete 타입은 등록 없어도 생성 시도
-                return CreateInstance(serviceType, scope, chain);
+                return null;
             }
 
             // 3) 마지막 등록 우선
