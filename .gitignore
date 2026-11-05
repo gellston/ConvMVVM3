@@ -401,3 +401,5 @@ appsettings.*.json
 
 
 *.zip
+ConvMVVM3/ConvMVVM3.SourceGenerator/AnalyzerReleases.Shipped.md
+ConvMVVM3/ConvMVVM3.SourceGenerator/AnalyzerReleases.Unshipped.md

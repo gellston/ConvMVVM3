@@ -41,14 +41,14 @@ namespace TestNamespace
             var result = driver.GetRunResult();
 
             // Assert
-            Assert.Equal(2, result.GeneratedTrees.Length); // AlwaysExecuted.g.cs + TestViewModel_Generated.g.cs
+            Assert.Single(result.GeneratedTrees);
             
-            // Find the TestViewModel generated file (not the AlwaysExecuted one)
+            // Find the TestViewModel generated file
             var viewModelGeneratedCode = result.GeneratedTrees
                 .FirstOrDefault(tree => tree.ToString().Contains("TestViewModel"))?.ToString();
             
             Assert.NotNull(viewModelGeneratedCode);
-            Assert.Contains("public string Name", viewModelGeneratedCode);
+            Assert.Contains("public global::System.String Name", viewModelGeneratedCode);
             Assert.Contains("return _name;", viewModelGeneratedCode);
             Assert.Contains("SetProperty(ref _name, value)", viewModelGeneratedCode);
         }
@@ -80,7 +80,7 @@ namespace TestNamespace
             var result = driver.GetRunResult();
 
             // Assert
-            Assert.Equal(2, result.GeneratedTrees.Length); // AlwaysExecuted.g.cs + TestViewModel_Generated.g.cs
+            Assert.Single(result.GeneratedTrees);
             
             // Find TestViewModel generated file
             var viewModelGeneratedCode = result.GeneratedTrees
@@ -120,7 +120,7 @@ namespace TestNamespace
             var result = driver.GetRunResult();
 
             // Assert
-            Assert.Equal(2, result.GeneratedTrees.Length); // AlwaysExecuted.g.cs + TestViewModel_Generated.g.cs
+            Assert.Single(result.GeneratedTrees);
             
             // Find TestViewModel generated file
             var viewModelGeneratedCode = result.GeneratedTrees
@@ -166,7 +166,7 @@ namespace TestNamespace
             var result = driver.GetRunResult();
 
             // Assert
-            Assert.Equal(2, result.GeneratedTrees.Length); // AlwaysExecuted.g.cs + TestViewModel_Generated.g.cs
+            Assert.Single(result.GeneratedTrees);
             
             // Find TestViewModel generated file
             var viewModelGeneratedCode = result.GeneratedTrees
@@ -175,7 +175,7 @@ namespace TestNamespace
             Assert.NotNull(viewModelGeneratedCode);
             
             // Check ObservableProperty generation
-            Assert.Contains("public string Name", viewModelGeneratedCode);
+            Assert.Contains("public global::System.String Name", viewModelGeneratedCode);
             Assert.Contains("return _name;", viewModelGeneratedCode);
             Assert.Contains("SetProperty(ref _name, value)", viewModelGeneratedCode);
             

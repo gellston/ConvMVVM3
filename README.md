@@ -33,7 +33,7 @@
 
 
 
-**ConvMVVM3 (Convergence MVVM3)** is a modern, cross-platform MVVM framework that combines the best features from Prism and Community Toolkit while adding unique innovations.
+**ConvMVVM3 (Convergence MVVM3)** is an MVVM framework for WPF on Windows, inspired by Prism and Community Toolkit. WPF is currently the only supported UI framework. The Core, Host, and SourceGenerator packages target .NET Standard 2.0, but this does not imply support for other UI frameworks.
 
 ---
 
@@ -57,14 +57,14 @@ ConvMVVM3 exposes a **single** XAML XML namespace for a clean, consistent XAML e
 
 ## ✨ Key Differentiators from Prism & Community Toolkit
 
-### 🚀 **UIDispatcher** (UNIQUE - Cross-Platform)
-Microsoft-compatible UI thread dispatcher for multiple platforms:
+### 🚀 **UIDispatcher** (WPF)
+UI thread dispatcher with a WPF implementation:
 
 ```csharp
-// Setup - Available for WPF, MAUI, Avalonia, WinUI
+// Register the WPF dispatcher
 services.AddWPFUIDispatcher();      // WPF
 
-// Usage - Cross-platform compatible
+// Dispatch to the WPF UI thread
 await dispatcher.InvokeAsync(() => Title = "Updated");
 ```
 
@@ -76,19 +76,19 @@ Lightweight service container with addon system - **No external DI required**:
 services.AddSingleton<IMyService, MyService>();
 ```
 
-### 📡 **WeakReference Messenger** (Memory-Safe, Cross-Platform)
+### 📡 **WeakReference Messenger** (Weak References)
 Thread-safe messaging with automatic cleanup:
 
 ```csharp
-// Automatic weak references - Platform-agnostic
+// Messaging using weak references
 WeakReferenceMessenger.Default.Send<Message>(this, newData);
 ```
 
-### 🎯 **Region System** (Prism-inspired, Cross-Platform)
-Built-in region management for multiple frameworks:
+### 🎯 **Region System** (Prism-inspired, WPF)
+Built-in region management for WPF controls:
 
 ```xml
-<!-- Works on WPF, MAUI, Avalonia, WinUI -->
+<!-- WPF region host -->
 <ContentControl convMVVM3:RegionPlugin.RegionName="MainContent" />
 ```
 
@@ -110,24 +110,24 @@ Automatic property and command generation with enhanced features:
 ConvMVVM3.Core/
 ├── ObservableObject              # Base class with INotifyPropertyChanged
 ├── ObservableRecipient           # Message recipient base class
-├── UIDispatcher                  # Cross-platform dispatcher interface
+├── UIDispatcher                  # UI dispatcher abstraction
 ├── WeakReferenceMessenger        # Memory-safe messaging system
 ├── Commands/
 │   ├── RelayCommand              # Synchronous command implementation
 │   └── AsyncRelayCommand         # Async command with cancellation
-└── DependencyInjection/          # Built-in DI container
+└── DependencyInjection/          # DI abstractions (implementation in Host)
 ```
 
-### **WPF Implementation** (One of Many Platforms)
+### **WPF Implementation** (Windows)
 ```
 ConvMVVM3.WPF/                    # WPF-specific implementation
 ├── Regions/                      # Region system (Prism-inspired)
 ├── WPFUIDispatcher               # WPF-specific dispatcher
-├── Interactivity/                # Behaviors / triggers / actions
-└── WeakEventManager              # Memory-efficient event handling
+├── Behaviors/                    # Behaviors / triggers / actions
+└── Locator/                      # ViewModel auto-wiring
 ```
 
-### **Source Generation** (Cross-Platform)
+### **Source Generation**
 ```
 ConvMVVM3.SourceGenerator/
 ├── ObservableProperty generation # Auto property implementation
@@ -142,7 +142,7 @@ ConvMVVM3.SourceGenerator/
 
 ```
 ConvMVVM3.Core/                   # Platform-agnostic MVVM library
-ConvMVVM3.SourceGenerator/        # Cross-platform source generator
+ConvMVVM3.SourceGenerator/        # Property and command source generator
 ConvMVVM3.WPF/                    # WPF-specific interactivity + regions
 ConvMVVM3.Host/                   # DI host implementation
 ConvMVVM3.WPF.Tests/              # WPF unit tests
@@ -154,17 +154,17 @@ ConvMVVM3.Tests/                  # Core unit tests
 ## 🛠️ Installation
 
 ```bash
-dotnet add package ConvMVVM3
+dotnet add package ConvMVVM3.WPF
 ```
 
 ---
 
 ## 🚀 Quick Start
 
-### 1) Basic ViewModel with Cross-Platform Generation
+### 1) Basic WPF ViewModel with Source Generation
 
 ```csharp
-// Works on ALL supported platforms
+// ViewModel for a WPF application
 public partial class MainViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -195,13 +195,13 @@ public partial class MainViewModel : ObservableObject
 </Window>
 ```
 
-### 3) Cross-Platform UIDispatcher Integration
+### 3) WPF UIDispatcher Integration
 
 ```csharp
-// Setup varies by platform
+// Register in the WPF application service registry
 services.AddWPFUIDispatcher();       // WPF
 
-// Usage is identical across platforms
+// Inject IUIDispatcher into the ViewModel
 public partial class MyViewModel : ObservableObject
 {
     private readonly IUIDispatcher _dispatcher;
@@ -216,33 +216,33 @@ public partial class MyViewModel : ObservableObject
     {
         var data = await Task.Run(() => GetHeavyData());
 
-        // Thread-safe UI update (cross-platform)
+        // Update on the WPF UI thread
         await _dispatcher.InvokeAsync(() => Title = data);
     }
 }
 ```
 
-### 4) Cross-Platform Region Management
+### 4) WPF Region Management
 
 ```xml
-<!-- Works on WPF, MAUI, Avalonia, WinUI -->
+<!-- WPF region host -->
 <Grid>
     <ContentControl convMVVM3:RegionPlugin.RegionName="MainContent" />
 </Grid>
 ```
 
 ```csharp
-// Platform-agnostic navigation
+// Navigate within a WPF region
 _regionManager.RequestNavigate("MainContent", typeof(HomeViewModel));
 ```
 
-### 5) Memory-Safe Cross-Platform Messaging
+### 5) Weak Reference Messaging
 
 ```csharp
-// Sender (all platforms)
+// Sender
 WeakReferenceMessenger.Default.Send<DataUpdatedMessage>(this, newData);
 
-// Receiver (auto-cleanup, all platforms)
+// Receiver
 public partial class MyViewModel : ObservableObject, IRecipient<DataUpdatedMessage>
 {
     public void Receive(DataUpdatedMessage message)
@@ -451,20 +451,17 @@ public class AppBootStrapper : Bootstrapper
 
 ---
 
-## 🎯 Platform Support Matrix
+## 🎯 Supported Platform
 
-| Feature | WPF | MAUI | Avalonia | WinUI | UNO |
-|---------|------|------|----------|-------|-----|
-| **Core MVVM** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **UIDispatcher** | ✅ | 🔄 | 🔄 | 🔄 | 🔄 |
-| **Source Generator** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Region System** | ✅ | 🔄 | 🔄 | 🔄 | 🔄 |
-| **Built-in DI** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Weak Messenger** | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **WPF Interactivity** | ✅ | ❌ | ❌ | ❌ | ❌ |
-| **Platform Interactivity** | ❌ | 🔄 | 🔄 | 🔄 | 🔄 |
+WPF on Windows is currently the only supported UI framework.
 
-*✅ Available | 🔄 Planned | ❌ Not applicable*
+| Component | Target frameworks |
+|-----------|-------------------|
+| Core, Host, SourceGenerator | .NET Standard 2.0 |
+| WPF integration | .NET Framework 4.8; .NET 6, 7, 8, 9, 10 for Windows |
+| Example WPF applications | .NET 10 for Windows |
+
+The framework includes WPF implementations for regions, UI dispatching, ViewModel location, and behaviors.
 
 ---
 
@@ -474,6 +471,6 @@ MIT License - see [LICENSE](LICENSE) file
 
 ---
 
-**ConvMVVM3**: Modern, cross-platform MVVM framework that bridges the gap between Prism's power and Community Toolkit's simplicity while adding unique cross-platform innovations.
+**ConvMVVM3**: An MVVM framework for WPF combining modular application composition with property and command source generation.
 
-**Future Roadmap**: MAUI, Avalonia, WinUI, and UNO Platform support coming soon!
+Support for additional UI frameworks is not currently provided.

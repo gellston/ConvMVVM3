@@ -5,6 +5,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace ConvMVVM3.SourceGenerator
@@ -12,6 +13,11 @@ namespace ConvMVVM3.SourceGenerator
     [Generator]
     public class ConvMVVM3Generator : IIncrementalGenerator
     {
+        private static readonly DiagnosticDescriptor GenerationFailed = new(
+            "CONVMVVM001", "Source generation failed",
+            "Failed to generate code for '{0}': {1}",
+            "ConvMVVM3.SourceGenerator", DiagnosticSeverity.Error, isEnabledByDefault: true);
+
         // FullyQualifiedFormat 기본값은 nullable 표기를 빼는 경우가 있어서 옵션을 포함해둠
         private static readonly SymbolDisplayFormat s_fqFormat =
             SymbolDisplayFormat.FullyQualifiedFormat.WithMiscellaneousOptions(
@@ -95,49 +101,58 @@ namespace ConvMVVM3.SourceGenerator
         {
             System.Diagnostics.Debug.WriteLine($"ConvMVVM3 IncrementalGenerator Execute called with {classes.Count} classes");
 
-            // 항상 실행되었음을 증명하는 파일 생성
-            var alwaysGeneratedCode = $@"// ConvMVVM3 IncrementalGenerator ALWAYS EXECUTED
-namespace GeneratedTest
-{{
-    public static class AlwaysExecuted
-    {{
-        public const string Message = ""IncrementalGenerator Execute method was called!"";
-        public const string Timestamp = ""{DateTime.Now:O}"";
-        public const string AssemblyName = ""{compilation.AssemblyName}"";
-        public const int ClassesCount = {classes.Count};
-    }}
-}}";
-            context.AddSource("AlwaysExecuted.g.cs", alwaysGeneratedCode);
-
             if (classes.Count == 0)
             {
                 System.Diagnostics.Debug.WriteLine("No classes with attributes found");
                 return;
             }
 
+            var generatedTypes = new HashSet<ISymbol>(SymbolEqualityComparer.Default);
             foreach (var classDecl in classes)
             {
+                context.CancellationToken.ThrowIfCancellationRequested();
                 try
                 {
                     var semanticModel = compilation.GetSemanticModel(classDecl.SyntaxTree);
-                    var source = GenerateForClass(classDecl, semanticModel);
+                    var symbol = semanticModel.GetDeclaredSymbol(classDecl, context.CancellationToken);
+                    if (symbol == null || !generatedTypes.Add(symbol))
+                        continue;
+
+                    var declarations = symbol.DeclaringSyntaxReferences
+                        .Select(reference => reference.GetSyntax(context.CancellationToken))
+                        .OfType<ClassDeclarationSyntax>()
+                        .ToArray();
+                    var source = GenerateForClass(declarations, compilation);
 
                     if (!string.IsNullOrEmpty(source))
                     {
-                        var fileName = $"{classDecl.Identifier.Text}_Generated.g.cs";
+                        // Keep names short for Windows paths while distinguishing complete type identities.
+                        var identity = symbol.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+                        string identityHash;
+                        using (var sha256 = SHA256.Create())
+                            identityHash = string.Concat(sha256.ComputeHash(Encoding.UTF8.GetBytes(identity))
+                                .Select(b => b.ToString("x2")));
+                        var fileName = $"{symbol.Name}_{identityHash}.Generated.g.cs";
                         context.AddSource(fileName, source);
                         System.Diagnostics.Debug.WriteLine($"Generated source for {classDecl.Identifier.Text}");
                     }
                 }
+                catch (OperationCanceledException)
+                {
+                    throw;
+                }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Error generating for {classDecl.Identifier.Text}: {ex.Message}");
+                    context.ReportDiagnostic(Diagnostic.Create(
+                        GenerationFailed, classDecl.Identifier.GetLocation(),
+                        classDecl.Identifier.Text, ex.Message));
                 }
             }
         }
 
-        static string GenerateForClass(ClassDeclarationSyntax classDecl, SemanticModel semanticModel)
+        static string GenerateForClass(IReadOnlyList<ClassDeclarationSyntax> declarations, Compilation compilation)
         {
+            var classDecl = declarations[0];
             var sb = new StringBuilder();
             var ns = GetNamespace(classDecl);
             var className = classDecl.Identifier.Text;
@@ -160,14 +175,21 @@ namespace GeneratedTest
                 sb.AppendLine("{");
             }
 
-            sb.AppendLine($"    {modifiers} class {className}");
+            var containingTypes = classDecl.Ancestors().OfType<TypeDeclarationSyntax>().Reverse().ToArray();
+            foreach (var containingType in containingTypes)
+            {
+                sb.AppendLine($"    {containingType.Modifiers} {containingType.Keyword.Text} {containingType.Identifier.Text}{containingType.TypeParameterList}");
+                sb.AppendLine("    {");
+            }
+
+            sb.AppendLine($"    {modifiers} class {className}{classDecl.TypeParameterList}");
             sb.AppendLine("    {");
 
             // 필드 및 메서드 수집
             var observableFields = new List<FieldDeclarationSyntax>();
             var relayCommands = new List<MethodDeclarationSyntax>();
 
-            foreach (var member in classDecl.Members)
+            foreach (var member in declarations.SelectMany(declaration => declaration.Members))
             {
                 if (member is FieldDeclarationSyntax field && HasObservablePropertyAttribute(field))
                     observableFields.Add(field);
@@ -183,11 +205,13 @@ namespace GeneratedTest
                 {
                     var fieldName = variable.Identifier.Text;
                     var propertyName = fieldName.TrimStart('_');
-                    if (propertyName.Length > 0)
-                        propertyName = char.ToUpper(propertyName[0]) + propertyName.Substring(1);
+                    if (propertyName.Length == 0)
+                        throw new InvalidOperationException($"Field '{fieldName}' cannot produce a property name.");
+                    propertyName = char.ToUpperInvariant(propertyName[0]) + propertyName.Substring(1);
 
                     // ✅ 핵심: using 누락으로 인한 타입 해석 실패 방지(ObservableCollection 등)
-                    var fieldType = GetFullyQualifiedTypeName(field.Declaration.Type, semanticModel);
+                    var fieldType = GetFullyQualifiedTypeName(field.Declaration.Type,
+                        compilation.GetSemanticModel(field.SyntaxTree));
 
                     // 속성 변경 알림을 위한 속성 확인
                     var notifyChangedAttrs = GetNotifyAttributes(field, "NotifyPropertyChangedFor");
@@ -233,7 +257,7 @@ namespace GeneratedTest
                 var isAsync = HasAsyncRelayCommandAttribute(method);
                 var commandType = isAsync ? "AsyncRelayCommand" : "RelayCommand";
                 var commandPropertyName = methodName + "Command";
-                var backingFieldName = "_" + char.ToLower(methodName[0]) + methodName.Substring(1) + "Command";
+                var backingFieldName = "_" + char.ToLowerInvariant(methodName[0]) + methodName.Substring(1) + "Command";
 
                 sb.AppendLine($"        private {commandType}? {backingFieldName};");
                 sb.AppendLine($"        public {commandType} {commandPropertyName}");
@@ -251,6 +275,9 @@ namespace GeneratedTest
             }
 
             sb.AppendLine("    }");
+
+            foreach (var containingType in containingTypes)
+                sb.AppendLine("    }");
 
             if (!string.IsNullOrWhiteSpace(ns))
                 sb.AppendLine("}");
