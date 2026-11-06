@@ -1,4 +1,4 @@
-﻿using ConvMVVM3.Core;
+using ConvMVVM3.Core;
 using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using ConvMVVM3.Core.Mvvm.Attributes;
 using ConvMVVM3.Core.Mvvm.Modules;
@@ -207,7 +207,7 @@ namespace ConvMVVM3.WPF
 
             this.RegisterServices(this.serviceRegistry);
             this.serviceRegistry.AddWPFUIDispatcher();
-            this.serviceRegistry.AddRegionManager();
+            this.serviceRegistry.AddWPFRegionManager();
             
 
             // Module Registeration

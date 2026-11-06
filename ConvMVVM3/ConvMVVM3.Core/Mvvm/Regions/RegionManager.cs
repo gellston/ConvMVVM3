@@ -1,4 +1,4 @@
-﻿using ConvMVVM3.Core.DependencyInjection.Abstractions;
+using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using ConvMVVM3.Core.Mvvm.Abstractions;
 using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
 using System;
@@ -16,13 +16,16 @@ namespace ConvMVVM3.Core.Mvvm.Regions
     {
         #region Private Property
         private readonly IServiceContainer serviceContainer;
+        private readonly INavigationAwareResolver navigationAwareResolver;
         private readonly Dictionary<string, IRegion> regions = new Dictionary<string, IRegion>();
         #endregion
 
         #region Constructor
         public RegionManager(IServiceContainer serviceContainer)
         {
-            this.serviceContainer = serviceContainer;
+            this.serviceContainer = serviceContainer ?? throw new ArgumentNullException(nameof(serviceContainer));
+            this.navigationAwareResolver = serviceContainer.GetService<INavigationAwareResolver>()
+                ?? new NavigationAwareResolver();
             
         }
         #endregion
@@ -260,131 +263,74 @@ namespace ConvMVVM3.Core.Mvvm.Regions
 
         public void RequestNavigate(string name, Type viewType, NavigationParameters parameters = null, Action<NavigationContext> result = null)
         {
-            if (!this.regions.ContainsKey(name))
-            {
-                throw new InvalidOperationException($"Invalid region name : {name}");
-            }
-
-            var navigation = new NavigationContext();
-            var region = this.regions[name];
-
-
-            if (region.RegionType != RegionType.SingleView)
-            {
-                throw new InvalidOperationException("Invalid region type");
-            }
-
-            region.NavigationContext = navigation;
-            var prevView = region.Content;
-            if (prevView is INavigationAware prevNavigationAware)
-            {
-                prevNavigationAware.OnNavigatedFrom(navigation);
-            }
-
-
-            var view = this.serviceContainer.GetRequiredService(viewType);
-            region.Content = view;
-            if (view is INavigationAware navigationAware)
-            {
-                navigation.Parameters = parameters;
-                if (navigationAware.IsNavigationTarget(navigation))
-                    navigationAware.OnNavigatedTo(navigation);
-            }
-
-
-            result?.Invoke(navigation);
+            NavigateSingle(name, () => this.serviceContainer.GetRequiredService(viewType), parameters, result);
         }
 
         public void RequestNavigate<T>(string name, NavigationParameters parameters = null, Action<NavigationContext> result = null)
         {
-            try
-            {
-                if (!this.regions.ContainsKey(name))
-                {
-                    throw new InvalidOperationException($"Invalid region name : {name}");
-                }
-
-                var navigation = new NavigationContext();
-                var region = this.regions[name];
-
-
-                if (region.RegionType != RegionType.SingleView)
-                {
-                    throw new InvalidOperationException("Invalid region type");
-                }
-
-                region.NavigationContext = navigation;
-                var prevView = region.Content;
-                if (prevView is INavigationAware prevNavigationAware)
-                {
-                    prevNavigationAware.OnNavigatedFrom(navigation);
-                }
-
-
-                var view = this.serviceContainer.GetRequiredService(typeof(T));
-                region.Content = view;
-                if (view is INavigationAware navigationAware)
-                {
-                    navigation.Parameters = parameters;
-                    if (navigationAware.IsNavigationTarget(navigation))
-                        navigationAware.OnNavigatedTo(navigation);
-                }
-
-                result?.Invoke(navigation);
-
-            }
-            catch
-            {
-                throw;
-            }
+            RequestNavigate(name, typeof(T), parameters, result);
         }
-
-
-
 
         public void RequestNavigate(string name, string typeName, NavigationParameters parameters = null, Action<NavigationContext> result = null)
         {
-            try
+            NavigateSingle(name, () => this.serviceContainer.GetRequiredService(typeName), parameters, result);
+        }
+
+        private void NavigateSingle(string name, Func<object> createView, NavigationParameters parameters, Action<NavigationContext> result)
+        {
+            if (!this.regions.ContainsKey(name))
+                throw new InvalidOperationException($"Invalid region name : {name}");
+
+            var region = this.regions[name];
+            if (region.RegionType != RegionType.SingleView)
+                throw new InvalidOperationException("Invalid region type");
+
+            var navigation = new NavigationContext
             {
-                if (!this.regions.ContainsKey(name))
-                {
-                    throw new InvalidOperationException($"Invalid region name : {name}");
-                }
+                Parameters = parameters ?? new NavigationParameters()
+            };
 
-                var navigation = new NavigationContext();
-                var region = this.regions[name];
+            // Prepare the destination before notifying or replacing the current view.
+            // WPF's resolver ensures AutoWireViewModel is complete without waiting for Loaded.
+            var view = createView();
+            var targets = GetNavigationParticipants(view);
+            var previousTargets = GetNavigationParticipants(region.Content);
+            region.NavigationContext = navigation;
+            foreach (var target in previousTargets)
+                target.OnNavigatedFrom(navigation);
 
-
-                if (region.RegionType != RegionType.SingleView)
-                {
-                    throw new InvalidOperationException("Invalid region type");
-                }
-
-                region.NavigationContext = navigation;
-                var prevView = region.Content;
-                if(prevView is INavigationAware prevNavigationAware)
-                {
-                    prevNavigationAware.OnNavigatedFrom(navigation);
-                }
-
-
-                var view = this.serviceContainer.GetRequiredService(typeName);
-                region.Content = view;
-                if (view is INavigationAware navigationAware)
-                {
-                    navigation.Parameters = parameters;
-                    if(navigationAware.IsNavigationTarget(navigation))
-                        navigationAware.OnNavigatedTo(navigation);
-                }
-
-
-
-                result?.Invoke(navigation);
-            }
-            catch
+            region.Content = view;
+            foreach (var target in targets)
             {
-                throw;
+                // Preserve the existing per-participant gate. This is not a navigation veto
+                // or a Prism-style search for reusable view instances.
+                if (target.IsNavigationTarget(navigation))
+                    target.OnNavigatedTo(navigation);
             }
+
+            result?.Invoke(navigation);
+        }
+
+        private List<INavigationAware> GetNavigationParticipants(object view)
+        {
+            var participants = new List<INavigationAware>();
+            if (view == null) return participants;
+
+            foreach (var participant in this.navigationAwareResolver.Resolve(view))
+            {
+                if (participant == null) continue;
+                var duplicate = false;
+                foreach (var existing in participants)
+                {
+                    if (ReferenceEquals(existing, participant))
+                    {
+                        duplicate = true;
+                        break;
+                    }
+                }
+                if (!duplicate) participants.Add(participant);
+            }
+            return participants;
         }
 
         public void RequestNavigate(string name, string[] typeNames)

@@ -1,215 +1,192 @@
 using ConvMVVM3.Core.Mvvm.Commands;
-using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace ConvMVVM3.Tests;
 
 public class AsyncRelayCommandTests
 {
+    private static TaskCompletionSource Gate() => new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private static readonly TimeSpan Timeout = TimeSpan.FromSeconds(5);
+
     [Fact]
-    public async Task ExecuteAsync_Invokes_Action_When_CanExecute_Returns_True()
+    public async Task ExecuteAsync_PassesParameterToAction()
     {
-        // Arrange
-        var executed = false;
-        var command = new AsyncRelayCommand(async (ct) =>
+        object? received = null;
+        var command = new AsyncRelayCommand<object>((value, _) =>
         {
-            await Task.Delay(1, ct);
-            executed = true;
+            received = value;
+            return Task.CompletedTask;
         });
-
-        // Act
-        await command.ExecuteAsync(null);
-
-        // Assert
-        Assert.True(executed);
+        var parameter = new object();
+        await command.ExecuteAsync(parameter);
+        Assert.Same(parameter, received);
     }
 
     [Fact]
-    public async Task ExecuteAsync_With_Parameter_Passes_Parameter_To_Action()
+    public async Task ExecuteAsync_DoesNotStartAnotherOperationWhileRunning()
     {
-        // Arrange
-        object receivedParameter = null;
-        var command = new AsyncRelayCommand<object>(async (param, ct) =>
-        {
-            await Task.Delay(1, ct);
-            receivedParameter = param;
-        });
-
-        var testParameter = new object();
-
-        // Act
-        await command.ExecuteAsync(testParameter);
-
-        // Assert
-        Assert.Equal(testParameter, receivedParameter);
-    }
-
-    [Fact]
-    public void CanExecute_Returns_True_By_Default()
-    {
-        // Arrange
-        var command = new AsyncRelayCommand(async (ct) => await Task.Delay(1, ct));
-
-        // Act & Assert
-        Assert.True(command.CanExecute(null));
-    }
-
-    [Fact]
-    public async Task ExecuteAsync_Prevents_Concurrent_Execution()
-    {
-        // Arrange
-        var executionCount = 0;
-        var command = new AsyncRelayCommand(async (ct) =>
-        {
-            executionCount++;
-            await Task.Delay(10, ct);
-        });
-
-        // Act - Start multiple executions
-        var task1 = command.ExecuteAsync(null);
-        var task2 = command.ExecuteAsync(null);
-
+        var release = Gate();
+        var count = 0;
+        // Ignore cancellation so the first operation stays in progress.
+        var command = new AsyncRelayCommand(() => { count++; return release.Task; });
+        var first = command.ExecuteAsync(null);
         try
         {
-            await Task.WhenAll(task1, task2);
+            await command.ExecuteAsync(null).WaitAsync(Timeout);
+            Assert.Equal(1, count);
+            Assert.True(command.IsExecuting);
         }
-        catch (TaskCanceledException)
+        finally
         {
-            // Expected when first task is canceled
+            release.TrySetResult();
+            await first.WaitAsync(Timeout);
         }
-
-        // Assert - Only one execution should occur
-        Assert.Equal(1, executionCount);
+        await command.ExecuteAsync(null);
+        Assert.Equal(2, count);
     }
 
-    [Fact]
-    public async Task ExecuteAsync_Allows_Sequential_Execution_After_Completion()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Cancel_CancelsTokenAndRestoresState(bool generic)
     {
-        // Arrange
-        var executionCount = 0;
-        var command = new AsyncRelayCommand(async () =>
+        var started = Gate();
+        async Task Run(CancellationToken token)
         {
-            executionCount++;
-            await Task.Delay(1);
-        });
-
-        // Act - Execute sequentially
-        await command.ExecuteAsync(null);
-        await command.ExecuteAsync(null);
-
-        // Assert - Both executions should occur
-        Assert.Equal(2, executionCount);
+            started.TrySetResult();
+            await Task.Delay(System.Threading.Timeout.Infinite, token);
+        }
+        var command = new AsyncRelayCommand(Run);
+        var typed = new AsyncRelayCommand<int>((_, token) => Run(token));
+        var operation = generic ? typed.ExecuteAsync(42) : command.ExecuteAsync(null);
+        await started.Task.WaitAsync(Timeout);
+        if (generic) typed.Cancel(); else command.Cancel();
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() => operation.WaitAsync(Timeout));
+        Assert.False(generic ? typed.IsRunning : command.IsRunning);
+        Assert.True(generic ? typed.CanExecute(42) : command.CanExecute(null));
     }
 
-    [Fact]
-    public async Task Cancel_Previous_Operation_When_New_Execute_Called()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Execution_RaisesStartAndFinishNotifications(bool generic)
     {
-        // Arrange
-        var firstExecutionCompleted = false;
-        var secondExecutionStarted = false;
-        var command = new AsyncRelayCommand(async (ct) =>
+        var release = Gate();
+        var command = new AsyncRelayCommand(() => release.Task);
+        var typed = new AsyncRelayCommand<int>((_, _) => release.Task);
+        var states = new List<bool>();
+        if (generic) typed.CanExecuteChanged += (_, _) => states.Add(typed.CanExecute(1));
+        else command.CanExecuteChanged += (_, _) => states.Add(command.CanExecute(null));
+        Assert.True(generic ? typed.CanExecute(1) : command.CanExecute(null));
+        var operation = generic ? typed.ExecuteAsync(1) : command.ExecuteAsync(null);
+        try
         {
-            firstExecutionCompleted = true;
-            if (!secondExecutionStarted)
-            {
-                await Task.Delay(100, ct); // Long delay
-            }
+            Assert.True(generic ? typed.IsRunning : command.IsExecuting);
+            Assert.Equal(new[] { false }, states);
+        }
+        finally
+        {
+            release.TrySetResult();
+            await operation.WaitAsync(Timeout);
+        }
+        Assert.False(generic ? typed.IsRunning : command.IsExecuting);
+        Assert.Equal(new[] { false, true }, states);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task Failure_PropagatesAndAllowsNextExecution(bool generic)
+    {
+        var count = 0;
+        var error = new InvalidOperationException("operation failed");
+        Task Run() => ++count == 1 ? Task.FromException(error) : Task.CompletedTask;
+        var command = new AsyncRelayCommand(Run);
+        var typed = new AsyncRelayCommand<int>((_, _) => Run());
+        Task Execute() => generic ? typed.ExecuteAsync(1) : command.ExecuteAsync(null);
+        Assert.Same(error, await Assert.ThrowsAsync<InvalidOperationException>(Execute));
+        Assert.False(generic ? typed.IsRunning : command.IsRunning);
+        await Execute();
+        Assert.Equal(2, count);
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task DisableWhileRunningFalse_KeepsCanExecuteEnabled(bool generic)
+    {
+        var release = Gate();
+        var command = new AsyncRelayCommand(() => release.Task, disableWhileRunning: false);
+        var typed = new AsyncRelayCommand<int>((_, _) => release.Task, disableWhileRunning: false);
+        var operation = generic ? typed.ExecuteAsync(1) : command.ExecuteAsync(null);
+        try { Assert.True(generic ? typed.CanExecute(1) : command.CanExecute(null)); }
+        finally { release.TrySetResult(); await operation.WaitAsync(Timeout); }
+    }
+
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task ConcurrentExecutions_KeepRunningAndCancellationUntilLastOperationEnds(bool generic)
+    {
+        var firstRelease = Gate();
+        var secondStarted = Gate();
+        var secondRelease = Gate();
+        var calls = 0;
+        async Task Run(CancellationToken token)
+        {
+            if (++calls == 1) await firstRelease.Task;
             else
             {
-                await Task.Delay(1, ct);
+                secondStarted.TrySetResult();
+                await secondRelease.Task.WaitAsync(token);
             }
-        });
-
-        // Act - Start first execution
-        var firstTask = command.ExecuteAsync(null);
-        await Task.Delay(50); // Let first execution start
-
-        secondExecutionStarted = true;
-
-        // Start second execution (should cancel first)
-        var secondTask = command.ExecuteAsync(null);
-        await secondTask;
-
-        // Assert
-        Assert.True(secondExecutionStarted);
-        // First task should be cancelled
+        }
+        var command = new AsyncRelayCommand(Run, allowConcurrentExecutions: true);
+        var typed = new AsyncRelayCommand<int>((_, token) => Run(token), allowConcurrentExecutions: true);
+        var first = generic ? typed.ExecuteAsync(1) : command.ExecuteAsync(null);
+        var second = generic ? typed.ExecuteAsync(2) : command.ExecuteAsync(null);
         try
         {
-            await firstTask;
-            Assert.False(true, "First task should be canceled");
+            await secondStarted.Task.WaitAsync(Timeout);
+            Assert.Equal(2, calls);
+            firstRelease.TrySetResult();
+            await first.WaitAsync(Timeout);
+            Assert.True(generic ? typed.IsRunning : command.IsRunning);
+            Assert.False(generic ? typed.CanExecute(1) : command.CanExecute(null));
+            if (generic) typed.Cancel(); else command.Cancel();
+            await Assert.ThrowsAnyAsync<OperationCanceledException>(() => second.WaitAsync(Timeout));
+            Assert.False(generic ? typed.IsRunning : command.IsRunning);
         }
-        catch (TaskCanceledException)
+        finally
         {
-            // Expected
+            firstRelease.TrySetResult();
+            if (generic) typed.Cancel(); else command.Cancel();
+            secondRelease.TrySetResult();
+            await first.WaitAsync(Timeout);
+            try { await second.WaitAsync(Timeout); }
+            catch (OperationCanceledException) { }
         }
     }
 
     [Fact]
-    public void IsExecuting_True_During_Async_Operation()
+    public void CanExecute_UsesPredicateAndRejectsWrongParameterType()
     {
-        // Arrange
-        var command = new AsyncRelayCommand(async () => await Task.Delay(10));
-
-        // Act & Assert - Before execution
-        Assert.False(command.IsExecuting);
-
-        var task = Task.Run(async () =>
-        {
-            await command.ExecuteAsync(null);
-        });
-
-        // Give it a moment to start
-        Task.Delay(1).Wait();
-        Assert.True(command.IsExecuting);
-
-        // Wait for completion
-        task.Wait();
-        Assert.False(command.IsExecuting);
+        var enabled = false;
+        var command = new AsyncRelayCommand(() => Task.CompletedTask, () => enabled);
+        Assert.False(command.CanExecute(null));
+        enabled = true;
+        Assert.True(command.CanExecute(null));
+        var typed = new AsyncRelayCommand<int>((_, _) => Task.CompletedTask, value => value > 0);
+        Assert.False(typed.CanExecute("wrong type"));
+        Assert.False(typed.CanExecute(0));
+        Assert.True(typed.CanExecute(1));
     }
 
     [Fact]
-    public void CanExecuteChanged_Raised_When_IsExecuting_Changes()
+    public void Constructors_RejectNullActions()
     {
-        // Arrange
-        var command = new AsyncRelayCommand(async () => await Task.Delay(10));
-        var eventRaised = false;
-
-        command.CanExecuteChanged += (sender, e) => eventRaised = true;
-
-        // Act
-        var task = command.ExecuteAsync(null);
-        Task.Delay(1).Wait(); // Let execution start
-
-        // Assert
-        Assert.True(eventRaised);
+        Assert.Throws<ArgumentNullException>(() => new AsyncRelayCommand((Func<Task>)null!));
+        Assert.Throws<ArgumentNullException>(() => new AsyncRelayCommand((Func<CancellationToken, Task>)null!));
+        Assert.Throws<ArgumentNullException>(() => new AsyncRelayCommand<int>(null!));
     }
-
-    [Fact]
-    public async Task ExecuteAsync_With_FuncTask_Overload_Works()
-    {
-        // Arrange
-        var executed = false;
-        var command = new AsyncRelayCommand(async () =>
-        {
-            await Task.Delay(1);
-            executed = true;
-        });
-
-        // Act
-        await command.ExecuteAsync(null);
-
-        // Assert
-        Assert.True(executed);
-    }
-
-    [Fact]
-    public void Constructor_FuncTask_Overload_Throws_When_Execute_Is_Null()
-    {
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new AsyncRelayCommand((Func<Task>)null));
-    }
-
-
-
 }

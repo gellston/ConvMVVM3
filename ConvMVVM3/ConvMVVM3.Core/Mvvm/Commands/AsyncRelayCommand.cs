@@ -17,7 +17,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
         private readonly bool _disableWhileRunning;
 
         private CancellationTokenSource _cts;
-        private int _running; // 0/1
+        private int _running; // Number of active executions
 
         #endregion
 
@@ -31,7 +31,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 
         public bool IsRunning
         {
-            get { return _running == 1; }
+            get { return Volatile.Read(ref _running) > 0; }
         }
 
         public bool IsExecuting
@@ -127,7 +127,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             }
             else
             {
-                Interlocked.Exchange(ref _running, 1);
+                Interlocked.Increment(ref _running);
             }
 
             if (_disableWhileRunning)
@@ -142,9 +142,10 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             }
             finally
             {
-                _cts = null;
+                // An older execution must not clear a newer execution's cancellation source.
+                Interlocked.CompareExchange(ref _cts, null, localCts);
                 localCts.Dispose();
-                Interlocked.Exchange(ref _running, 0);
+                Interlocked.Decrement(ref _running);
 
                 if (_disableWhileRunning)
                     NotifyCanExecuteChanged();
@@ -177,7 +178,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
 
         public bool IsRunning
         {
-            get { return _running == 1; }
+            get { return Volatile.Read(ref _running) > 0; }
         }
 
         #endregion
@@ -263,7 +264,7 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             }
             else
             {
-                Interlocked.Exchange(ref _running, 1);
+                Interlocked.Increment(ref _running);
             }
 
             if (_disableWhileRunning)
@@ -278,9 +279,10 @@ namespace ConvMVVM3.Core.Mvvm.Commands
             }
             finally
             {
-                _cts = null;
+                // An older execution must not clear a newer execution's cancellation source.
+                Interlocked.CompareExchange(ref _cts, null, localCts);
                 localCts.Dispose();
-                Interlocked.Exchange(ref _running, 0);
+                Interlocked.Decrement(ref _running);
 
                 if (_disableWhileRunning)
                     NotifyCanExecuteChanged();

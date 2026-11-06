@@ -30,7 +30,7 @@ public class WeakReferenceMessengerTests
     {
         // Arrange
         var recipient = new TestRecipient();
-        var messenger = WeakReferenceMessenger.Default;
+        var messenger = new WeakReferenceMessenger();
         var message = new TestMessage { Content = "Test" };
 
         // Register using IRecipient interface
@@ -49,7 +49,7 @@ public class WeakReferenceMessengerTests
     {
         // Arrange
         var recipient = new TestRecipient();
-        var messenger = WeakReferenceMessenger.Default;
+        var messenger = new WeakReferenceMessenger();
         var message = new TestMessage { Content = "Test" };
         TestMessage receivedMessage = null;
 
@@ -72,7 +72,7 @@ public class WeakReferenceMessengerTests
         // Arrange
         var recipient1 = new TestRecipient();
         var recipient2 = new TestRecipient();
-        var messenger = WeakReferenceMessenger.Default;
+        var messenger = new WeakReferenceMessenger();
         var message = new TestMessage { Content = "Test" };
 
         // Register both recipients
@@ -94,7 +94,7 @@ public class WeakReferenceMessengerTests
     {
         // Arrange
         var recipient = new TestRecipient();
-        var messenger = WeakReferenceMessenger.Default;
+        var messenger = new WeakReferenceMessenger();
         var message = new TestMessage { Content = "Test" };
 
         // Register first
@@ -111,34 +111,38 @@ public class WeakReferenceMessengerTests
         Assert.Equal(0, recipient.ReceiveCount);
     }
 
-    [Fact]
-    public void WeakReference_Allows_Garbage_Collection()
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public void Registrations_DoNotKeepRecipientsAlive(bool useHandler)
     {
-        // Arrange
-        var messenger = WeakReferenceMessenger.Default;
-        var messageReceived = false;
-
-        // Create recipient in a method to allow GC
-        CreateRecipientAndSendMessage(messenger);
-
-        // Force garbage collection
+        var messenger = new WeakReferenceMessenger();
+        var reference = RegisterCollectibleRecipient(messenger, useHandler);
         GC.Collect();
         GC.WaitForPendingFinalizers();
+        GC.Collect();
+        Assert.False(reference.IsAlive);
 
-        // Act - Send another message
         messenger.Send(new TestMessage { Content = "After GC" });
-
-        // Assert - No crash or exception should occur
-        // The weak reference should have been collected
-        Assert.True(true); // If we get here, no exception occurred
+        messenger.Cleanup();
+        var live = new TestRecipient();
+        messenger.Register<TestMessage>(live);
+        messenger.Send(new TestMessage { Content = "Still working" });
+        Assert.Equal(1, live.ReceiveCount);
+        GC.KeepAlive(messenger);
     }
 
-    private void CreateRecipientAndSendMessage(WeakReferenceMessenger messenger)
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static WeakReference RegisterCollectibleRecipient(WeakReferenceMessenger messenger, bool useHandler)
     {
         var recipient = new TestRecipient();
-        messenger.Send(new TestMessage { Content = "Initial" });
-
-        // recipient goes out of scope here
+        if (useHandler)
+            messenger.Register<TestRecipient, TestMessage>(recipient, static (r, m) => r.Receive(m));
+        else
+            messenger.Register<TestMessage>(recipient);
+        messenger.Send(new TestMessage { Content = "Registered" });
+        Assert.Equal(1, recipient.ReceiveCount);
+        return new WeakReference(recipient);
     }
 
     [Fact]
@@ -146,7 +150,7 @@ public class WeakReferenceMessengerTests
     {
         // Arrange
         var recipient = new TestRecipient();
-        var messenger = WeakReferenceMessenger.Default;
+        var messenger = new WeakReferenceMessenger();
         var token = new object();
 
         // Register IRecipient with token
@@ -182,7 +186,7 @@ public class WeakReferenceMessengerTests
         // Arrange
         var recipient1 = new TestRecipient();
         var recipient2 = new TestRecipient();
-        var messenger = WeakReferenceMessenger.Default;
+        var messenger = new WeakReferenceMessenger();
 
         var token1 = new object();
         var token2 = new object();

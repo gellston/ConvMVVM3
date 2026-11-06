@@ -129,6 +129,25 @@ namespace ConvMVVM3.WPF.Locator
             return (string)element.GetValue(NamespaceReplaceToProperty);
         }
 
+        /// <summary>
+        /// Completes opted-in ViewModel wiring synchronously on the view's dispatcher thread.
+        /// Existing DataContexts and local values (including null and bindings) are preserved.
+        /// Returns false when no DataContext could be connected; never waits for Loaded.
+        /// </summary>
+        public static bool EnsureViewModelConnected(FrameworkElement view)
+        {
+            if (view == null) throw new ArgumentNullException(nameof(view));
+            view.VerifyAccess();
+            if (view.DataContext != null) return true;
+            if (!GetAutoWireViewModel(view)) return false;
+            TryWire(view);
+            return view.DataContext != null;
+        }
+
+        private static readonly DependencyProperty IsWiringProperty =
+            DependencyProperty.RegisterAttached("IsWiring", typeof(bool), typeof(ViewModelLocator),
+                new PropertyMetadata(false));
+
         private static void OnAutoWireChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var fe = d as FrameworkElement;
@@ -143,7 +162,7 @@ namespace ConvMVVM3.WPF.Locator
                 loaded = delegate (object s, RoutedEventArgs args)
                 {
                     fe.Loaded -= loaded;
-                    TryWire(fe);
+                    EnsureViewModelConnected(fe);
                 };
                 fe.Loaded += loaded;
             }
@@ -151,10 +170,16 @@ namespace ConvMVVM3.WPF.Locator
 
         private static void TryWire(FrameworkElement fe)
         {
-            if (fe.ReadLocalValue(FrameworkElement.DataContextProperty) != DependencyProperty.UnsetValue)
+            if (fe.DataContext != null ||
+                fe.ReadLocalValue(FrameworkElement.DataContextProperty) != DependencyProperty.UnsetValue)
                 return;
 
-            Wire(fe);
+            if ((bool)fe.GetValue(IsWiringProperty))
+                throw new InvalidOperationException("Recursive ViewModel wiring for " + fe.GetType().FullName);
+
+            fe.SetValue(IsWiringProperty, true);
+            try { Wire(fe); }
+            finally { fe.ClearValue(IsWiringProperty); }
         }
 
         private static void Wire(FrameworkElement fe)

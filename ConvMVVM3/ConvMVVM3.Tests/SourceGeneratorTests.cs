@@ -37,8 +37,11 @@ namespace TestNamespace
 
             // Act
             var driver = CSharpGeneratorDriver.Create(generator);
-            driver = (CSharpGeneratorDriver)driver.RunGenerators(compilation);
+            driver = (CSharpGeneratorDriver)driver.RunGeneratorsAndUpdateCompilation(compilation, out var output, out var diagnostics);
             var result = driver.GetRunResult();
+            Assert.Empty(diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error));
+            Assert.Empty(output.GetDiagnostics().Where(d => d.Severity == DiagnosticSeverity.Error));
+            Assert.All(result.Results, run => Assert.Null(run.Exception));
 
             // Assert
             Assert.Single(result.GeneratedTrees);
@@ -59,10 +62,12 @@ namespace TestNamespace
             // Arrange
             var source = @"
 using ConvMVVM3.Core.Mvvm.Attributes;
+using ConvMVVM3.Core.Mvvm;
+using System.Threading.Tasks;
 
 namespace TestNamespace
 {
-    public partial class TestViewModel
+    public partial class TestViewModel : ObservableObject
     {
         [AsyncRelayCommand]
         private async Task LoadDataAsync()
@@ -76,8 +81,11 @@ namespace TestNamespace
 
             // Act
             var driver = CSharpGeneratorDriver.Create(generator);
-            driver = (CSharpGeneratorDriver)driver.RunGenerators(compilation);
+            driver = (CSharpGeneratorDriver)driver.RunGeneratorsAndUpdateCompilation(compilation, out var output, out var diagnostics);
             var result = driver.GetRunResult();
+            Assert.Empty(diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error));
+            Assert.Empty(output.GetDiagnostics().Where(d => d.Severity == DiagnosticSeverity.Error));
+            Assert.All(result.Results, run => Assert.Null(run.Exception));
 
             // Assert
             Assert.Single(result.GeneratedTrees);
@@ -99,10 +107,12 @@ namespace TestNamespace
             // Arrange
             var source = @"
 using ConvMVVM3.Core.Mvvm.Attributes;
+using ConvMVVM3.Core.Mvvm;
+using System.Threading.Tasks;
 
 namespace TestNamespace
 {
-    public partial class TestViewModel
+    public partial class TestViewModel : ObservableObject
     {
         [RelayCommand]
         private void Save()
@@ -116,8 +126,11 @@ namespace TestNamespace
 
             // Act
             var driver = CSharpGeneratorDriver.Create(generator);
-            driver = (CSharpGeneratorDriver)driver.RunGenerators(compilation);
+            driver = (CSharpGeneratorDriver)driver.RunGeneratorsAndUpdateCompilation(compilation, out var output, out var diagnostics);
             var result = driver.GetRunResult();
+            Assert.Empty(diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error));
+            Assert.Empty(output.GetDiagnostics().Where(d => d.Severity == DiagnosticSeverity.Error));
+            Assert.All(result.Results, run => Assert.Null(run.Exception));
 
             // Assert
             Assert.Single(result.GeneratedTrees);
@@ -137,10 +150,12 @@ namespace TestNamespace
             // Arrange
             var source = @"
 using ConvMVVM3.Core.Mvvm.Attributes;
+using ConvMVVM3.Core.Mvvm;
+using System.Threading.Tasks;
 
 namespace TestNamespace
 {
-    public partial class TestViewModel
+    public partial class TestViewModel : ObservableObject
     {
         [ObservableProperty]
         private string _name;
@@ -162,8 +177,11 @@ namespace TestNamespace
 
             // Act
             var driver = CSharpGeneratorDriver.Create(generator);
-            driver = (CSharpGeneratorDriver)driver.RunGenerators(compilation);
+            driver = (CSharpGeneratorDriver)driver.RunGeneratorsAndUpdateCompilation(compilation, out var output, out var diagnostics);
             var result = driver.GetRunResult();
+            Assert.Empty(diagnostics.Where(d => d.Severity == DiagnosticSeverity.Error));
+            Assert.Empty(output.GetDiagnostics().Where(d => d.Severity == DiagnosticSeverity.Error));
+            Assert.All(result.Results, run => Assert.Null(run.Exception));
 
             // Assert
             Assert.Single(result.GeneratedTrees);
@@ -193,12 +211,10 @@ namespace TestNamespace
         private static Compilation CreateCompilation(string source)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
-            var references = new[]
-            {
-                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(ConvMVVM3.Core.Mvvm.ObservableObject).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(ObservablePropertyAttribute).Assembly.Location),
-            };
+            var references = ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")!)
+                .Split(System.IO.Path.PathSeparator)
+                .Append(typeof(ObservableObject).Assembly.Location)
+                .Distinct().Select(path => MetadataReference.CreateFromFile(path));
             return CSharpCompilation.Create("Test", new[] { syntaxTree }, references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
         }
     }

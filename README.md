@@ -233,8 +233,63 @@ public partial class MyViewModel : ObservableObject
 
 ```csharp
 // Navigate within a WPF region
-_regionManager.RequestNavigate("MainContent", typeof(HomeViewModel));
+_regionManager.RequestNavigate("MainContent", typeof(HomeView));
 ```
+
+#### ViewModel navigation callbacks (WPF)
+
+`Bootstrapper` registers `AddWPFRegionManager()` automatically. If configuring the
+container without a bootstrapper, call `services.AddWPFRegionManager()` instead
+of the Core-only `AddRegionManager()`.
+
+Keep `ViewModelLocator.AutoWireViewModel="True"` on the View in XAML and implement
+`INavigationAware` on its ViewModel. The View only needs `InitializeComponent()`;
+constructor injection of the ViewModel and manual callback forwarding are unnecessary.
+The WPF adapter completes opted-in wiring before navigation callbacks, without
+waiting for `Loaded`. It preserves existing DataContexts, explicit nulls, and bindings.
+An opted-in View whose DataContext cannot be connected causes navigation to fail
+before the current content is replaced.
+
+```csharp
+public class CustomerViewModel : ObservableObject, INavigationAware
+{
+    public bool IsNavigationTarget(NavigationContext context) => true;
+
+    public void OnNavigatedTo(NavigationContext context)
+    {
+        if (context.Parameters.TryGetValue("CustomerId", out var customerId))
+        {
+            // Initialize the screen for this customer.
+        }
+    }
+
+    public void OnNavigatedFrom(NavigationContext context)
+    {
+        // Store screen state or cancel outstanding work.
+    }
+}
+
+regionManager.RequestNavigate<CustomerView>("MainContent",
+    new NavigationParameters { ["CustomerId"] = 123 });
+```
+
+The single-view `RequestNavigate` overloads (type, generic, and service key) notify
+both the View and its DataContext, in that order, using the same navigation context.
+The same instance is never notified twice by the adapter. Remove any existing
+View-to-ViewModel forwarding code when enabling automatic dispatch to both.
+Each participant's `IsNavigationTarget` still gates only its own `OnNavigatedTo`;
+it does not cancel navigation or implement Prism-style view reuse. Multi-view item
+addition, `Active`, and `ClearRegion` retain their existing notification behavior.
+
+`ViewModelLocator.EnsureViewModelConnected(view)` can also be called explicitly
+on the View's dispatcher thread. It returns whether a non-null DataContext exists;
+repeated calls preserve an already connected transient ViewModel. Explicit local
+nulls and bindings are never overwritten; opt out of automatic wiring if they are
+intended to remain null during navigation.
+
+The WPF 1.2.0 project uses NuGet references to Core, Host, and SourceGenerator
+with dependency ranges `[1.2.0,1.3.0)`. These packages must be available from the
+NuGet feed before building WPF; no local Core project reference is required.
 
 ### 5) Weak Reference Messaging
 

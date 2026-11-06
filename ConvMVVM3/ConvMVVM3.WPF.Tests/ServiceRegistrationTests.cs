@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using ConvMVVM3.Core.Mvvm.UIDispatcher.Abstractions;
 using ConvMVVM3.Host.DependencyInjection;
@@ -8,129 +7,37 @@ using Xunit;
 
 namespace ConvMVVM3.WPF.Tests
 {
-    /// <summary>
-    /// Tests for service registration and dependency injection functionality.
-    /// </summary>
     public class ServiceRegistrationTests
     {
         [Fact]
-        public void AddSingleton_Can_Register_Service()
+        public void AddWPFUIDispatcher_RegistersSingletonAcrossScopes()
         {
-            // Arrange
             var services = new ServiceCollection();
-            services.AddWPFUIDispatcher();
-
-            // Act
-            var serviceProvider = new ServiceContainer(services);
-            var service = serviceProvider.GetService<IUIDispatcher>();
-            
-            // Assert
-            Assert.NotNull(service);
-            Assert.IsType<WPFUIDispatcher>(service);
+            Assert.Same(services, services.AddWPFUIDispatcher());
+            using (var container = new ServiceContainer(services))
+            using (var scope = container.CreateScope())
+            {
+                var dispatcher = container.GetRequiredService<IUIDispatcher>();
+                Assert.IsType<WPFUIDispatcher>(dispatcher);
+                Assert.Same(dispatcher, container.GetRequiredService<IUIDispatcher>());
+                Assert.Same(dispatcher, scope.ServiceProvider.GetRequiredService<IUIDispatcher>());
+            }
         }
 
         [Fact]
-        public void AddSingleton_Does_Not_Throw_When_Parameters_Are_Valid()
+        public void AddWPFUIDispatcher_RejectsNullRegistry()
         {
-            // Arrange
-            var services = new ServiceCollection();
-
-            // Act & Assert
-            services.AddWPFUIDispatcher();
-            var serviceProvider = new ServiceContainer(services);
-            var service = serviceProvider.GetService<IUIDispatcher>();
-            
-            Assert.NotNull(service);
-            Assert.IsType<WPFUIDispatcher>(service);
+            Assert.Throws<ArgumentNullException>(() => UIDispatcherExtensions.AddWPFUIDispatcher(null));
         }
 
         [Fact]
-        public void AddScoped_Can_Register_Service()
+        public void MissingDispatcher_OptionalReturnsNullAndRequiredThrows()
         {
-            // Arrange
-            var services = new ServiceCollection();
-            services.AddWPFUIDispatcher();
-
-            // Act
-            var serviceProvider = new ServiceContainer(services);
-            var service = serviceProvider.GetService<IUIDispatcher>();
-            
-            // Assert
-            Assert.NotNull(service);
-            Assert.IsType<WPFUIDispatcher>(service);
-        }
-
-        [Fact]
-        public void AddTransient_Can_Register_Service()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            services.AddWPFUIDispatcher();
-
-            // Act
-            var serviceProvider = new ServiceContainer(services);
-            var service = serviceProvider.GetService<IUIDispatcher>();
-            
-            // Assert
-            Assert.NotNull(service);
-            Assert.IsType<WPFUIDispatcher>(service);
-        }
-
-        [Fact]
-        public void ServiceContainer_Returns_Valid_ServiceProvider()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            services.AddWPFUIDispatcher();
-
-            // Act
-            var serviceProvider = new ServiceContainer(services);
-
-            // Assert
-            Assert.NotNull(serviceProvider);
-            Assert.IsType<ServiceContainer>(serviceProvider);
-        }
-
-        [Fact]
-        public void ServiceFactory_Registration_Works()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            services.AddSingleton<IUIDispatcher>(sp => new WPFUIDispatcher(System.Windows.Threading.Dispatcher.CurrentDispatcher));
-
-            // Act
-            var serviceProvider = new ServiceContainer(services);
-            var service = serviceProvider.GetService<IUIDispatcher>();
-            
-            // Assert
-            Assert.NotNull(service);
-            Assert.IsType<WPFUIDispatcher>(service);
-        }
-
-        [Fact]
-        public void GetRequiredService_Throws_When_Not_Registered()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            var serviceProvider = new ServiceContainer(services);
-
-            // Act & Assert
-            Assert.Throws<InvalidOperationException>(() => 
-                serviceProvider.GetRequiredService<IUIDispatcher>());
-        }
-
-        [Fact]
-        public void GetService_Returns_Null_When_Not_Registered()
-        {
-            // Arrange
-            var services = new ServiceCollection();
-            var serviceProvider = new ServiceContainer(services);
-
-            // Act
-            var service = serviceProvider.GetService<IUIDispatcher>();
-
-            // Assert
-            Assert.Null(service);
+            using (var container = new ServiceContainer(new ServiceCollection()))
+            {
+                Assert.Null(container.GetService<IUIDispatcher>());
+                Assert.Throws<InvalidOperationException>(() => container.GetRequiredService<IUIDispatcher>());
+            }
         }
     }
 }
