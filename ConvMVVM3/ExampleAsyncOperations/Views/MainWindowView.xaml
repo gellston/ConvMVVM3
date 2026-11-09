@@ -1,0 +1,28 @@
+<Window x:Class="ExampleAsyncOperations.Views.MainWindowView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:conv="https://github.com/gellston/ConvMVVM3"
+ conv:ViewModelLocator.AutoWireViewModel="True"
+ Title="ConvMVVM3 1.2.0 - Async operations" Width="1050" Height="740" MinWidth="850" MinHeight="600">
+ <Grid Margin="24">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+  <StackPanel Margin="0,0,0,20">
+   <TextBlock Text="Async operations" FontSize="26" FontWeight="SemiBold"/>
+   <TextBlock Text="Observe cooperative cancellation, BusyScope cleanup, and recovery after a simulated failure." TextWrapping="Wrap" Margin="0,8,0,0"/>
+  </StackPanel>
+  <Grid Grid.Row="1">
+ <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+ <WrapPanel><Button Content="Run job" Command="{Binding RunCommand}"/><Button Content="Cancel" Command="{Binding CancelCommand}"/></WrapPanel>
+ <CheckBox Grid.Row="1" Content="Simulate a service failure halfway through the next run" IsChecked="{Binding SimulateFailure}" Margin="0,8,0,20"/>
+ <StackPanel Grid.Row="2"><ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}" Height="24"/><TextBlock Text="{Binding Progress, StringFormat=Progress: {0}%}" Margin="0,8,0,16"/></StackPanel>
+ <StackPanel Grid.Row="3">
+  <TextBlock Text="{Binding IsBusy, StringFormat=Busy: {0}}"/>
+  <TextBlock Text="{Binding CompletedRuns, StringFormat=Completed: {0}}" Margin="0,12,0,8"/>
+  <TextBlock Text="{Binding CancelledRuns, StringFormat=Cancelled: {0}}"/>
+  <TextBlock Text="{Binding FailedRuns, StringFormat=Failed: {0}}" Margin="0,8,0,16"/>
+  <TextBlock Text="The Run button is disabled while work is pending. Exceptions are handled in the ViewModel, including ICommand execution." TextWrapping="Wrap"/>
+ </StackPanel>
+ <TextBlock Grid.Row="4" Text="{Binding Status}" TextWrapping="Wrap"/>
+</Grid>
+ </Grid>
+</Window>

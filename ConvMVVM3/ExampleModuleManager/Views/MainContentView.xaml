@@ -1,25 +1,25 @@
-﻿<UserControl x:Class="ExampleModuleManager.Views.MainContentView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ExampleModuleManager.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             xmlns:convMVVM3="https://github.com/gellston/ConvMVVM3"
-             convMVVM3:ViewModelLocator.AutoWireViewModel="True">
+<UserControl x:Class="ExampleModuleManager.Views.MainContentView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="https://github.com/gellston/ConvMVVM3"
+    conv:ViewModelLocator.AutoWireViewModel="True">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/><RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ContentControl Grid.Row="0"
-                        convMVVM3:RegionPlugin.RegionName="SubContent"></ContentControl>
-        <UniformGrid Grid.Row="1"
-                     Rows="1">
-            <Button Content="AModule" Command="{Binding AModuleCommand}"></Button>
-            <Button Content="BModule" Command="{Binding BModuleCommand}"></Button>
-            <Button Content="CModule Init On Demand" Command="{Binding CModuleLoadCommand}"></Button>
-        </UniformGrid>
+        <Border Background="White" Padding="16" Margin="0,0,0,16">
+            <StackPanel>
+                <TextBlock Text="Module initialization status" FontWeight="SemiBold"/>
+                <TextBlock Text="{Binding ModuleStatus}" TextWrapping="Wrap" Margin="0,8,0,0"/>
+            </StackPanel>
+        </Border>
+        <WrapPanel Grid.Row="1">
+            <Button Content="Open A (automatic)" Command="{Binding AModuleCommand}"/>
+            <Button Content="Open B (automatic)" Command="{Binding BModuleCommand}"/>
+            <Button Content="Initialize / open C (on demand)" Command="{Binding CModuleLoadCommand}"/>
+        </WrapPanel>
+        <ContentControl Grid.Row="2" conv:RegionPlugin.RegionName="SubContent" Margin="0,8,0,12"/>
+        <TextBlock Grid.Row="3" Text="{Binding Status}" TextWrapping="Wrap"/>
     </Grid>
 </UserControl>

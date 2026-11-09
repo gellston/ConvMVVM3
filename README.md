@@ -151,6 +151,97 @@ ConvMVVM3.Tests/                  # Core unit tests
 
 ---
 
+## WPF examples
+
+All ten examples target `net10.0-windows` and consume the published
+`ConvMVVM3.WPF` 1.2.0 NuGet package. They use XAML
+`ViewModelLocator.AutoWireViewModel="True"`; View constructors only call
+`InitializeComponent()`. Run them on Windows with the .NET 10 SDK installed.
+
+| Project | Focus | What to try |
+|---|---|---|
+| `ExampleActivatorUtilities` | DI services plus runtime arguments | Enter a name and age. Compare `CreateInstance` with a cached `CreateFactory`, inspect the greeting from the injected service, and try invalid input. |
+| `ExampleModuleManager` | Automatic and on-demand initialization | Compare A/B initialization with C before and after its first use. Open A, C, A and C again; C must reopen and its visit count must increase. |
+| `ExampleRegionManager` | SingleView navigation and MultiView hosts | Change customers and inspect the ViewModel navigation history. Add distinct transient items, select the second list item, clear the list, and add again. |
+| `ExampleMvvmBasics` | Generated properties and commands | Edit a name, observe dependent values, disable saving with CanExecute, and reset the form. |
+| `ExampleAsyncOperations` | Async commands and BusyScope | Complete a local job, cancel it, simulate a failure, and retry. |
+| `ExampleMessaging` | WeakReferenceMessenger and ObservableRecipient | Send to Alpha/Beta, toggle recipient activation, and move a receiver between channels. |
+| `ExampleUIDispatcher` | UI dispatch from background work | Compare worker/UI thread IDs and cancel a background operation safely. |
+| `ExampleBehaviors` | XAML event triggers and actions | Invoke a command with a parameter, honor CanExecute, call a method, and change a control property. |
+| `ExampleCollections` | Batch collection notifications | Compare 1,000 individual additions with a single range reset; replace, remove and clear items. |
+| `ExampleResourceLifecycle` | Disposable ownership and OperationGuard | Replace subscriptions, clear/dispose groups, reject reentry and recover after failure. |
+
+From the repository root, run one command at a time:
+
+```powershell
+dotnet run --project ConvMVVM3/ExampleActivatorUtilities -c Release
+dotnet run --project ConvMVVM3/ExampleModuleManager -c Release
+dotnet run --project ConvMVVM3/ExampleRegionManager -c Release
+```
+
+Build individual example projects explicitly when validating Release: the
+solution configuration excludes examples from its Release build.
+
+The Region example registers the detail View/ViewModel as singletons, so repeated
+navigation preserves the instance ID. Its ViewModel implements `INavigationAware`
+and receives the selected `Customer` in `NavigationParameters`. Instance reuse
+comes from DI lifetime, not a view-reuse search by `IsNavigationTarget`. Both
+multi-view regions use transient Views and ViewModels. Item numbers and IDs make
+distinct instances visible. Adding multi-view items does not invoke SingleView
+navigation callbacks.
+
+All modules register services at startup. `OnDemand` delays C's initialization,
+not its registration or assembly loading. Module categories are not observable,
+so the example refreshes status text after initialization. The module example remains
+in one project; loading separate plugin DLLs is not demonstrated.
+
+### Run a new example
+
+```powershell
+dotnet run --project ConvMVVM3/ExampleMvvmBasics -c Release
+dotnet run --project ConvMVVM3/ExampleAsyncOperations -c Release
+dotnet run --project ConvMVVM3/ExampleMessaging -c Release
+dotnet run --project ConvMVVM3/ExampleUIDispatcher -c Release
+dotnet run --project ConvMVVM3/ExampleBehaviors -c Release
+dotnet run --project ConvMVVM3/ExampleCollections -c Release
+dotnet run --project ConvMVVM3/ExampleResourceLifecycle -c Release
+```
+
+The examples use only APIs available in 1.2.0. Predicate-based and parameterized
+commands are constructed explicitly where generator options are not supported.
+Async examples expose their own observable Busy/progress/error state and catch
+exceptions inside their operations, including execution through ICommand.
+Cancellation is cooperative; the local job simulation does not require a server.
+The messaging sample owns its receivers and disposes subscriptions on window exit;
+UI-thread dispatch is demonstrated separately rather than implied by Messenger.
+
+### Reproducible example checks
+
+The `Examples.SmokeTests` console runner uses a separate STA/dispatcher process for
+each sample because WPF Application and ServiceLocator are process-wide. It boots
+the real sample, initializes XAML, exercises commands and actual routed Click events,
+checks binding diagnostics, and optionally renders a preview without showing a window.
+It covers successful completion, cancellation, failure/retry, message channels,
+UI-thread affinity, trigger detachment, range notifications and subscription cleanup.
+These are automated runtime checks, not manual mouse/keyboard acceptance tests.
+The validation project is under the solution's Validation folder and is not a NuGet package.
+
+From the repository root:
+
+```powershell
+# Build and check all ten examples.
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/Test-Examples.ps1
+
+# Check one sample and save a rendered preview under the ignored build directory.
+./scripts/Test-Examples.ps1 -Samples ExampleAsyncOperations -PreviewDirectory ConvMVVM3/Examples.SmokeTests/bin/previews
+```
+
+The first command applies the execution policy only to its child process; it does
+not change machine/user policy. Use the second form when your current policy
+already permits local scripts. Existing nullable warnings from the 1.2.0 source
+generator may appear during a clean build; these are distinct from runtime binding
+diagnostics, which cause the checks to fail.
+
 ## 🛠️ Installation
 
 ```bash

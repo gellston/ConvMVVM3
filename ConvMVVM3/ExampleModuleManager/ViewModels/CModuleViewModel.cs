@@ -1,20 +1,6 @@
-﻿using ConvMVVM3.Core.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Text;
+namespace ExampleModuleManager.ViewModels;
 
-namespace ExampleModuleManager.ViewModels
+public sealed class CModuleViewModel : ModuleViewModel
 {
-    public partial class CModuleViewModel : ObservableObject
-    {
-        #region Private Property
-
-        #endregion
-
-        #region Constructor
-        public CModuleViewModel() { 
-        
-        }
-        #endregion
-    }
+    public CModuleViewModel() : base("Module C", "Initialized on demand when you press the C module button.") { }
 }

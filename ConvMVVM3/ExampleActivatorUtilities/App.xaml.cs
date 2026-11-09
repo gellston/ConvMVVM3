@@ -1,28 +1,12 @@
-﻿using System.Configuration;
-using System.Data;
 using System.Windows;
 
-namespace ExampleActivatorUtilities
+namespace ExampleActivatorUtilities;
+
+public partial class App : Application
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    protected override void OnStartup(StartupEventArgs e)
     {
-
-        #region Private Property
-        private readonly AppBootStrapper bootStrapper = new AppBootStrapper();
-        #endregion
-
-        #region Protected Functions
-
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
-
-            bootStrapper.Run(this);
-        }
-        #endregion
+        base.OnStartup(e);
+        new AppBootStrapper().Run(this);
     }
-
 }

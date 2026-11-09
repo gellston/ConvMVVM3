@@ -1,15 +1,15 @@
-﻿<UserControl x:Class="ExampleRegionManager.Views.MainView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ExampleRegionManager.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             xmlns:convMVVM3="https://github.com/gellston/ConvMVVM3"
-             convMVVM3:ViewModelLocator.AutoWireViewModel="True"
-             >
-    <Grid Background="Green">
-            
-    </Grid>
+<UserControl x:Class="ExampleRegionManager.Views.MainView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="https://github.com/gellston/ConvMVVM3"
+    conv:ViewModelLocator.AutoWireViewModel="True">
+    <StackPanel Margin="16">
+        <TextBlock Text="Customer details" FontWeight="SemiBold" FontSize="20"/>
+        <TextBlock Text="{Binding Customer.Name}" FontSize="24" Margin="0,16,0,4"/>
+        <TextBlock Text="{Binding Customer.Id, StringFormat=Customer ID: {0}}"/>
+        <TextBlock Text="{Binding InstanceId, StringFormat=VM instance: {0}}" Margin="0,12,0,4"/>
+        <TextBlock Text="{Binding NavigationCount, StringFormat=OnNavigatedTo: {0} visits}"/>
+        <TextBlock Text="Changing customers calls INavigationAware on the DataContext."
+                   TextWrapping="Wrap" Margin="0,16,0,0"/>
+    </StackPanel>
 </UserControl>

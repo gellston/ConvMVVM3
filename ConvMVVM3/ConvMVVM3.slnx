@@ -9,6 +9,32 @@
     <Project Path="ExampleRegionManager/ExampleRegionManager.csproj" Id="3d079cc5-eecb-4ab3-9584-9791417e8121">
       <Build Solution="Release|*" Project="false" />
     </Project>
+    <Project Path="ExampleMvvmBasics/ExampleMvvmBasics.csproj" Id="e11109c3-1d65-465a-8b2a-334b1af25e9f">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+    <Project Path="ExampleAsyncOperations/ExampleAsyncOperations.csproj" Id="587c2cab-ff3b-40b3-8aeb-4eb62028a36f">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+    <Project Path="ExampleMessaging/ExampleMessaging.csproj" Id="9f0f0be3-49e3-4349-8fb7-e1a2dfe1b27b">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+    <Project Path="ExampleUIDispatcher/ExampleUIDispatcher.csproj" Id="4a06a729-4022-419f-a61a-c00ece3918e8">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+    <Project Path="ExampleBehaviors/ExampleBehaviors.csproj" Id="fe3cb53e-8e5d-4280-93c6-0c70ebfdd4fd">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+    <Project Path="ExampleCollections/ExampleCollections.csproj" Id="79c27741-0122-4436-8a64-db549537537a">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+    <Project Path="ExampleResourceLifecycle/ExampleResourceLifecycle.csproj" Id="e13dbc1b-c03d-4139-bb4f-473a70cb2a67">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Validation/">
+    <Project Path="Examples.SmokeTests/Examples.SmokeTests.csproj" Id="d8c4c6ea-2931-4488-9614-6f21f77e4624">
+      <Build Solution="Release|*" Project="false" />
+    </Project>
   </Folder>
   <Project Path="ConvMVVM3.Core/ConvMVVM3.Core.csproj" />
   <Project Path="ConvMVVM3.Host/ConvMVVM3.Host.csproj">

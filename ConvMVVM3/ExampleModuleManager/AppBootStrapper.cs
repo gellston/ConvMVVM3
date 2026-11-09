@@ -1,39 +1,31 @@
-﻿using ConvMVVM3.Core.DependencyInjection.Abstractions;
+using System.Windows;
+using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
 using ConvMVVM3.WPF;
 using ExampleModuleManager.Modules;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+using ExampleModuleManager.ViewModels;
+using ExampleModuleManager.Views;
 
-namespace ExampleModuleManager
+namespace ExampleModuleManager;
+
+public class AppBootStrapper : Bootstrapper
 {
-    public class AppBootStrapper : Bootstrapper
+    protected override void RegisterModules()
     {
-        protected override void ConfigureRegion(IRegionManager regionManager)
-        {
-        }
+        RegisterModule<AModule>();
+        RegisterModule<BModule>();
+        RegisterModule<CModule>();
+        RegisterModule<MainModule>();
+    }
 
-        protected override Window CreateShell(IServiceContainer provider)
-        {
-            return (Window)provider.GetService("MainWindowView");
-        }
+    protected override Window CreateShell(IServiceContainer provider) => provider.GetRequiredService<MainWindowView>();
+    protected override void RegisterServices(IServiceRegistry services) { }
+    protected override void ConfigureRegion(IRegionManager regionManager) { }
 
-        protected override void OnInitialized(IServiceContainer provider)
-        {
-        }
-
-        protected override void RegisterModules()
-        {
-            this.RegisterModule<AModule>();
-            this.RegisterModule<BModule>();
-            this.RegisterModule<CModule>();
-            this.RegisterModule<MainModule>();
-        }
-
-        protected override void RegisterServices(IServiceRegistry container)
-        {
-        }
+    protected override void OnInitialized(IServiceContainer provider)
+    {
+        var vm = provider.GetRequiredService<MainContentViewModel>();
+        vm.RefreshModuleStatus();
+        vm.AModuleCommand.Execute(null);
     }
 }

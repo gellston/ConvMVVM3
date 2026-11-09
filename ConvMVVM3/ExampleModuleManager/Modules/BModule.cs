@@ -1,35 +1,22 @@
-﻿using ConvMVVM3.Core.DependencyInjection.Abstractions;
+using ConvMVVM3.Core.DependencyInjection.Abstractions;
 using ConvMVVM3.Core.Mvvm.Attributes;
 using ConvMVVM3.Core.Mvvm.Modules.Abstractions;
 using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
 using ExampleModuleManager.ViewModels;
 using ExampleModuleManager.Views;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ExampleModuleManager.Modules
+namespace ExampleModuleManager.Modules;
+
+[Module("BModule", "1.0.0")]
+public class BModule : IModule
 {
-    [Module("BModule", "1.0.0")]
-    public class BModule : IModule
+    public void RegisterServices(IServiceRegistry services)
     {
-        public void ConfigureRegions(IRegionManager regionManager)
-        {
-
-        }
-
-        public void OnInitialized(IServiceResolver serviecResolver)
-        {
-
-        }
-
-        public void RegisterServices(IServiceRegistry registry)
-        {
-            //Views
-            registry.AddSingleton<BModuleView>("/SubContent/BModuleView");
-
-            //ViewModels
-            registry.AddSingleton<BModuleViewModel>();
-        }
+        services.AddSingleton<BModuleView>("/SubContent/BModuleView");
+        services.AddSingleton<BModuleViewModel>();
     }
+
+    public void ConfigureRegions(IRegionManager regionManager) { }
+    // ModuleManager records initialization. Navigation is a separate, repeatable action.
+    public void OnInitialized(IServiceResolver serviceResolver) { }
 }

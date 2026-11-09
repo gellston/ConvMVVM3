@@ -1,0 +1,38 @@
+<Window x:Class="ExampleResourceLifecycle.Views.MainWindowView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:conv="https://github.com/gellston/ConvMVVM3"
+ conv:ViewModelLocator.AutoWireViewModel="True"
+ Title="ConvMVVM3 1.2.0 - Resource lifecycle" Width="1150" Height="850" MinWidth="1000" MinHeight="740">
+ <Grid Margin="24">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <StackPanel Margin="0,0,0,20"><TextBlock Text="Resource lifecycle and operation guards" FontSize="26" FontWeight="SemiBold"/>
+   <TextBlock Text="Observe real subscription cleanup, serial replacement, idempotent disposal and guarded async work." TextWrapping="Wrap" Margin="0,8,0,0"/></StackPanel>
+  <WrapPanel Grid.Row="1">
+   <Button Content="Add grouped subscription" Command="{Binding AddGroupedCommand}"/>
+   <Button Content="Replace serial subscription" Command="{Binding ReplaceSerialCommand}"/>
+   <Button Content="Send signal" Command="{Binding SendSignalCommand}"/>
+   <Button Content="Clear group" Command="{Binding ClearGroupedCommand}"/>
+   <Button Content="Dispose group" Command="{Binding DisposeGroupedCommand}"/>
+   <Button Content="New resource session" Command="{Binding ResetResourcesCommand}"/>
+  </WrapPanel>
+  <WrapPanel Grid.Row="2" Margin="0,8,0,16">
+   <TextBlock Text="{Binding ActiveSubscriptions, StringFormat=Active subscriptions: {0}}" Margin="0,0,24,8"/>
+   <TextBlock Text="{Binding DisposedResources, StringFormat=Released resources: {0}}" Margin="0,0,24,8"/>
+   <TextBlock Text="{Binding ReceivedSignals, StringFormat=Signals received: {0}}" Margin="0,0,24,8"/>
+   <TextBlock Text="{Binding GroupDisposed, StringFormat=Group disposed: {0}}"/>
+  </WrapPanel>
+  <StackPanel Grid.Row="3">
+   <WrapPanel><Button Content="Run guarded work (click repeatedly)" Command="{Binding GuardedWorkCommand}"/><CheckBox Content="Simulate work failure" IsChecked="{Binding SimulateFailure}" VerticalAlignment="Center"/></WrapPanel>
+   <WrapPanel Margin="0,8,0,16">
+    <TextBlock Text="{Binding WorkAttempts, StringFormat=Attempts: {0}}" Margin="0,0,24,8"/>
+    <TextBlock Text="{Binding AcceptedWork, StringFormat=Accepted: {0}}" Margin="0,0,24,8"/>
+    <TextBlock Text="{Binding RejectedWork, StringFormat=Ignored: {0}}" Margin="0,0,24,8"/>
+    <TextBlock Text="{Binding BusyCount, StringFormat=Busy scopes: {0}}" Margin="0,0,24,8"/>
+    <TextBlock Text="{Binding IsBusy, StringFormat=Busy: {0}}"/>
+   </WrapPanel>
+  </StackPanel>
+  <ListBox Grid.Row="4" ItemsSource="{Binding Events}" Margin="0,0,0,16"/>
+  <TextBlock Grid.Row="5" Text="{Binding Status}" TextWrapping="Wrap"/>
+ </Grid>
+</Window>

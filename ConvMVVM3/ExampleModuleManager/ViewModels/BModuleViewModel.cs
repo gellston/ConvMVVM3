@@ -1,21 +1,6 @@
-﻿using ConvMVVM3.Core.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Text;
+namespace ExampleModuleManager.ViewModels;
 
-namespace ExampleModuleManager.ViewModels
+public sealed class BModuleViewModel : ModuleViewModel
 {
-    public partial class BModuleViewModel : ObservableObject
-    {
-        #region Private Property
-
-        #endregion
-
-        #region Constructor
-        public BModuleViewModel()
-        {
-
-        }
-        #endregion
-    }
+    public BModuleViewModel() : base("Module B", "Initialized automatically when the application starts.") { }
 }

@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType><TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExampleActivatorUtilities\ExampleActivatorUtilities.csproj" />
+    <ProjectReference Include="..\ExampleModuleManager\ExampleModuleManager.csproj" />
+    <ProjectReference Include="..\ExampleRegionManager\ExampleRegionManager.csproj" />
+    <ProjectReference Include="..\ExampleMvvmBasics\ExampleMvvmBasics.csproj" />
+    <ProjectReference Include="..\ExampleAsyncOperations\ExampleAsyncOperations.csproj" />
+    <ProjectReference Include="..\ExampleMessaging\ExampleMessaging.csproj" />
+    <ProjectReference Include="..\ExampleUIDispatcher\ExampleUIDispatcher.csproj" />
+    <ProjectReference Include="..\ExampleBehaviors\ExampleBehaviors.csproj" />
+    <ProjectReference Include="..\ExampleCollections\ExampleCollections.csproj" />
+    <ProjectReference Include="..\ExampleResourceLifecycle\ExampleResourceLifecycle.csproj" />
+  </ItemGroup>
+</Project>

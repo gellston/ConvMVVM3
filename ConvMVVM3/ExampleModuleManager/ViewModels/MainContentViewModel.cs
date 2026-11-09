@@ -1,72 +1,62 @@
-﻿using ConvMVVM3.Core.Mvvm;
+using ConvMVVM3.Core.Mvvm;
 using ConvMVVM3.Core.Mvvm.Attributes;
 using ConvMVVM3.Core.Mvvm.Modules.Abstractions;
 using ConvMVVM3.Core.Mvvm.Regions.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace ExampleModuleManager.ViewModels
+namespace ExampleModuleManager.ViewModels;
+
+public partial class MainContentViewModel : ObservableObject
 {
-    public partial class MainContentViewModel : ObservableObject
+    private readonly IRegionManager _regions;
+    private readonly IModuleManager _modules;
+
+    public MainContentViewModel(IRegionManager regions, IModuleManager modules)
     {
-        #region Private Property
-        private readonly IRegionManager regionManager;
-        private readonly IModuleManager moduleManager;
-        #endregion
+        _regions = regions;
+        _modules = modules;
+    }
 
-        #region Constructor
-        public MainContentViewModel(IRegionManager regionManager,
-                                    IModuleManager moduleManager) { 
-        
-            this.regionManager = regionManager;
-            this.moduleManager = moduleManager;
-        }
-        #endregion
+    [ObservableProperty] private string _moduleStatus = "Waiting for initialization...";
+    [ObservableProperty] private string _status = "Open a module to see its ViewModel navigation count.";
 
-        #region Command
-        [RelayCommand]
-        private void AModule()
+    // ModuleCategory is not observable; refresh this display after explicit initialization.
+    public void RefreshModuleStatus()
+    {
+        ModuleStatus = string.Join(" | ", _modules.Categories.Select(category =>
+            $"{category.Name}: {(category.IsInitialized ? "initialized" : "not initialized")} ({category.Mode})"));
+    }
+
+    [RelayCommand] private void AModule() => OpenModule("AModule");
+    [RelayCommand] private void BModule() => OpenModule("BModule");
+
+    [RelayCommand]
+    private void CModuleLoad()
+    {
+        try
         {
-            try
-            {
-                this.regionManager.RequestNavigate("SubContent", "/SubContent/AModuleView");
-
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex);
-            }
+            _modules.InitializeModule("CModule"); // Idempotent: only initializes once.
+            OpenModule("CModule"); // Always navigate, including subsequent button presses.
         }
-
-
-        [RelayCommand]
-        private void BModule()
+        catch (Exception error)
         {
-            try
-            {
-                this.regionManager.RequestNavigate("SubContent", "/SubContent/BModuleView");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex);
-            }
+            Status = $"Initialization failed: {error.Message}";
         }
-
-
-        [RelayCommand]
-        private void CModuleLoad()
+        finally
         {
-            try
-            {
-                this.moduleManager.InitializeModule("CModule");
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex);
-            }
+            RefreshModuleStatus();
         }
+    }
 
-        #endregion
+    private void OpenModule(string name)
+    {
+        try
+        {
+            _regions.RequestNavigate("SubContent", $"/SubContent/{name}View");
+            Status = $"Opened {name}. Reopening preserves its singleton ViewModel.";
+        }
+        catch (Exception error)
+        {
+            Status = $"Navigation failed: {error.Message}";
+        }
     }
 }

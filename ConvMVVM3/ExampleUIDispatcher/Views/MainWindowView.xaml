@@ -1,0 +1,26 @@
+<Window x:Class="ExampleUIDispatcher.Views.MainWindowView"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:conv="https://github.com/gellston/ConvMVVM3"
+ conv:ViewModelLocator.AutoWireViewModel="True"
+ Title="ConvMVVM3 1.2.0 - UI dispatcher" Width="1050" Height="740" MinWidth="850" MinHeight="600">
+ <Grid Margin="24">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+  <StackPanel Margin="0,0,0,20">
+   <TextBlock Text="UI dispatcher" FontSize="26" FontWeight="SemiBold"/>
+   <TextBlock Text="Run computation off the UI thread, then safely update bound properties and collections." TextWrapping="Wrap" Margin="0,8,0,0"/>
+  </StackPanel>
+  <Grid Grid.Row="1">
+ <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+ <WrapPanel><Button Content="Start worker" Command="{Binding StartCommand}"/><Button Content="Cancel" Command="{Binding CancelCommand}"/></WrapPanel>
+ <StackPanel Grid.Row="1" Margin="0,8,0,16">
+  <TextBlock Text="{Binding UIThreadId, StringFormat=UI owner thread: {0}}"/>
+  <TextBlock Text="{Binding WorkerThreadId, StringFormat=Latest worker thread: {0}}" Margin="0,8,0,8"/>
+  <TextBlock Text="{Binding UpdateThreadId, StringFormat=Latest property/collection update thread: {0}}"/>
+ </StackPanel>
+ <ProgressBar Grid.Row="2" Height="20" Minimum="0" Maximum="100" Value="{Binding Progress}" Margin="0,0,0,16"/>
+ <ListBox Grid.Row="3" ItemsSource="{Binding Updates}"/>
+ <TextBlock Grid.Row="4" Text="{Binding Status}" TextWrapping="Wrap" Margin="0,16,0,0"/>
+</Grid>
+ </Grid>
+</Window>
